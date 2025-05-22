@@ -1,10 +1,11 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware  # Importar CORSMiddleware
-from app.api.v1.endpoints import users
-from app.db import models, database
-from app.db.database import get_supabase_client
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.db import crud, schemas
+from app.api.v1.endpoints import users
+from app.db.database import get_supabase_client
 
 # Crear la aplicación FastAPI
 app = FastAPI()
@@ -12,18 +13,24 @@ app = FastAPI()
 # Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permitir solicitudes desde cualquier origen
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Permitir todos los métodos HTTP (GET, POST, etc.)
-    allow_headers=["*"],  # Permitir todos los headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
+# Static files (para imágenes, CSS, JS...)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Jinja2 templates (para HTML)
+templates = Jinja2Templates(directory="templates")
+
+# Supabase
 supabase = get_supabase_client()
 
-# Incluir las rutas de usuarios en la API con el prefijo '/users'
+# Rutas
 app.include_router(users.router, prefix="/users", tags=["users"])
 
-# Ruta raíz de ejemplo
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the User Management API!"}
+@app.get("/", response_class=HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
