@@ -419,7 +419,7 @@
           "No has iniciado sesión";
         document.getElementById("login-btn").style.display = "inline-block";
       } else {
-        fetch("http://127.0.0.1:8000/users/me", {
+        fetch("https://stylo-4u8w.onrender.com/users/me", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
