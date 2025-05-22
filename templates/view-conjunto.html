@@ -100,7 +100,7 @@
         document.getElementById("conjunto-info").innerText =
           "No se especificó el ID del conjunto en la URL.";
       } else {
-        fetch(`https://stylo-4u8w.onrender.com//users/conjuntos/${conjuntoId}`)
+        fetch(`https://stylo-4u8w.onrender.com/users/conjuntos/${conjuntoId}`)
           .then((response) => {
             if (!response.ok) throw new Error("Error al obtener el conjunto");
             return response.json();
