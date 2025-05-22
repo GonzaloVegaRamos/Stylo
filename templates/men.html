@@ -372,7 +372,7 @@
   <body>
     <div class="menu">
       <div class="logo">
-        <a href="dashboard.html">
+        <a href="/">
           <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
         </a>
       </div>
@@ -686,7 +686,7 @@
         const token = localStorage.getItem("token");
         if (!token) {
           alert("Debes iniciar sesión para guardar conjuntos.");
-          window.location.href = "Register.html";
+          window.location.href = "/login";
           return;
         }
 
@@ -750,7 +750,7 @@
           return;
         }
 
-        const urlCompartir = `file:///C:/hlocal2/TFG/frontend/view-conjunto.html?id=${conjuntoGuardadoId}`;
+        const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
         copiarAlPortapapeles(urlCompartir);
         cerrarConfirmationModal();
       }

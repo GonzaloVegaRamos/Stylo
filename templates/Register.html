@@ -296,7 +296,7 @@
             const data = await response.json();
             localStorage.setItem("token", data.access_token);
 
-            window.location.href = "dashboard.html";
+            window.location.href = "/";
           } catch (error) {
             errorMsg.textContent = error.message;
           }
