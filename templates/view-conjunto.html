@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ver Conjunto</title>
+    <style>
+      :root {
+        --main-bg: #f5f6fa;
+        --card-bg: #ffffff;
+        --primary: #2f3640;
+        --accent: #00a8ff;
+        --border: #dcdde1;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--main-bg);
+        margin: 0;
+        padding: 20px;
+        color: var(--primary);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+      }
+
+      #conjunto-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 800px;
+        margin: auto;
+      }
+
+      .prenda {
+        display: flex;
+        align-items: center;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .prenda:hover {
+        transform: translateY(-3px);
+      }
+
+      .prenda img {
+        width: 80px;
+        height: auto;
+        border-radius: 8px;
+        margin-right: 15px;
+        object-fit: contain;
+      }
+
+      .prenda-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .prenda h3 {
+        margin: 0 0 5px;
+        font-size: 1rem;
+        color: var(--accent);
+      }
+
+      .prenda p {
+        margin: 2px 0;
+        font-size: 0.9rem;
+      }
+
+      .prenda a {
+        font-size: 0.9rem;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .prenda a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="nombre">Conjunto de ropa</h1>
+    <div id="conjunto-info">Cargando conjunto...</div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const conjuntoId = params.get("id");
+
+      if (!conjuntoId) {
+        document.getElementById("conjunto-info").innerText =
+          "No se especificó el ID del conjunto en la URL.";
+      } else {
+        fetch(`http://127.0.0.1:8000/users/conjuntos/${conjuntoId}`)
+          .then((response) => {
+            if (!response.ok) throw new Error("Error al obtener el conjunto");
+            return response.json();
+          })
+          .then(async (conjunto) => {
+            document.getElementById("nombre").innerText =
+              conjunto.nombre || "Conjunto de ropa";
+
+            const div = document.getElementById("conjunto-info");
+            div.innerHTML = "";
+
+            const prendasKeys = [
+              "camiseta",
+              "calzado",
+              "chaqueta",
+              "ral",
+              "pb",
+              "accesorio",
+            ];
+
+            for (const key of prendasKeys) {
+              const prendaId = conjunto[key];
+              if (prendaId) {
+                try {
+                  const res = await fetch(
+                    `http://127.0.0.1:8000/users/ropa?id=${prendaId}`
+                  );
+                  if (!res.ok)
+                    throw new Error(`Error al obtener la prenda ${key}`);
+                  const prendaData = await res.json();
+                  const prenda = prendaData[0];
+
+                  const prendaDiv = document.createElement("div");
+                  prendaDiv.className = "prenda";
+
+                  prendaDiv.innerHTML = `
+                    <img src="${prenda.img}" alt="${prenda.marca}" />
+                    <div class="prenda-info">
+                      <h3>${key.charAt(0).toUpperCase() + key.slice(1)}</h3>
+                      <p><strong>Marca:</strong> ${prenda.marca}</p>
+                      <a href="${prenda.url}" target="_blank">Ver en tienda</a>
+                    </div>
+                  `;
+
+                  div.appendChild(prendaDiv);
+                } catch (error) {
+                  console.error(error);
+                  const prendaDiv = document.createElement("div");
+                  prendaDiv.className = "prenda";
+                  prendaDiv.innerText = `${key}: No se pudo cargar la prenda.`;
+                  div.appendChild(prendaDiv);
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            document.getElementById("conjunto-info").innerText =
+              "Error al cargar el conjunto: " + err.message;
+          });
+      }
+    </script>
+  </body>
+</html>
