@@ -1,5 +1,6 @@
 import re
 from fastapi import APIRouter, Depends, HTTPException, status
+from requests import request
 from app.core.auth import authenticate_token  # Importar funciones de auth
 from app.db.database import get_supabase_client  # Usar el cliente de Supabase para interactuar con la DB
 from passlib.context import CryptContext

@@ -229,8 +229,8 @@
               />
               <input
                 type="number"
-                id="age"
-                name="age"
+                id="edad"
+                name="edad"
                 placeholder="Edad"
                 min="1"
                 required
@@ -312,7 +312,7 @@
           event.preventDefault();
           const username = document.getElementById("username").value;
           const email = document.getElementById("email-register").value;
-          const age = parseInt(document.getElementById("age").value);
+          const edad = parseInt(document.getElementById("edad").value);
           const password = document.getElementById("password-register").value;
           const confirmPassword =
             document.getElementById("confirm-password").value;
@@ -325,12 +325,12 @@
             return;
           }
 
-          if (age < 18) {
+          if (edad < 18) {
             errorMsg.textContent = "Debes tener al menos 18 años";
             return;
           }
 
-          const userData = { username, email, age, password };
+          const userData = { username, email, edad, password };
 
           try {
             const response = await fetch(
