@@ -163,13 +163,21 @@ async def get_current_user(authorization: str = Header(None)):
         if not user_info or not user_info.user:
             raise HTTPException(status_code=401, detail="Token inválido")
 
-        # Obtener el auth_id
         auth_id = user_info.user.id
-
+        
+        user_data = (
+    supabase.table("users")
+    .select("username")
+    .eq("auth_id", auth_id)
+    .execute()
+      )
+        username = user_data.data[0].get("username") if user_data.data else None
         # Retornar solo el auth_id
         return {
-            "auth_id": auth_id
+            "auth_id": auth_id,
+            "username": username
         }
+
 
     except Exception as e:
         raise HTTPException(status_code=401, detail="Token inválido")
@@ -206,7 +214,7 @@ async def get_all_users():
         )
 
 @router.get("/ropa")
-async def get_ropa(tipo: str = None, id: str = None, genero: str = None):
+async def get_ropa(tipo: str = None, id: str = None, genero: str = None,marca: str = None):
     """Obtener prendas de ropa filtradas por tipo, género o por id"""
     try:
         query = supabase.table("ropa").select("*")
@@ -220,6 +228,8 @@ async def get_ropa(tipo: str = None, id: str = None, genero: str = None):
         if genero and genero in ["Hombre", "Mujer"]:
             query = query.eq("Genero", genero)
         
+        if marca:
+            query = query.eq("marca", marca.upper())
         response = query.execute()
 
         if not response.data:

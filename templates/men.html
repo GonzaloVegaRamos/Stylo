@@ -217,7 +217,7 @@
       .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 15;
         left: 0;
         top: 0;
         width: 100%;
@@ -398,11 +398,9 @@
       <div class="search-container">
         <input type="text" id="search-bar" placeholder="Buscar..." />
         <select id="brand-dropdown">
-          <option value="">Seleccionar Marca</option>
-          <option value="Nike">Nike</option>
-          <option value="Adidas">Adidas</option>
-          <option value="Puma">Puma</option>
-          <option value="Gucci">Gucci</option>
+          <option value="">Todas las marcas</option>
+          <option value="PB">Pull&Bear</option>
+          <option value="HOLLISTER">Hollister</option>
         </select>
         <div class="gender-filter">
           <label>
@@ -619,7 +617,7 @@
 
         // Agregar filtro de género si está seleccionado
         if (selectedGender) {
-          url += `&Genero=${encodeURIComponent(selectedGender)}`;
+          url += `&genero=${encodeURIComponent(selectedGender)}`;
         }
 
         try {
@@ -633,10 +631,13 @@
           }
 
           if (searchTerm) {
+            const term = searchTerm.toLowerCase();
             ropaList = ropaList.filter(
               (item) =>
-                item.nombre.toLowerCase().includes(searchTerm) ||
-                (item.marca && item.marca.toLowerCase().includes(searchTerm))
+                (item.nombre && item.nombre.toLowerCase().includes(term)) ||
+                (item.marca && item.marca.toLowerCase().includes(term)) ||
+                (item.descripcion &&
+                  item.descripcion.toLowerCase().includes(term)) // Este campo es opcional
             );
           }
 
@@ -667,10 +668,16 @@
     }
   </div>
   <p>${ropa.nombre}</p>
+  <a href="${ropa.url}" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
 `;
 
             // Ahora asignamos el onclick al contenedor 'item':
-            item.onclick = () => seleccionarPrenda(category, ropa);
+            item
+              .querySelector(".ropa-imagen-container")
+              .addEventListener("click", (e) => {
+                e.stopPropagation(); // Evita que el click llegue al enlace si está dentro
+                seleccionarPrenda(category, ropa);
+              });
 
             ropaContainer.appendChild(item);
           });
