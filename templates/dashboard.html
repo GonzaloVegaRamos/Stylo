@@ -362,7 +362,7 @@
 
     <!-- Nav -->
     <nav>
-      <a href="armario.html">ARMARIO</a>
+      <a href="/armario">ARMARIO</a>
       <a href="#">EXPLORAR</a>
       <a href="#">¿POR DONDE EMPIEZO?</a>
     </nav>
@@ -377,13 +377,13 @@
 
       <div class="contenedor">
         <h2>🌟 Armario Virtual 🌟</h2>
-        <button class="boton boton1" onclick="window.location.href='men.html'">
+        <button
+          class="boton boton1"
+          onclick="window.location.href='/crear-conjunto'"
+        >
           Empieza a Crear!
         </button>
-        <button
-          class="boton boton2"
-          onclick="window.location.href='armario.html'"
-        >
+        <button class="boton boton2" onclick="window.location.href='/armario'">
           Ver tu armario
         </button>
       </div>
@@ -448,7 +448,7 @@
       }
 
       document.getElementById("login-btn").addEventListener("click", () => {
-        window.location.href = "Register.html";
+        window.location.href = "/login";
       });
 
       document.getElementById("logout-btn").addEventListener("click", () => {

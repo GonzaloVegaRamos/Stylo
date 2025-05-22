@@ -34,3 +34,21 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
+
+@app.get("/armario", response_class=HTMLResponse)
+async def read_armario(request: Request):
+    return templates.TemplateResponse("armario.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("Register.html", {"request": request})
+
+
+@app.get("/crear-conjunto", response_class=HTMLResponse)
+async def crear_conjunto_page(request: Request):
+    return templates.TemplateResponse("men.html", {"request": request})
+
+
+@app.get("/ver-conjunto", response_class=HTMLResponse)
+async def ver_conjunto_page(request: Request):
+    return templates.TemplateResponse("view-conjunto.html", {"request": request})
