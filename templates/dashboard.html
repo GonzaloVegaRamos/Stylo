@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <style>
+      /* Reset básico */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        color: #444;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+      /* Header con fondo claro y sombra sutil */
+      .header {
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px 20px;
+        position: relative;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #666;
+        z-index: 10;
+      }
+      .header button {
+        background: #ffe5d4;
+        border: none;
+        color: #666;
+        padding: 8px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+      .logo {
+        margin-right: 1100px;
+      }
+      .header button:hover {
+        background: #60b1a7;
+      }
+      /* Navegación */
+      nav {
+        background: #fff;
+        display: flex;
+        padding: 10px 40px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        gap: 30px;
+        font-weight: 700;
+      }
+      nav a {
+        color: #60b1a7;
+        text-decoration: none;
+        font-size: 1.15rem;
+        position: relative;
+        padding-bottom: 5px;
+        transition: color 0.3s ease;
+      }
+      nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 3px;
+        background: #60b1a7;
+        transition: width 0.3s ease;
+        border-radius: 2px;
+      }
+      nav a:hover {
+        color: #666;
+      }
+      nav a:hover::after {
+        width: 100%;
+      }
+      /* Imagen principal y fondo animado */
+      .main-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        height: 60vh;
+        overflow: hidden;
+        /* background: rgba(138, 43, 226, 0.4);  <-- esta línea la quitamos */
+      }
+
+      .fondo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        width: 300vw; /* 3 imágenes */
+        height: 100%;
+        animation: slideBackground 30s linear infinite;
+        opacity: 0.2;
+        border-radius: 20px;
+        pointer-events: none;
+        user-select: none;
+      }
+      .fondo img {
+        width: 100vw;
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+        filter: brightness(0.8);
+        border-radius: 20px;
+      }
+      @keyframes slideBackground {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100vw);
+        }
+      }
+      /* Contenedor principal con estilo card */
+      .contenedor {
+        position: relative;
+        background: #ffe5d4;
+        padding: 50px 60px;
+        border-radius: 25px;
+        box-shadow: 0 12px 30px rgba(55, 66, 250, 0.25);
+        max-width: 500px; /* <- antes 350px */
+        width: 90%;
+        text-align: center;
+        z-index: 1;
+        color: #2f3542;
+      }
+
+      .contenedor h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        user-select: none;
+        letter-spacing: 0.04em;
+      }
+      .boton {
+        display: inline-block;
+        padding: 12px 28px;
+        margin: 10px 8px 0;
+        font-weight: 700;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 15px rgba(55, 66, 250, 0.3);
+        user-select: none;
+      }
+      .boton1 {
+        background: #60b1a7;
+        color: white;
+      }
+      .boton1:hover {
+        background: #2f3542;
+        box-shadow: 0 8px 20px rgba(47, 53, 66, 0.5);
+        transform: translateY(-3px);
+      }
+      .boton2 {
+        background: #60b1a7;
+        color: white;
+      }
+      .boton2:hover {
+        background: #2f3542;
+        box-shadow: 0 8px 20px rgba(47, 53, 66, 0.5);
+        transform: translateY(-3px);
+      }
+      /* Sección noticias */
+      .news-section {
+        max-width: 900px;
+        margin: 40px auto 60px;
+        padding: 20px 30px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      }
+      .news-section h2 {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #60b1a7;
+        letter-spacing: 0.03em;
+        user-select: none;
+      }
+      .news-item {
+        background: #f7f9fc;
+        border-radius: 15px;
+        padding: 20px 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 10px rgba(55, 66, 250, 0.05);
+        transition: background-color 0.3s ease;
+      }
+      .news-item:hover {
+        background-color: #e1e8ff;
+      }
+      .news-item h3 {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+        color: #2f3542;
+        user-select: text;
+      }
+      .news-item p {
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.4;
+        user-select: text;
+      }
+      .news-item .date {
+        font-size: 0.85rem;
+        color: #888;
+        text-align: right;
+        margin-top: 10px;
+        font-style: italic;
+        user-select: none;
+      }
+
+      /* Banner de anuncio - MODIFICADO */
+      .ad-section {
+        width: 100%;
+        background: #ffe5d4;
+        padding: 30px 0;
+        margin: 40px 0;
+      }
+
+      .ad-banner {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        background: #ffe5d4;
+        padding: 20px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .ad-banner img {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
+      .ad-text {
+        flex: 1;
+        padding: 0 20px;
+      }
+
+      .ad-text h2 {
+        font-size: 1.8rem;
+        color: #2f3542;
+        margin-bottom: 10px;
+      }
+
+      .ad-text p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 15px;
+      }
+
+      .ad-text button {
+        background: #60b1a7;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .ad-text button:hover {
+        background-color: #2f3542;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Footer */
+      footer {
+        background: #fff;
+        text-align: center;
+        padding: 20px;
+        color: #999;
+        font-size: 0.9rem;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+        user-select: none;
+      }
+      /* Responsive */
+      @media (max-width: 768px) {
+        .contenedor {
+          width: 95%;
+          padding: 25px 20px;
+        }
+        .news-section {
+          margin: 20px 15px 40px;
+          padding: 15px 20px;
+        }
+        nav {
+          justify-content: center;
+          gap: 20px;
+          padding: 10px 15px;
+        }
+
+        /* Responsive para el banner */
+        .ad-section {
+          padding: 20px 0;
+          margin: 30px 0;
+        }
+
+        .ad-banner {
+          flex-direction: column;
+          padding: 15px;
+          margin: 0 auto;
+          width: 95%;
+        }
+
+        .ad-banner img {
+          max-width: 100%;
+          width: 100%;
+          margin-bottom: 15px;
+        }
+
+        .ad-text {
+          padding: 0;
+          text-align: center;
+        }
+
+        .ad-text h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+      </div>
+
+      <div class="account-info">
+        <p id="user-info">Cargando información...</p>
+        <button id="login-btn" style="display: none">Iniciar sesión</button>
+        <button id="logout-btn" style="display: none">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav>
+      <a href="armario.html">ARMARIO</a>
+      <a href="#">EXPLORAR</a>
+      <a href="#">¿POR DONDE EMPIEZO?</a>
+    </nav>
+
+    <!-- Imagen principal con fondo en movimiento -->
+    <div class="main-image">
+      <div class="fondo">
+        <img src="static/img/FU.png" alt="Fondo" />
+        <img src="static/img/FU.png" alt="Fondo" />
+        <img src="static/img/FU.png" alt="Fondo" />
+      </div>
+
+      <div class="contenedor">
+        <h2>🌟 Armario Virtual 🌟</h2>
+        <button class="boton boton1" onclick="window.location.href='men.html'">
+          Empieza a Crear!
+        </button>
+        <button
+          class="boton boton2"
+          onclick="window.location.href='armario.html'"
+        >
+          Ver tu armario
+        </button>
+      </div>
+    </div>
+
+    <!-- Banner de Anuncio - MODIFICADO -->
+    <section class="ad-section">
+      <div class="ad-banner">
+        <img
+          src="static/img/Nueva coleccion verano 2025 (1).png"
+          alt="Anuncio especial"
+        />
+        <div class="ad-text">
+          <h2>🎉 ¡Gran promoción de temporada!</h2>
+          <p>Descubre descuentos exclusivos en nuevas colecciones.</p>
+          <button onclick="window.location.href='promo.html'">
+            Ver Promoción
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Mi Empresa | Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        document.getElementById("user-info").textContent =
+          "No has iniciado sesión";
+        document.getElementById("login-btn").style.display = "inline-block";
+      } else {
+        fetch("http://127.0.0.1:8000/users/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("No autorizado");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            document.getElementById(
+              "user-info"
+            ).textContent = `${data.username}`;
+            document.getElementById("logout-btn").style.display =
+              "inline-block";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            localStorage.removeItem("token");
+            document.getElementById("user-info").textContent =
+              "No has iniciado sesión";
+            document.getElementById("login-btn").style.display = "inline-block";
+          });
+      }
+
+      document.getElementById("login-btn").addEventListener("click", () => {
+        window.location.href = "Register.html";
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        location.reload();
+      });
+    </script>
+  </body>
+</html>

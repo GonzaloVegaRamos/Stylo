@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Monigote Customizer</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        height: 100vh;
+        background: #f3f3f3;
+      }
+
+      .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100vh;
+        background: #fff;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .menu h2 {
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
+
+      .menu ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .menu li {
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .menu li:hover {
+        background: #e0e0e0;
+      }
+
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin-left: 220px;
+        padding-top: 20px;
+      }
+
+      .ropa-item {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        width: 250px;
+        text-align: center;
+      }
+
+      .ropa-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+
+      .ropa-item p {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .ropa-item a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .ropa-item a:hover {
+        background-color: #0056b3;
+      }
+
+      .ropa-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 15px;
+      }
+
+      .search-container {
+        width: 80%;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        margin-right: 50px;
+        gap: 15px;
+      }
+
+      .search-container input {
+        padding: 10px;
+        width: 60%;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .search-container select {
+        padding: 10px;
+        width: 20%;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .gender-filter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .gender-filter label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .gender-filter input[type="radio"] {
+        margin: 0;
+        accent-color: #007bff;
+      }
+
+      .favorito-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 22px;
+        color: #888;
+        transition: color 0.3s ease;
+      }
+
+      .favorito-btn.fav {
+        color: red;
+      }
+
+      .seleccion-container {
+        margin-top: 20px;
+        padding: 10px;
+        background: #f8f8f8;
+        border-top: 1px solid #ccc;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .seleccion-container h2 {
+        margin-bottom: 15px;
+      }
+
+      .categoria-seleccion {
+        margin-bottom: 20px;
+      }
+
+      .seleccion-list .ropa-item {
+        width: 80px;
+        padding: 5px;
+        position: relative;
+      }
+
+      .seleccion-list .ropa-item img {
+        width: 100%;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+
+      .seleccion-list .ropa-item .remove-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      .seleccion-list .ropa-item p {
+        display: none;
+      }
+
+      /* Estilos para el popup/modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 70%;
+        max-width: 500px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h3 {
+        margin: 0;
+      }
+
+      .modal-body {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .modal-item {
+        width: 80px;
+        padding: 5px;
+        text-align: center;
+      }
+
+      .modal-item img {
+        width: 100%;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+
+      .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* Estilos para el modal de confirmación */
+      #confirmationModal .modal-content {
+        max-width: 400px;
+      }
+
+      #confirmationMessage {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      /* Estilos para los nuevos botones */
+      .action-button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+        margin: 0 10px;
+      }
+
+      #shareButton {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      #viewWardrobeButton {
+        background-color: #2196f3;
+        color: white;
+      }
+
+      #shareButton:hover {
+        background-color: #45a049;
+      }
+
+      #viewWardrobeButton:hover {
+        background-color: #0b7dda;
+      }
+
+      /* Estilos para el input de nombre */
+      #nombreConjunto {
+        padding: 12px;
+        width: 80%;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 15px 0;
+        transition: border 0.3s;
+      }
+
+      #nombreConjunto:focus {
+        border-color: #007bff;
+        outline: none;
+      }
+
+      /* Contenedor de imagen con logo */
+      .ropa-imagen-container {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        margin-bottom: 15px;
+      }
+
+      /* Imagen principal de la prenda */
+      .ropa-imagen-container img:first-child {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      /* Logo de marca superpuesto */
+      .ropa-imagen-container .marca-logo {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 75px !important; /* Forzamos el tamaño */
+        height: 75px !important; /* Forzamos el tamaño */
+        border-radius: 50%;
+        background: white;
+        padding: 3px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        object-fit: contain;
+        z-index: 2;
+      }
+      .item {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu">
+      <div class="logo">
+        <a href="dashboard.html">
+          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+        </a>
+      </div>
+
+      <ul>
+        <li onclick="showOptions('Camiseta')">Camisetas</li>
+        <li onclick="showOptions('RAL')">Sudaderas</li>
+        <li onclick="showOptions('PB')">Pantalones</li>
+        <li onclick="showOptions('Calzado')">Zapatillas</li>
+        <li onclick="showOptions('Accesorio')">Accesorios</li>
+        <li onclick="showOptions('Chaqueta')">Chaquetas</li>
+      </ul>
+      <div class="seleccion-container">
+        <h2>Selección</h2>
+        <div id="seleccion-final"></div>
+        <button class="save-button" onclick="mostrarPopup()">
+          Guardar Conjunto
+        </button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Buscar..." />
+        <select id="brand-dropdown">
+          <option value="">Seleccionar Marca</option>
+          <option value="Nike">Nike</option>
+          <option value="Adidas">Adidas</option>
+          <option value="Puma">Puma</option>
+          <option value="Gucci">Gucci</option>
+        </select>
+        <div class="gender-filter">
+          <label>
+            <input type="radio" name="gender" value="" checked /> Todos
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Hombre" /> Hombre
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Mujer" /> Mujer
+          </label>
+        </div>
+      </div>
+
+      <div id="options" class="option-box">
+        <div id="ropa-list" class="ropa-list"></div>
+      </div>
+    </div>
+
+    <!-- Modal para confirmar el conjunto -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Confirmar Conjunto</h3>
+          <span class="close" onclick="cerrarPopup()">&times;</span>
+        </div>
+        <div class="modal-body" id="modal-seleccion-final"></div>
+        <div style="margin: 20px 0; text-align: center">
+          <input
+            type="text"
+            id="nombreConjunto"
+            placeholder="Nombre para tu conjunto"
+          />
+        </div>
+        <div style="text-align: center">
+          <button class="save-button" onclick="guardarConjunto()">
+            Confirmar y Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmationModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>¡Conjunto guardado!</h3>
+          <span class="close" onclick="cerrarConfirmationModal()">&times;</span>
+        </div>
+        <div class="modal-body" style="text-align: center; padding: 20px">
+          <p id="confirmationMessage"></p>
+          <div style="margin-top: 20px">
+            <button
+              id="shareButton"
+              class="action-button"
+              onclick="compartirConjunto()"
+            >
+              Compartir
+            </button>
+            <button
+              id="viewWardrobeButton"
+              class="action-button"
+              onclick="verArmario()"
+            >
+              Ver Armario
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let seleccion = {};
+      let conjuntoGuardadoId = null;
+      let currentCategory = "";
+      const imagenesPorMarca = {
+        HOLLISTER: "static/img/hollister.png",
+        PB: "static/img/pb.png",
+        uniqlo: "static/img/uniqlo.png",
+      };
+
+      // Función para manejar la selección de prendas
+      function seleccionarPrenda(categoria, prenda) {
+        seleccion[categoria] = prenda;
+        actualizarSeleccion();
+      }
+
+      // Función para actualizar la visualización de la selección
+      function actualizarSeleccion() {
+        const seleccionContainer = document.getElementById("seleccion-final");
+        seleccionContainer.innerHTML = "";
+
+        const categorias = [
+          "Camiseta",
+          "RAL",
+          "PB",
+          "Calzado",
+          "Accesorio",
+          "Chaqueta",
+        ];
+
+        categorias.forEach((categoria) => {
+          const categoriaContainer = document.createElement("div");
+          categoriaContainer.classList.add("categoria-seleccion");
+
+          const lista = document.createElement("div");
+          lista.classList.add("seleccion-list");
+
+          if (seleccion[categoria]) {
+            const prenda = seleccion[categoria];
+            const item = document.createElement("div");
+            item.classList.add("ropa-item");
+
+            item.innerHTML = `
+                  <img src="${prenda.img}" alt="${prenda.nombre}" />
+                  <p>${prenda.nombre}</p>
+                  <p>Marca: ${prenda.marca}</p>
+                  <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">X</button>
+                `;
+            lista.appendChild(item);
+          }
+
+          categoriaContainer.appendChild(lista);
+          seleccionContainer.appendChild(categoriaContainer);
+        });
+      }
+
+      // Función para eliminar una prenda de la selección
+      function eliminarPrenda(categoria) {
+        delete seleccion[categoria];
+        actualizarSeleccion();
+      }
+
+      // Función para mostrar el popup de confirmación
+      function mostrarPopup() {
+        const modal = document.getElementById("myModal");
+        document.getElementById("nombreConjunto").value = "";
+        modal.style.display = "block";
+
+        const modalContainer = document.getElementById("modal-seleccion-final");
+        modalContainer.innerHTML = "";
+
+        Object.values(seleccion).forEach((prenda) => {
+          const item = document.createElement("div");
+          item.classList.add("modal-item");
+
+          item.innerHTML = `
+                <img src="${prenda.img}" alt="${prenda.nombre}" />
+                <p>${prenda.nombre}</p>
+              `;
+          modalContainer.appendChild(item);
+        });
+      }
+
+      // Función para cerrar el popup
+      function cerrarPopup() {
+        document.getElementById("myModal").style.display = "none";
+      }
+
+      // Función para mostrar el modal de confirmación
+      function mostrarConfirmationModal(conjuntoId, nombreConjunto) {
+        const modal = document.getElementById("confirmationModal");
+        const message = document.getElementById("confirmationMessage");
+
+        message.textContent = `"${nombreConjunto}" se ha guardado correctamente.`;
+        modal.style.display = "block";
+        conjuntoGuardadoId = conjuntoId;
+      }
+
+      // Función para cerrar el modal de confirmación
+      function cerrarConfirmationModal() {
+        document.getElementById("confirmationModal").style.display = "none";
+      }
+
+      // Función para copiar al portapapeles
+      function copiarAlPortapapeles(texto) {
+        navigator.clipboard
+          .writeText(texto)
+          .then(() => {
+            alert("¡Enlace copiado al portapeles!\n" + texto);
+          })
+          .catch((err) => {
+            console.error("Error al copiar:", err);
+            alert(
+              "No se pudo copiar el enlace automáticamente. Cópialo manualmente:\n" +
+                texto
+            );
+          });
+      }
+
+      // Función para redirigir al armario
+      function verArmario() {
+        alert("Redirigiendo a tu armario... (Función en desarrollo)");
+        cerrarConfirmationModal();
+      }
+
+      // Función principal para mostrar las opciones de ropa
+      async function showOptions(category) {
+        currentCategory = category;
+
+        // Obtener filtros actuales
+        const searchTerm = document
+          .getElementById("search-bar")
+          .value.toLowerCase();
+        const selectedBrand = document.getElementById("brand-dropdown").value;
+        const selectedGender = document.querySelector(
+          'input[name="gender"]:checked'
+        ).value;
+
+        // Construir la URL con los parámetros
+        let url = `http://127.0.0.1:8000/users/ropa?tipo=${encodeURIComponent(
+          category.trim()
+        )}`;
+
+        // Agregar filtro de género si está seleccionado
+        if (selectedGender) {
+          url += `&Genero=${encodeURIComponent(selectedGender)}`;
+        }
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Error al obtener las prendas");
+          let ropaList = await response.json();
+
+          // Aplicar filtros adicionales (marca y búsqueda) en el cliente
+          if (selectedBrand) {
+            ropaList = ropaList.filter((item) => item.marca === selectedBrand);
+          }
+
+          if (searchTerm) {
+            ropaList = ropaList.filter(
+              (item) =>
+                item.nombre.toLowerCase().includes(searchTerm) ||
+                (item.marca && item.marca.toLowerCase().includes(searchTerm))
+            );
+          }
+
+          // Mostrar los resultados
+          const ropaContainer = document.getElementById("ropa-list");
+          ropaContainer.innerHTML = "";
+
+          if (ropaList.length === 0) {
+            ropaContainer.innerHTML =
+              "<p>No se encontraron prendas con los filtros seleccionados</p>";
+            return;
+          }
+
+          ropaList.forEach((ropa) => {
+            const item = document.createElement("div");
+            item.classList.add("ropa-item");
+
+            // Verificar si hay logo para esta marca
+            const logoMarca = imagenesPorMarca[ropa.marca] || null;
+
+            item.innerHTML = `
+  <div class="ropa-imagen-container">
+    <img src="${ropa.img}" alt="${ropa.nombre}" />
+    ${
+      logoMarca
+        ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
+        : ""
+    }
+  </div>
+  <p>${ropa.nombre}</p>
+`;
+
+            // Ahora asignamos el onclick al contenedor 'item':
+            item.onclick = () => seleccionarPrenda(category, ropa);
+
+            ropaContainer.appendChild(item);
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          document.getElementById("ropa-list").innerHTML =
+            "<p>Error al cargar las prendas</p>";
+        }
+      }
+
+      // Función para guardar el conjunto
+      function guardarConjunto() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Debes iniciar sesión para guardar conjuntos.");
+          window.location.href = "Register.html";
+          return;
+        }
+
+        const nombreInput = document.getElementById("nombreConjunto");
+        const nombreConjunto = nombreInput.value.trim();
+
+        if (!nombreConjunto) {
+          alert("Por favor ingresa un nombre para tu conjunto.");
+          return;
+        }
+
+        const conjuntoData = {
+          nombre: nombreConjunto,
+          camiseta: seleccion["Camiseta"]?.id || null,
+          ral: seleccion["RAL"]?.id || null,
+          pb: seleccion["PB"]?.id || null,
+          calzado: seleccion["Calzado"]?.id || null,
+          accesorio: seleccion["Accesorio"]?.id || null,
+          chaqueta: seleccion["Chaqueta"]?.id || null,
+        };
+
+        // Filtrar valores null
+        const datosFiltrados = Object.fromEntries(
+          Object.entries(conjuntoData).filter(([_, value]) => value !== null)
+        );
+
+        fetch("http://127.0.0.1:8000/users/conjuntos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(datosFiltrados),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((text) => {
+                throw new Error(
+                  `Error en la solicitud: ${response.statusText}, Detalles: ${text}`
+                );
+              });
+            }
+            return response.json();
+          })
+          .then((data) => {
+            mostrarConfirmationModal(data.id, nombreConjunto);
+            cerrarPopup();
+          })
+          .catch((error) => {
+            console.error("Error al guardar el conjunto:", error);
+            alert("Hubo un error al guardar el conjunto: " + error.message);
+          });
+      }
+
+      // Función para compartir el conjunto
+      function compartirConjunto() {
+        if (!conjuntoGuardadoId) {
+          console.error("Error: conjuntoGuardadoId no definido");
+          alert("No se puede compartir: ID del conjunto no encontrado");
+          cerrarConfirmationModal();
+          return;
+        }
+
+        const urlCompartir = `file:///C:/hlocal2/TFG/frontend/view-conjunto.html?id=${conjuntoGuardadoId}`;
+        copiarAlPortapapeles(urlCompartir);
+        cerrarConfirmationModal();
+      }
+
+      // Función alternativa para copiar URL
+      function copiarUrlFallback(url) {
+        const input = document.createElement("input");
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+
+        try {
+          document.execCommand("copy");
+          alert("✅ Enlace copiado:\n" + url);
+        } catch (err) {
+          console.error("Error al copiar:", err);
+          prompt("Por favor copia este enlace manualmente:", url);
+        }
+
+        document.body.removeChild(input);
+      }
+
+      // Event listeners para los filtros
+      document.addEventListener("DOMContentLoaded", function () {
+        // Escuchar cambios en el filtro de género
+        document.querySelectorAll('input[name="gender"]').forEach((radio) => {
+          radio.addEventListener("change", function () {
+            if (currentCategory) {
+              showOptions(currentCategory);
+            }
+          });
+        });
+
+        // Escuchar cambios en el filtro de marca
+        document
+          .getElementById("brand-dropdown")
+          .addEventListener("change", function () {
+            if (currentCategory) {
+              showOptions(currentCategory);
+            }
+          });
+
+        // Escuchar cambios en la barra de búsqueda
+        document
+          .getElementById("search-bar")
+          .addEventListener("input", function () {
+            if (currentCategory) {
+              showOptions(currentCategory);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
