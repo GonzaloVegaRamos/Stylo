@@ -279,7 +279,9 @@
         container.innerHTML = conjuntos
           .map(
             (conjunto) => `
-          <div class="conjunto-card" data-id="${conjunto.codigo}">
+          <div class="conjunto-card" data-id="${
+            conjunto.codigo
+          }" onclick="verConjunto('${conjunto.codigo}')>
             <div class="card-header">
               <h3>${conjunto.nombre}</h3>
             </div>
@@ -309,6 +311,10 @@
         `
           )
           .join("");
+      }
+
+      function verConjunto(codigo) {
+        window.location.href = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${codigo}`;
       }
 
       async function eliminarConjunto(id) {
