@@ -279,40 +279,39 @@
         container.innerHTML = conjuntos
           .map(
             (conjunto) => `
-          <div class="conjunto-card" data-id="${
-            conjunto.codigo
-          }" onclick="verConjunto('${conjunto.codigo}')>
-            <div class="card-header">
-              <h3>${conjunto.nombre}</h3>
-            </div>
-            <div class="card-body">
-              <div class="prendas-container">
-                ${Object.values(conjunto.prendas || {})
-                  .map(
-                    (prenda) => `
-                      <div class="prenda-item">
-                        <img src="${prenda.img}" alt="${prenda.nombre}">
-                        <p>${prenda.nombre}</p>
-                      </div>
-                    `
-                  )
-                  .join("")}
-              </div>
-            </div>
-            <div class="card-footer">
-              <button class="btn btn-compartir" onclick="compartirConjunto('${
-                conjunto.codigo
-              }')">Compartir</button>
-              <button class="btn btn-eliminar" onclick="eliminarConjunto('${
-                conjunto.codigo
-              }')">Eliminar</button>
+        <div class="conjunto-card" data-id="${
+          conjunto.codigo
+        }" onclick="verConjunto('${conjunto.codigo}')">
+          <div class="card-header">
+            <h3>${conjunto.nombre}</h3>
+          </div>
+          <div class="card-body">
+            <div class="prendas-container">
+              ${Object.values(conjunto.prendas || {})
+                .map(
+                  (prenda) => `
+                    <div class="prenda-item">
+                      <img src="${prenda.img}" alt="${prenda.nombre}">
+                      <p>${prenda.nombre}</p>
+                    </div>
+                  `
+                )
+                .join("")}
             </div>
           </div>
-        `
+          <div class="card-footer">
+            <button class="btn btn-compartir" onclick="event.stopPropagation(); compartirConjunto('${
+              conjunto.codigo
+            }')">Compartir</button>
+            <button class="btn btn-eliminar" onclick="event.stopPropagation(); eliminarConjunto('${
+              conjunto.codigo
+            }')">Eliminar</button>
+          </div>
+        </div>
+      `
           )
           .join("");
       }
-
       function verConjunto(codigo) {
         window.location.href = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${codigo}`;
       }
