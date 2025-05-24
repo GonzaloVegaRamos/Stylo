@@ -97,6 +97,19 @@ async def register_user(user: schemas.UserCreate):
     )
 
 
+@router.get("/users/{user_id}")
+async def obtener_usuario(user_id: int):
+    try:
+        response = supabase.table("users").select("*").eq("id", user_id).single().execute()
+        
+        if not response.data:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        
+        return response.data
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener el usuario: {str(e)}")
+
 @router.get("/user/{user_id}", response_model=schemas.UserResponse)
 async def get_user_by_id(user_id: str):
     try:
@@ -163,6 +176,7 @@ async def get_current_user(authorization: str = Header(None)):
         if not user_info or not user_info.user:
             raise HTTPException(status_code=401, detail="Token inválido")
 
+        # Obtener el auth_id
         auth_id = user_info.user.id
         
         user_data = (
@@ -177,7 +191,6 @@ async def get_current_user(authorization: str = Header(None)):
             "auth_id": auth_id,
             "username": username
         }
-
 
     except Exception as e:
         raise HTTPException(status_code=401, detail="Token inválido")
@@ -227,9 +240,12 @@ async def get_ropa(tipo: str = None, id: str = None, genero: str = None,marca: s
         # Filtro por género si está presente
         if genero and genero in ["Hombre", "Mujer"]:
             query = query.eq("Genero", genero)
-        
+
         if marca:
-            query = query.eq("marca", marca.upper())
+            query = query.eq("marca", marca.upper()) # Asumiendo que se guardan en mayúsculas
+        
+       
+        
         response = query.execute()
 
         if not response.data:

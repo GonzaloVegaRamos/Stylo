@@ -21,10 +21,21 @@
         color: var(--primary);
       }
 
-      h1 {
+      .conjunto-header {
         text-align: center;
         margin-bottom: 20px;
+      }
+
+      .conjunto-nombre {
         font-size: 1.8rem;
+        margin: 0;
+      }
+
+      .conjunto-creador {
+        font-size: 1rem;
+        color: #666;
+        margin-top: 5px;
+        font-style: italic;
       }
 
       #conjunto-info {
@@ -86,10 +97,25 @@
       .prenda a:hover {
         text-decoration: underline;
       }
+      .logo {
+        margin-right: 1100px;
+      }
     </style>
   </head>
   <body>
-    <h1 id="nombre">Conjunto de ropa</h1>
+    <header>
+      <div class="logo">
+        <a href="dashboard.html">
+          <img src="img/STYLO (1).png" alt="Logo" style="height: 80px" />
+        </a>
+      </div>
+    </header>
+
+    <div class="conjunto-header">
+      <h1 id="nombre" class="conjunto-nombre">Conjunto de ropa</h1>
+      <div id="creador" class="conjunto-creador"></div>
+    </div>
+
     <div id="conjunto-info">Cargando conjunto...</div>
 
     <script>
@@ -100,15 +126,37 @@
         document.getElementById("conjunto-info").innerText =
           "No se especificó el ID del conjunto en la URL.";
       } else {
-        fetch(`https://stylo-4u8w.onrender.com/users/conjuntos/${conjuntoId}`)
+        fetch(`http://127.0.0.1:8000/users/conjuntos/${conjuntoId}`)
           .then((response) => {
             if (!response.ok) throw new Error("Error al obtener el conjunto");
             return response.json();
           })
           .then(async (conjunto) => {
-            document.getElementById("nombre").innerText =
-              conjunto.nombre || "Conjunto de ropa";
+            // Establecer nombre del conjunto
+            const nombreConjunto = conjunto.nombre || "Conjunto de ropa";
+            document.getElementById("nombre").innerText = nombreConjunto;
 
+            // Si hay usuario, obtener nombre del usuario
+            if (conjunto.usuario) {
+              try {
+                const userRes = await fetch(
+                  `http://127.0.0.1:8000/users/users/${conjunto.usuario}`
+                );
+                if (!userRes.ok) throw new Error("Error al obtener el usuario");
+                const usuario = await userRes.json();
+
+                // Mostrar creador
+                document.getElementById("creador").innerText = `Creado por: ${
+                  usuario.username || "Usuario desconocido"
+                }`;
+              } catch (error) {
+                console.error("Error al obtener el usuario:", error);
+                document.getElementById("creador").innerText =
+                  "Creador no disponible";
+              }
+            }
+
+            // Cargar prendas
             const div = document.getElementById("conjunto-info");
             div.innerHTML = "";
 
@@ -126,7 +174,7 @@
               if (prendaId) {
                 try {
                   const res = await fetch(
-                    `https://stylo-4u8w.onrender.com/users/ropa?id=${prendaId}`
+                    `http://127.0.0.1:8000/users/ropa?id=${prendaId}`
                   );
                   if (!res.ok)
                     throw new Error(`Error al obtener la prenda ${key}`);
@@ -139,7 +187,7 @@
                   prendaDiv.innerHTML = `
                     <img src="${prenda.img}" alt="${prenda.marca}" />
                     <div class="prenda-info">
-                      <h3>${key.charAt(0).toUpperCase() + key.slice(1)}</h3>
+                      <h3>${prenda.nombre}</h3>
                       <p><strong>Marca:</strong> ${prenda.marca}</p>
                       <a href="${prenda.url}" target="_blank">Ver en tienda</a>
                     </div>
