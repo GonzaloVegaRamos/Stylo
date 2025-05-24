@@ -400,3 +400,18 @@ async def eliminar_conjunto(id_conjunto: str, authorization: str = Header(None))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error inesperado al eliminar conjunto: {str(e)}")
 
+
+@router.get("/todos-los-conjuntos", response_model=list[schemas.ConjuntoCreate])
+async def obtener_todos_los_conjuntos():
+    try:
+        # Obtener todos los conjuntos de la tabla 'conjuntos'
+        conjuntos_response = supabase.table("conjuntos").select("*").execute()
+
+        if not conjuntos_response.data:
+            return []  # No hay conjuntos
+
+        return conjuntos_response.data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener los conjuntos: {str(e)}")
+
