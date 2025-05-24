@@ -46,7 +46,7 @@ async def login_page(request: Request):
 
 @app.get("/crear-conjunto", response_class=HTMLResponse)
 async def crear_conjunto_page(request: Request):
-    return templates.TemplateResponse("men.html", {"request": request})
+    return templates.TemplateResponse("crear-conjunto.html", {"request": request})
 
 
 @app.get("/ver-conjunto", response_class=HTMLResponse)
