@@ -227,35 +227,24 @@ async def get_all_users():
         )
 
 @router.get("/ropa")
-async def get_ropa(tipo: str = None, id: str = None, genero: str = None,marca: str = None):
-    """Obtener prendas de ropa filtradas por tipo, género o por id"""
+async def get_ropa(tipo: str = None, id: str = None, genero: str = None, marca: str = None):
     try:
         query = supabase.table("ropa").select("*")
         
         if id:
-            query = query.eq("id", id)
+            # Manejar múltiples IDs separados por comas
+            id_list = [i.strip() for i in id.split(',') if i.strip()]
+            if len(id_list) == 1:
+                query = query.eq("id", id_list[0])
+            elif len(id_list) > 1:
+                query = query.in_("id", id_list)
         elif tipo:
             query = query.eq("tipo", tipo)
         
-        # Filtro por género si está presente
-        if genero and genero in ["Hombre", "Mujer"]:
-            query = query.eq("Genero", genero)
-
-        if marca:
-            query = query.eq("marca", marca.upper()) # Asumiendo que se guardan en mayúsculas
-        
-       
+        # Resto de tu lógica actual...
         
         response = query.execute()
-
-        if not response.data:
-            raise HTTPException(
-                status_code=404,
-                detail="No se encontraron prendas de ropa con los filtros aplicados."
-            )
-        
         return response.data
-
     except Exception as e:
         raise HTTPException(
             status_code=500,
