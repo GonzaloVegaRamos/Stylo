@@ -372,8 +372,8 @@
   <body>
     <div class="menu">
       <div class="logo">
-        <a href="/">
-          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+        <a href="dashboard.html">
+          <img src="img/STYLO (1).png" alt="Logo" style="height: 80px" />
         </a>
       </div>
 
@@ -398,7 +398,7 @@
       <div class="search-container">
         <input type="text" id="search-bar" placeholder="Buscar..." />
         <select id="brand-dropdown">
-          <option value="">Todas las marcas</option>
+          <option value="">Seleccionar Marca</option>
           <option value="PB">Pull&Bear</option>
           <option value="HOLLISTER">Hollister</option>
         </select>
@@ -477,9 +477,9 @@
       let conjuntoGuardadoId = null;
       let currentCategory = "";
       const imagenesPorMarca = {
-        HOLLISTER: "static/img/hollister.png",
-        PB: "static/img/pb.png",
-        uniqlo: "static/img/uniqlo.png",
+        HOLLISTER: "img/hollister.png",
+        PB: "img/pb.png",
+        uniqlo: "img/uniqlo.png",
       };
 
       // Función para manejar la selección de prendas
@@ -611,7 +611,7 @@
         ).value;
 
         // Construir la URL con los parámetros
-        let url = `https://stylo-4u8w.onrender.com/users/ropa?tipo=${encodeURIComponent(
+        let url = `http://127.0.0.1:8000/users/ropa?tipo=${encodeURIComponent(
           category.trim()
         )}`;
 
@@ -629,7 +629,6 @@
           if (selectedBrand) {
             ropaList = ropaList.filter((item) => item.marca === selectedBrand);
           }
-
           if (searchTerm) {
             const term = searchTerm.toLowerCase();
             ropaList = ropaList.filter(
@@ -678,7 +677,6 @@
                 e.stopPropagation(); // Evita que el click llegue al enlace si está dentro
                 seleccionarPrenda(category, ropa);
               });
-
             ropaContainer.appendChild(item);
           });
         } catch (error) {
@@ -693,7 +691,7 @@
         const token = localStorage.getItem("token");
         if (!token) {
           alert("Debes iniciar sesión para guardar conjuntos.");
-          window.location.href = "/login";
+          window.location.href = "Register.html";
           return;
         }
 
@@ -720,7 +718,7 @@
           Object.entries(conjuntoData).filter(([_, value]) => value !== null)
         );
 
-        fetch("https://stylo-4u8w.onrender.com/users/conjuntos", {
+        fetch("http://127.0.0.1:8000/users/conjuntos", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -757,7 +755,7 @@
           return;
         }
 
-        const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
+        const urlCompartir = `file:///C:/hlocal2/TFG/frontend/view-conjunto.html?id=${conjuntoGuardadoId}`;
         copiarAlPortapapeles(urlCompartir);
         cerrarConfirmationModal();
       }
