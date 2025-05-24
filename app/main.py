@@ -52,3 +52,7 @@ async def crear_conjunto_page(request: Request):
 @app.get("/ver-conjunto", response_class=HTMLResponse)
 async def ver_conjunto_page(request: Request):
     return templates.TemplateResponse("view-conjunto.html", {"request": request})
+
+@app.get("/comunidad", response_class=HTMLResponse)
+async def comunidad_page(request: Request):
+    return templates.TemplateResponse("comunidad.html", {"request": request})
