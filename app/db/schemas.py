@@ -42,6 +42,7 @@ class ConjuntoCreate(BaseModel):
     chaqueta: Optional[UUID] = None
     usuario: Optional[int] = None
     codigo : Optional [UUID] = None
+    estilo : Optional [str] = None
 
     model_config = ConfigDict(from_attributes=True)
 

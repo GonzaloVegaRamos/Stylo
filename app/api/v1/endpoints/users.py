@@ -363,3 +363,51 @@ async def obtener_conjunto_por_id(id_conjunto: str = Path(..., description="ID d
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener el conjunto: {str(e)}")
+
+
+@router.delete("/conjuntos/{id_conjunto}")
+async def eliminar_conjunto(id_conjunto: str, authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token no proporcionado")
+
+    token = authorization.split("Bearer ")[1]
+
+    try:
+        # Validar usuario
+        user_info = supabase.auth.get_user(token)
+        if not user_info or not user_info.user:
+            raise HTTPException(status_code=401, detail="Token inválido")
+
+        # Obtener ID interno del usuario
+        user_lookup = supabase.table("users").select("id").eq("auth_id", user_info.user.id).single().execute()
+        if not user_lookup.data:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        user_id_int = user_lookup.data["id"]
+
+        # Verificar que el conjunto existe y pertenece al usuario
+        conjunto_check = supabase.table("conjuntos") \
+            .select("codigo") \
+            .eq("codigo", id_conjunto) \
+            .eq("usuario", user_id_int) \
+            .limit(1) \
+            .execute()
+
+        if not conjunto_check.data:
+            raise HTTPException(status_code=404, detail="Conjunto no encontrado o no te pertenece")
+
+        # Eliminar el conjunto
+        # Eliminar el conjunto
+        delete_response = supabase.table("conjuntos").delete().eq("codigo", id_conjunto).execute()
+
+        if not delete_response.data:
+            raise HTTPException(status_code=500, detail="Error al eliminar el conjunto")
+
+        
+
+
+        return {"mensaje": "Conjunto eliminado exitosamente"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error inesperado al eliminar conjunto: {str(e)}")
+
