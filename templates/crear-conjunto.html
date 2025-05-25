@@ -656,7 +656,7 @@
         ).value;
 
         // Construir la URL con los parámetros
-        let url = `http://127.0.0.1:8000/users/ropa?tipo=${encodeURIComponent(
+        let url = `https://stylo-4u8w.onrender.com//users/ropa?tipo=${encodeURIComponent(
           category.trim()
         )}`;
 
@@ -764,7 +764,7 @@
           Object.entries(conjuntoData).filter(([_, value]) => value !== null)
         );
 
-        fetch("http://127.0.0.1:8000/users/conjuntos", {
+        fetch("https://stylo-4u8w.onrender.com//users/conjuntos", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
