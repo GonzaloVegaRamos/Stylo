@@ -343,117 +343,116 @@
         .ad-text h2 {
           font-size: 1.5rem;
         }
+      }
+      .user-management {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-        .user-management {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-        }
+      .user-management-btn {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
 
-        .user-management-btn {
-          background: none;
-          border: none;
-          color: #666;
-          cursor: pointer;
-          font-size: 1.2rem;
-          transition: transform 0.3s ease;
-        }
+      .user-management-btn:hover {
+        transform: scale(1.1);
+      }
 
-        .user-management-btn:hover {
-          transform: scale(1.1);
-        }
+      /* Estilos para el modal de gestión de usuario */
+      .user-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+      }
 
-        /* Estilos para el modal de gestión de usuario */
-        .user-modal {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: 100;
-          justify-content: center;
-          align-items: center;
-        }
+      .user-modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
 
-        .user-modal-content {
-          background: white;
-          padding: 30px;
-          border-radius: 15px;
-          width: 90%;
-          max-width: 400px;
-          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-          position: relative;
-        }
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
 
-        .close-modal {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          font-size: 1.5rem;
-          cursor: pointer;
-          color: #666;
-        }
+      .user-modal h3 {
+        margin-bottom: 20px;
+        color: #2f3542;
+        text-align: center;
+      }
 
-        .user-modal h3 {
-          margin-bottom: 20px;
-          color: #2f3542;
-          text-align: center;
-        }
+      .user-option {
+        margin-bottom: 15px;
+      }
 
-        .user-option {
-          margin-bottom: 15px;
-        }
+      .user-option label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #555;
+      }
 
-        .user-option label {
-          display: block;
-          margin-bottom: 5px;
-          font-weight: 600;
-          color: #555;
-        }
+      .user-option input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
 
-        .user-option input {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          font-size: 1rem;
-        }
+      .user-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+      }
 
-        .user-actions {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 25px;
-        }
+      .user-actions button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
 
-        .user-actions button {
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
+      .update-btn {
+        background: #60b1a7;
+        color: white;
+      }
 
-        .update-btn {
-          background: #60b1a7;
-          color: white;
-        }
+      .update-btn:hover {
+        background: #4a8d84;
+      }
 
-        .update-btn:hover {
-          background: #4a8d84;
-        }
+      .delete-btn {
+        background: #ff6b6b;
+        color: white;
+      }
 
-        .delete-btn {
-          background: #ff6b6b;
-          color: white;
-        }
-
-        .delete-btn:hover {
-          background: #e05555;
-        }
+      .delete-btn:hover {
+        background: #e05555;
       }
     </style>
   </head>
