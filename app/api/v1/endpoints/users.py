@@ -435,7 +435,7 @@ GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = os.environ.get("OAUTHLIB_INSECURE_TRANSPORT", "1")
 
-@router.get("/users/google/login")
+@router.get("/google/login")
 async def google_login():
     flow = Flow.from_client_config(
         {
@@ -460,7 +460,7 @@ async def google_login():
     return RedirectResponse(authorization_url)
 
 
-@router.get("/users/google/callback")
+@router.get("/google/callback")
 async def google_callback(request: Request):
     flow = Flow.from_client_config(
         {
