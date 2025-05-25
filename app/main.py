@@ -56,3 +56,7 @@ async def ver_conjunto_page(request: Request):
 @app.get("/comunidad", response_class=HTMLResponse)
 async def comunidad_page(request: Request):
     return templates.TemplateResponse("comunidad.html", {"request": request})
+
+@app.get("/auth/callback", response_class=HTMLResponse)
+async def callback_page(request: Request):
+    return templates.TemplateResponse("callback.html", {"request": request})

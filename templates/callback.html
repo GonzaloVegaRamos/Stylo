@@ -1,0 +1,43 @@
+<!-- auth/callback.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Procesando login...</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+      // Configuración de Supabase con variables de entorno
+      const supabaseUrl =
+        import.meta.env.SUPABASE_URL || process.env.SUPABASE_URL;
+      const supabaseKey =
+        import.meta.env.SUPABASE_KEY || process.env.SUPABASE_KEY;
+
+      if (!supabaseUrl || !supabaseKey) {
+        console.error("Faltan las variables de entorno de Supabase");
+        // Puedes mostrar un mensaje de error al usuario si lo prefieres
+      }
+
+      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+      async function handleAuth() {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (session) {
+          localStorage.setItem("token", session.access_token);
+          window.location.href = "/";
+        } else if (error) {
+          console.error("Error:", error);
+          window.location.href =
+            "/login?error=" + encodeURIComponent(error.message);
+        }
+      }
+
+      handleAuth();
+    </script>
+  </head>
+  <body>
+    <p>Procesando tu autenticación...</p>
+  </body>
+</html>

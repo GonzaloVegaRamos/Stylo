@@ -432,32 +432,13 @@ import os
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = os.environ.get("OAUTHLIB_INSECURE_TRANSPORT", "1")
 
 @router.get("/google/login")
 async def google_login():
-    flow = Flow.from_client_config(
-        {
-            "web": {
-                "client_id": GOOGLE_CLIENT_ID,
-                "client_secret": GOOGLE_CLIENT_SECRET,
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-                "redirect_uris": [GOOGLE_REDIRECT_URI],
-            }
-        },
-        scopes=["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile", "openid"],
-    )
-
-    flow.redirect_uri = GOOGLE_REDIRECT_URI
-    authorization_url, state = flow.authorization_url(
-        access_type="offline",
-        include_granted_scopes="true",
-        prompt="consent"
-    )
-
-    return RedirectResponse(authorization_url)
+    return RedirectResponse(url=f"{SUPABASE_URL}/auth/v1/authorize?provider=google")
 
 
 from fastapi import APIRouter, Request, HTTPException, Form
@@ -467,66 +448,4 @@ from google.auth.transport import requests as google_requests
 import requests
 
 FRONTEND_URL = "https://stylo-4u8w.onrender.com/"  # Cambia por tu URL frontend
-
-@router.post("/google/callback")
-async def google_callback(credential: str = Form(...)):
-    id_token_str = credential 
-    if not id_token_str:
-        raise HTTPException(status_code=400, detail="No id_token provided")
-
-    try:
-        id_info = id_token.verify_oauth2_token(
-            id_token_str,
-            google_requests.Request(),
-            GOOGLE_CLIENT_ID,
-        )
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"Invalid token: {str(e)}")
-
-    email = id_info.get("email")
-    username = id_info.get("name", email.split("@")[0])
-    auth_id = id_info.get("sub")
-
-    if not email or not auth_id:
-        raise HTTPException(status_code=400, detail="Token missing required info")
-
-    try:
-        existing_user_response = supabase.table("users").select("*").eq("auth_id", auth_id).maybe_single().execute()
-
-    # Verificamos si hay una respuesta válida antes de acceder a .data
-        if not existing_user_response or not getattr(existing_user_response, "data", None):
-            supabase.table("users").insert({
-            "auth_id": auth_id,
-            "email": email,
-            "username": username,
-            "gender": None,
-            "style_preference": None,
-            "edad": None
-        }).execute()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error registering user: {str(e)}")
-
-
-    # Aquí deberías crear tu token JWT propio o usar el de supabase si puedes
-
-    response = requests.post(
-    "https://fcuoobbozbpwobfzbfwb.supabase.co/auth/v1/token?grant_type=id_token",
-    headers={"Content-Type": "application/json"},
-    json={
-        "provider": "google",
-        "id_token": id_token_str
-    }
-)
-
-    if response.status_code != 200:
-        raise HTTPException(status_code=400, detail="No se pudo intercambiar el token")
-
-    token_data = response.json()
-    token = token_data.get("access_token")
-
-    # Redirige al frontend pasando el token como query param o como cookie (mejor usar cookie)
-    redirect_url = f"{FRONTEND_URL}?token={token}"
-    return RedirectResponse(url=redirect_url)
-
-
 
