@@ -204,12 +204,15 @@
         border-radius: 50%;
         width: 16px;
         height: 16px;
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 10px; /* Reducido para asegurar espacio */
+        line-height: 16px; /* Debe ser igual al height */
         text-align: center;
         cursor: pointer;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-
       .seleccion-list .ropa-item p {
         display: none;
       }
@@ -517,7 +520,7 @@
 
             item.innerHTML = `
                   <img src="${prenda.img}" alt="${prenda.nombre}" />
-                  <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">X&nbsp</button>
+                  <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">×</button>
                 `;
             lista.appendChild(item);
           }
