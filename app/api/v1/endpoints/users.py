@@ -461,53 +461,32 @@ async def google_login():
 
 
 from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
-@router.api_route("/google/callback", methods=["GET", "POST"])
+router = APIRouter()
+
+@router.post("/google/callback")
 async def google_callback(request: Request):
-    flow = Flow.from_client_config(
-        {
-            "web": {
-                "client_id": GOOGLE_CLIENT_ID,
-                "client_secret": GOOGLE_CLIENT_SECRET,
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-                "redirect_uris": [GOOGLE_REDIRECT_URI],
-            }
-        },
-        scopes=[
-            "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/userinfo.profile",
-            "openid",
-        ],
-    )
-    flow.redirect_uri = GOOGLE_REDIRECT_URI
+    body = await request.json()
+    id_token_str = body.get("id_token") or body.get("credential")  # depende qué envíes desde frontend
 
-    if request.method == "POST":
-        form = await request.form()
-        # Google manda el code y el state como form fields
-        code = form.get("code")
-        state = form.get("state")
-        if not code:
-            raise HTTPException(status_code=400, detail="Código no recibido en POST")
-        authorization_response = f"{GOOGLE_REDIRECT_URI}?code={code}&state={state}"
-    else:  # GET
-        authorization_response = str(request.url)
+    if not id_token_str:
+        raise HTTPException(status_code=400, detail="No id_token provided")
 
     try:
-        flow.fetch_token(authorization_response=authorization_response)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error obteniendo token: {str(e)}")
+        # Validar token con Google
+        id_info = id_token.verify_oauth2_token(id_token_str, google_requests.Request(), GOOGLE_CLIENT_ID)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid token")
 
-    credentials = flow.credentials
-    id_info = id_token.verify_oauth2_token(
-        credentials._id_token,
-        google_requests.Request(),
-        GOOGLE_CLIENT_ID,
-    )
-
-    email = id_info["email"]
+    email = id_info.get("email")
     username = id_info.get("name", email.split("@")[0])
-    auth_id = id_info["sub"]  # Identificador único de Google
+    auth_id = id_info.get("sub")  # id único de Google
+
+    if not email or not auth_id:
+        raise HTTPException(status_code=400, detail="Token missing required info")
 
     # Buscar o crear usuario en Supabase
     try:
@@ -525,10 +504,10 @@ async def google_callback(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al registrar usuario con Google: {str(e)}")
 
-    # Generar token
+    # Aquí generas tu token propio (ejemplo con Supabase)
     session = supabase.auth.sign_in_with_id_token({
         "provider": "google",
-        "id_token": credentials._id_token
+        "id_token": id_token_str
     })
 
     token = session.session.access_token if session.session else None
