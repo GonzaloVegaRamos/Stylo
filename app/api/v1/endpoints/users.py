@@ -465,8 +465,6 @@ from fastapi import APIRouter, Request, HTTPException
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
-
-GOOGLE_CLIENT_ID = "tu-client-id-aqui"
 FRONTEND_URL = "https://stylo-4u8w.onrender.com/"  # Cambia por tu URL frontend
 
 @router.post("/google/callback")
