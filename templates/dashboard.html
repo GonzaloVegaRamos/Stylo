@@ -343,6 +343,117 @@
         .ad-text h2 {
           font-size: 1.5rem;
         }
+
+        .user-management {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .user-management-btn {
+          background: none;
+          border: none;
+          color: #666;
+          cursor: pointer;
+          font-size: 1.2rem;
+          transition: transform 0.3s ease;
+        }
+
+        .user-management-btn:hover {
+          transform: scale(1.1);
+        }
+
+        /* Estilos para el modal de gestión de usuario */
+        .user-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 100;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .user-modal-content {
+          background: white;
+          padding: 30px;
+          border-radius: 15px;
+          width: 90%;
+          max-width: 400px;
+          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+          position: relative;
+        }
+
+        .close-modal {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #666;
+        }
+
+        .user-modal h3 {
+          margin-bottom: 20px;
+          color: #2f3542;
+          text-align: center;
+        }
+
+        .user-option {
+          margin-bottom: 15px;
+        }
+
+        .user-option label {
+          display: block;
+          margin-bottom: 5px;
+          font-weight: 600;
+          color: #555;
+        }
+
+        .user-option input {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          font-size: 1rem;
+        }
+
+        .user-actions {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 25px;
+        }
+
+        .user-actions button {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .update-btn {
+          background: #60b1a7;
+          color: white;
+        }
+
+        .update-btn:hover {
+          background: #4a8d84;
+        }
+
+        .delete-btn {
+          background: #ff6b6b;
+          color: white;
+        }
+
+        .delete-btn:hover {
+          background: #e05555;
+        }
       }
     </style>
   </head>
@@ -355,6 +466,13 @@
 
       <div class="account-info">
         <p id="user-info">Cargando información...</p>
+        <button
+          id="user-management-btn"
+          class="user-management-btn"
+          style="display: none"
+        >
+          ⚙️
+        </button>
         <button id="login-btn" style="display: none">Iniciar sesión</button>
         <button id="logout-btn" style="display: none">Cerrar sesión</button>
       </div>
@@ -386,6 +504,31 @@
         <button class="boton boton2" onclick="window.location.href='/armario'">
           Ver tu armario
         </button>
+      </div>
+    </div>
+
+    <div id="user-modal" class="user-modal">
+      <div class="user-modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Gestión de cuenta</h3>
+
+        <div class="user-option">
+          <label for="new-username">Cambiar nombre de usuario</label>
+          <input
+            type="text"
+            id="new-username"
+            placeholder="Nuevo nombre de usuario"
+          />
+        </div>
+
+        <div class="user-actions">
+          <button class="update-btn" id="update-username-btn">
+            Actualizar
+          </button>
+          <button class="delete-btn" id="delete-account-btn">
+            Eliminar cuenta
+          </button>
+        </div>
       </div>
     </div>
 
@@ -454,6 +597,145 @@
       document.getElementById("logout-btn").addEventListener("click", () => {
         localStorage.removeItem("token");
         location.reload();
+      });
+
+      const token = localStorage.getItem("token");
+      let currentUser = null;
+
+      if (!token) {
+        document.getElementById("user-info").textContent =
+          "No has iniciado sesión";
+        document.getElementById("login-btn").style.display = "inline-block";
+      } else {
+        fetch("https://stylo-4u8w.onrender.com/users/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("No autorizado");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            currentUser = data;
+            document.getElementById(
+              "user-info"
+            ).textContent = `${data.username}`;
+            document.getElementById("logout-btn").style.display =
+              "inline-block";
+            document.getElementById("user-management-btn").style.display =
+              "inline-block";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            localStorage.removeItem("token");
+            document.getElementById("user-info").textContent =
+              "No has iniciado sesión";
+            document.getElementById("login-btn").style.display = "inline-block";
+          });
+      }
+
+      document.getElementById("login-btn").addEventListener("click", () => {
+        window.location.href = "/login";
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        location.reload();
+      });
+
+      // Gestión del modal de usuario
+      const userModal = document.getElementById("user-modal");
+      const userManagementBtn = document.getElementById("user-management-btn");
+      const closeModal = document.querySelector(".close-modal");
+      const updateUsernameBtn = document.getElementById("update-username-btn");
+      const deleteAccountBtn = document.getElementById("delete-account-btn");
+      const newUsernameInput = document.getElementById("new-username");
+
+      // Mostrar modal al hacer clic en el botón de gestión
+      userManagementBtn.addEventListener("click", () => {
+        userModal.style.display = "flex";
+        if (currentUser) {
+          newUsernameInput.value = currentUser.username;
+        }
+      });
+
+      // Cerrar modal al hacer clic en la X
+      closeModal.addEventListener("click", () => {
+        userModal.style.display = "none";
+      });
+
+      // Cerrar modal al hacer clic fuera del contenido
+      window.addEventListener("click", (event) => {
+        if (event.target === userModal) {
+          userModal.style.display = "none";
+        }
+      });
+
+      // Actualizar nombre de usuario
+      updateUsernameBtn.addEventListener("click", () => {
+        const newUsername = newUsernameInput.value.trim();
+
+        if (!newUsername) {
+          alert("Por favor ingresa un nombre de usuario válido");
+          return;
+        }
+
+        fetch("https://stylo-4u8w.onrender.com/users/me", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ username: newUsername }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al actualizar el nombre de usuario");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            currentUser = data;
+            document.getElementById("user-info").textContent = data.username;
+            alert("Nombre de usuario actualizado correctamente");
+            userModal.style.display = "none";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Hubo un error al actualizar el nombre de usuario");
+          });
+      });
+
+      // Eliminar cuenta
+      deleteAccountBtn.addEventListener("click", () => {
+        if (
+          confirm(
+            "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer."
+          )
+        ) {
+          fetch("https://stylo-4u8w.onrender.com/users/me", {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Error al eliminar la cuenta");
+              }
+              localStorage.removeItem("token");
+              alert("Tu cuenta ha sido eliminada correctamente");
+              location.reload();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("Hubo un error al eliminar tu cuenta");
+            });
+        }
       });
     </script>
   </body>
