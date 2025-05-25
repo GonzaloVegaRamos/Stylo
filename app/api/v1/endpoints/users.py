@@ -490,19 +490,20 @@ async def google_callback(credential: str = Form(...)):
         raise HTTPException(status_code=400, detail="Token missing required info")
 
     try:
-        existing_user_response = supabase.table("users").select("*").eq("auth_id", auth_id).single().execute()
+        existing_user_response = supabase.table("users").select("*").eq("auth_id", auth_id).maybe_single().execute()
 
-        if not existing_user_response.data:
+        if existing_user_response.data is None:
             supabase.table("users").insert({
-                "auth_id": auth_id,
-                "email": email,
-                "username": username,
-                "gender": None,
-                "style_preference": None,
-                "edad": None
-            }).execute()
+            "auth_id": auth_id,
+            "email": email,
+            "username": username,
+            "gender": None,
+            "style_preference": None,
+            "edad": None
+        }).execute()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error registering user: {str(e)}")
+
 
     # Aquí deberías crear tu token JWT propio o usar el de supabase si puedes
     session = supabase.auth.sign_in_with_id_token({
