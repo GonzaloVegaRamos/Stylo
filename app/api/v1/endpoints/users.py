@@ -465,12 +465,14 @@ from fastapi import APIRouter, Request, HTTPException
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
-router = APIRouter()
 
-@router.post("/google/callback")
+GOOGLE_CLIENT_ID = "tu-client-id-aqui"
+FRONTEND_URL = "https://stylo-4u8w.onrender.com/"  # Cambia por tu URL frontend
+
+@router.get("/google/callback")
 async def google_callback(request: Request):
-    body = await request.json()
-    id_token_str = body.get("id_token") or body.get("credential")  # según envíes desde frontend
+    # Obtiene el token desde los query params (Google envía 'credential')
+    id_token_str = request.query_params.get("credential") or request.query_params.get("id_token")
 
     if not id_token_str:
         raise HTTPException(status_code=400, detail="No id_token provided")
@@ -506,8 +508,7 @@ async def google_callback(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error registering user: {str(e)}")
 
-    # Genera aquí tu token propio — si supabase.auth.sign_in_with_id_token no te funciona,
-    # considera crear un JWT propio con PyJWT u otro método.
+    # Aquí deberías crear tu token JWT propio o usar el de supabase si puedes
     session = supabase.auth.sign_in_with_id_token({
         "provider": "google",
         "id_token": id_token_str
@@ -515,9 +516,6 @@ async def google_callback(request: Request):
 
     token = session.session.access_token if session.session else None
 
-    return {
-        "access_token": token,
-        "token_type": "bearer",
-        "email": email,
-        "username": username,
-    }
+    # Redirige al frontend pasando el token como query param o como cookie (mejor usar cookie)
+    redirect_url = f"{FRONTEND_URL}?token={token}"
+    return RedirectResponse(url=redirect_url)
