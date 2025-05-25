@@ -126,7 +126,7 @@
         document.getElementById("conjunto-info").innerText =
           "No se especificó el ID del conjunto en la URL.";
       } else {
-        fetch(`http://127.0.0.1:8000/users/conjuntos/${conjuntoId}`)
+        fetch(`https://stylo-4u8w.onrender.com/users/conjuntos/${conjuntoId}`)
           .then((response) => {
             if (!response.ok) throw new Error("Error al obtener el conjunto");
             return response.json();
@@ -140,7 +140,7 @@
             if (conjunto.usuario) {
               try {
                 const userRes = await fetch(
-                  `http://127.0.0.1:8000/users/users/${conjunto.usuario}`
+                  `https://stylo-4u8w.onrender.com/users/users/${conjunto.usuario}`
                 );
                 if (!userRes.ok) throw new Error("Error al obtener el usuario");
                 const usuario = await userRes.json();
@@ -174,7 +174,7 @@
               if (prendaId) {
                 try {
                   const res = await fetch(
-                    `http://127.0.0.1:8000/users/ropa?id=${prendaId}`
+                    `https://stylo-4u8w.onrender.com/users/ropa?id=${prendaId}`
                   );
                   if (!res.ok)
                     throw new Error(`Error al obtener la prenda ${key}`);
