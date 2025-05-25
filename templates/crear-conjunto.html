@@ -628,6 +628,10 @@
         message.textContent = `"${nombreConjunto}" se ha guardado correctamente.`;
         modal.style.display = "block";
         conjuntoGuardadoId = conjuntoId;
+        const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
+
+        // Mostrar la URL en el input
+        document.getElementById("urlCompartir").value = urlCompartir;
       }
 
       // Función para cerrar el modal de confirmación
@@ -805,11 +809,6 @@
             console.error("Error al guardar el conjunto:", error);
             alert("Hubo un error al guardar el conjunto: " + error.message);
           });
-
-        const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
-
-        // Mostrar la URL en el input
-        document.getElementById("urlCompartir").value = urlCompartir;
       }
 
       // Función para compartir el conjunto
