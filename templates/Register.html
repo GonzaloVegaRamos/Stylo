@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stylo - Login/Register</title>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
     <style>
       @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap");
 
@@ -289,6 +290,9 @@
       const supabaseUrl = "https://fcuoobbozbpwobfzbfwb.supabase.co";
       const supabaseKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdW9vYmJvemJwd29iZnpiZndiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDk2OTUsImV4cCI6MjA1Njg4NTY5NX0.kBnE22zwoUuTU2LORXr5llC2XmkM92s1nPAIG4yisyQ";
+
+      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      console.log("Supabase client creado:", supabase);
 
       // 2. INICIALIZACIÓN CON MANEJO DE ERRORES
       let supabase;
