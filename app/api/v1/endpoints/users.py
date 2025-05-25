@@ -460,8 +460,17 @@ async def google_login():
     return RedirectResponse(authorization_url)
 
 
-@router.api_route("/google/callback", methods=["GET", "POST"])
+from fastapi import APIRouter, Request, HTTPException
+
+
+@router.get("/google/callback")
 async def google_callback(request: Request):
+    # Verifica que venga el parámetro "code"
+    query_params = dict(request.query_params)
+    if "code" not in query_params:
+        raise HTTPException(status_code=400, detail="Missing code parameter in Google callback")
+
+    # Configura el flujo de autenticación
     flow = Flow.from_client_config(
         {
             "web": {
@@ -472,30 +481,40 @@ async def google_callback(request: Request):
                 "redirect_uris": [GOOGLE_REDIRECT_URI],
             }
         },
-        scopes=["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile", "openid"],
+        scopes=[
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "openid"
+        ],
     )
-
     flow.redirect_uri = GOOGLE_REDIRECT_URI
 
-    # Construir la URL completa con el código recibido
+    # Intercambia el código por un token
     authorization_response = str(request.url)
-    flow.fetch_token(authorization_response=authorization_response)
+    try:
+        flow.fetch_token(authorization_response=authorization_response)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error fetching token: {str(e)}")
 
     credentials = flow.credentials
-    id_info = id_token.verify_oauth2_token(
-        credentials._id_token,
-        google_requests.Request(),
-        GOOGLE_CLIENT_ID
-    )
+
+    # Verifica el ID token
+    try:
+        id_info = id_token.verify_oauth2_token(
+            credentials._id_token,
+            google_requests.Request(),
+            GOOGLE_CLIENT_ID
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error verifying token: {str(e)}")
 
     email = id_info["email"]
     username = id_info.get("name", email.split("@")[0])
-    auth_id = id_info["sub"]  # Usamos el sub como identificador único de Google
+    auth_id = id_info["sub"]
 
-    # Buscar o crear usuario en Supabase
+    # Crear o buscar usuario
     try:
         existing_user_response = supabase.table("users").select("*").eq("auth_id", auth_id).single().execute()
-
         if not existing_user_response.data:
             supabase.table("users").insert({
                 "auth_id": auth_id,
@@ -508,15 +527,22 @@ async def google_callback(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al registrar usuario con Google: {str(e)}")
 
-    # Generamos un token JWT de Supabase para este usuario (si lo necesitas)
-    session = supabase.auth.sign_in_with_id_token(
-        {
-            "provider": "google",
-            "id_token": credentials._id_token
-        }
-    )
+    # Crear sesión en Supabase
+    try:
+        session = supabase.auth.sign_in_with_id_token(
+            {
+                "provider": "google",
+                "id_token": credentials._id_token
+            }
+        )
+        token = session.session.access_token if session.session else None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creando sesión en Supabase: {str(e)}")
 
-    token = session.session.access_token if session.session else None
-
-    return {"access_token": token, "token_type": "bearer", "email": email, "username": username}
-
+    # Respuesta final
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "email": email,
+        "username": username
+    }
