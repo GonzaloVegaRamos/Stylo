@@ -284,6 +284,7 @@ async def guardar_conjunto(conjunto: schemas.ConjuntoCreate, authorization: str 
             "calzado": str(conjunto.calzado) if conjunto.calzado else None,
             "accesorio": str(conjunto.accesorio) if conjunto.accesorio else None,
             "chaqueta": str(conjunto.chaqueta) if conjunto.chaqueta else None,
+            "estilo": str(conjunto.estilo) if conjunto.estilo else None
         }
 
         # Insertar en Supabase
