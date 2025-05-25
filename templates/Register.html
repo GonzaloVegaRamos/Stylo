@@ -283,6 +283,8 @@
     </section>
 
     <script>
+      console.log("Supabase:", Supabase);
+
       // 1. CONFIGURACIÓN INICIAL - COLOCA TUS PROPIOS VALORES AQUÍ
       const supabaseUrl = "https://fcuoobbozbpwobfzbfwb.supabase.co";
       const supabaseKey =
@@ -291,7 +293,7 @@
       // 2. INICIALIZACIÓN CON MANEJO DE ERRORES
       let supabase;
       try {
-        supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        supabase = Supabase.createClient(supabaseUrl, supabaseKey);
         console.log("Supabase inicializado correctamente");
       } catch (error) {
         console.error("Error inicializando Supabase:", error);
