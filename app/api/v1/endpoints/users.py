@@ -469,7 +469,7 @@ from google.auth.transport import requests as google_requests
 GOOGLE_CLIENT_ID = "tu-client-id-aqui"
 FRONTEND_URL = "https://stylo-4u8w.onrender.com/"  # Cambia por tu URL frontend
 
-@router.get("/google/callback")
+@router.post("/google/callback")
 async def google_callback(request: Request):
     # Obtiene el token desde los query params (Google envía 'credential')
     id_token_str = request.query_params.get("credential") or request.query_params.get("id_token")
