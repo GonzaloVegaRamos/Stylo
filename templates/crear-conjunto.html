@@ -164,6 +164,7 @@
       }
 
       .seleccion-container {
+        margin-bottom: 50px;
         margin-top: 20px;
         padding: 10px;
         background: #f8f8f8;
@@ -516,8 +517,6 @@
 
             item.innerHTML = `
                   <img src="${prenda.img}" alt="${prenda.nombre}" />
-                  <p>${prenda.nombre}</p>
-                  <p>Marca: ${prenda.marca}</p>
                   <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">X</button>
                 `;
             lista.appendChild(item);
@@ -584,7 +583,7 @@
           item.innerHTML = `
             <img src="${prenda.img}" alt="${prenda.nombre}" />
             <p>${prenda.nombre}</p>
-            <small>Estilo: ${prenda.estilo || "No definido"}</small>
+            <small>${prenda.estilo || "No definido"}</small>
         `;
           modalContainer.appendChild(item);
         });
