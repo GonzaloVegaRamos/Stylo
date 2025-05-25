@@ -5,11 +5,12 @@ from uuid import UUID
 
 class UserCreate(BaseModel):
     email: str
-    password: str
+    password: Optional[str] = None
     username: str
     gender: Optional[str] = None
     style_preference: Optional[str] = None
     edad: int
+    is_google_account: bool = False
 
     model_config = ConfigDict(from_attributes=True)
 
