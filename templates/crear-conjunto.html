@@ -204,7 +204,7 @@
         border-radius: 50%;
         width: 16px;
         height: 16px;
-        font-size: 10px; /* Reducido para asegurar espacio */
+        font-size: 12px; /* Reducido para asegurar espacio */
         line-height: 16px; /* Debe ser igual al height */
         text-align: center;
         cursor: pointer;
@@ -457,6 +457,19 @@
         <div class="modal-body" style="text-align: center; padding: 20px">
           <p id="confirmationMessage"></p>
           <div style="margin-top: 20px">
+            <input
+              type="text"
+              id="urlCompartir"
+              readonly
+              style="
+                margin-right: 10px;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                width: 300px;
+              "
+              onclick="this.select()"
+            />
             <button
               id="shareButton"
               class="action-button"
@@ -804,8 +817,13 @@
         }
 
         const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
+
+        // Mostrar la URL en el input
+        document.getElementById("urlCompartir").value = urlCompartir;
+
         copiarAlPortapapeles(urlCompartir);
-        cerrarConfirmationModal();
+        // No cerramos el modal inmediatamente para que el usuario vea la URL
+        // cerrarConfirmationModal();
       }
 
       // Función alternativa para copiar URL
