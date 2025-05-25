@@ -555,107 +555,126 @@
     </footer>
 
     <script>
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        document.getElementById("user-info").textContent =
-          "No has iniciado sesión";
-        document.getElementById("login-btn").style.display = "inline-block";
-      } else {
-        fetch("https://stylo-4u8w.onrender.com/users/me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("No autorizado");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            document.getElementById(
-              "user-info"
-            ).textContent = `${data.username}`;
-            document.getElementById("logout-btn").style.display =
-              "inline-block";
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            localStorage.removeItem("token");
-            document.getElementById("user-info").textContent =
-              "No has iniciado sesión";
-            document.getElementById("login-btn").style.display = "inline-block";
-          });
-      }
-
-      document.getElementById("login-btn").addEventListener("click", () => {
-        window.location.href = "/login";
-      });
-
-      document.getElementById("logout-btn").addEventListener("click", () => {
-        localStorage.removeItem("token");
-        location.reload();
-      });
-
-      const token = localStorage.getItem("token");
-      let currentUser = null;
-
-      if (!token) {
-        document.getElementById("user-info").textContent =
-          "No has iniciado sesión";
-        document.getElementById("login-btn").style.display = "inline-block";
-      } else {
-        fetch("https://stylo-4u8w.onrender.com/users/me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("No autorizado");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            currentUser = data;
-            document.getElementById(
-              "user-info"
-            ).textContent = `${data.username}`;
-            document.getElementById("logout-btn").style.display =
-              "inline-block";
-            document.getElementById("user-management-btn").style.display =
-              "inline-block";
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            localStorage.removeItem("token");
-            document.getElementById("user-info").textContent =
-              "No has iniciado sesión";
-            document.getElementById("login-btn").style.display = "inline-block";
-          });
-      }
-
-      document.getElementById("login-btn").addEventListener("click", () => {
-        window.location.href = "/login";
-      });
-
-      document.getElementById("logout-btn").addEventListener("click", () => {
-        localStorage.removeItem("token");
-        location.reload();
-      });
-
-      // Gestión del modal de usuario
-      const userModal = document.getElementById("user-modal");
+      // Elementos del DOM
+      const userInfoElement = document.getElementById("user-info");
+      const loginBtn = document.getElementById("login-btn");
+      const logoutBtn = document.getElementById("logout-btn");
       const userManagementBtn = document.getElementById("user-management-btn");
+      const userModal = document.getElementById("user-modal");
       const closeModal = document.querySelector(".close-modal");
       const updateUsernameBtn = document.getElementById("update-username-btn");
       const deleteAccountBtn = document.getElementById("delete-account-btn");
       const newUsernameInput = document.getElementById("new-username");
 
-      // Mostrar modal al hacer clic en el botón de gestión
+      // Variables de estado
+      const token = localStorage.getItem("token");
+      let currentUser = null;
+
+      // Función principal de autenticación
+      async function checkAuth() {
+        try {
+          // Ocultar elementos por defecto
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "none";
+          userManagementBtn.style.display = "none";
+
+          if (!token) {
+            throw new Error("No hay token");
+          }
+
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+
+          const data = await response.json();
+          currentUser = data;
+          userInfoElement.textContent = data.username;
+          logoutBtn.style.display = "inline-block";
+          userManagementBtn.style.display = "inline-block";
+        } catch (error) {
+          console.error("Error de autenticación:", error);
+          localStorage.removeItem("token");
+          userInfoElement.textContent = "No has iniciado sesión";
+          loginBtn.style.display = "inline-block";
+        }
+      }
+
+      // Función para actualizar el nombre de usuario
+      async function updateUsername(newUsername) {
+        try {
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ username: newUsername }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Error en la respuesta del servidor");
+          }
+
+          const data = await response.json();
+          currentUser = data;
+          userInfoElement.textContent = data.username;
+          alert("Nombre de usuario actualizado correctamente");
+          userModal.style.display = "none";
+        } catch (error) {
+          console.error("Error al actualizar:", error);
+          alert("Hubo un error al actualizar el nombre de usuario");
+        }
+      }
+
+      // Función para eliminar la cuenta
+      async function deleteAccount() {
+        try {
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Error en la respuesta del servidor");
+          }
+
+          localStorage.removeItem("token");
+          alert("Tu cuenta ha sido eliminada correctamente");
+          location.reload();
+        } catch (error) {
+          console.error("Error al eliminar:", error);
+          alert("Hubo un error al eliminar tu cuenta");
+        }
+      }
+
+      // Event Listeners
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "/login";
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        location.reload();
+      });
+
       userManagementBtn.addEventListener("click", () => {
         userModal.style.display = "flex";
         if (currentUser) {
@@ -663,80 +682,37 @@
         }
       });
 
-      // Cerrar modal al hacer clic en la X
       closeModal.addEventListener("click", () => {
         userModal.style.display = "none";
       });
 
-      // Cerrar modal al hacer clic fuera del contenido
       window.addEventListener("click", (event) => {
         if (event.target === userModal) {
           userModal.style.display = "none";
         }
       });
 
-      // Actualizar nombre de usuario
       updateUsernameBtn.addEventListener("click", () => {
         const newUsername = newUsernameInput.value.trim();
-
         if (!newUsername) {
           alert("Por favor ingresa un nombre de usuario válido");
           return;
         }
-
-        fetch("https://stylo-4u8w.onrender.com/users/me", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ username: newUsername }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Error al actualizar el nombre de usuario");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            currentUser = data;
-            document.getElementById("user-info").textContent = data.username;
-            alert("Nombre de usuario actualizado correctamente");
-            userModal.style.display = "none";
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Hubo un error al actualizar el nombre de usuario");
-          });
+        updateUsername(newUsername);
       });
 
-      // Eliminar cuenta
       deleteAccountBtn.addEventListener("click", () => {
         if (
           confirm(
             "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer."
           )
         ) {
-          fetch("https://stylo-4u8w.onrender.com/users/me", {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Error al eliminar la cuenta");
-              }
-              localStorage.removeItem("token");
-              alert("Tu cuenta ha sido eliminada correctamente");
-              location.reload();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              alert("Hubo un error al eliminar tu cuenta");
-            });
+          deleteAccount();
         }
       });
+
+      // Inicialización
+      checkAuth();
     </script>
   </body>
 </html>
