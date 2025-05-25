@@ -194,7 +194,12 @@
 
         // Obtener las prendas asociadas como en el armario
         const prendasIds = new Set();
+        const usuariosIds = new Set();
+
         conjuntos.forEach((c) => {
+          if (c.usuario) {
+            usuariosIds.add(c.usuario);
+          }
           Object.values(c).forEach((valor) => {
             if (typeof valor === "string" && valor.length === 36) {
               prendasIds.add(valor);
@@ -202,6 +207,7 @@
           });
         });
 
+        // Obtener datos de prendas
         let prendasData = {};
         try {
           const response = await fetch(
@@ -217,6 +223,27 @@
           }
         } catch (error) {
           console.error("Error al obtener prendas:", error);
+        }
+
+        // Obtener datos de usuarios
+        let usuariosData = {};
+        try {
+          const usuariosArray = Array.from(usuariosIds);
+          if (usuariosArray.length > 0) {
+            const response = await fetch(
+              `https://stylo-4u8w.onrender.com/users/users?id=${usuariosArray.join(
+                ","
+              )}`
+            );
+            if (response.ok) {
+              const data = await response.json();
+              data.forEach((usuario) => {
+                usuariosData[usuario.id] = usuario;
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error al obtener usuarios:", error);
         }
 
         container.innerHTML = conjuntos
@@ -244,37 +271,41 @@
               }
             });
 
+            // Obtener nombre de usuario
+            const usuarioNombre =
+              conjunto.usuario && usuariosData[conjunto.usuario]
+                ? usuariosData[conjunto.usuario].username
+                : "Anónimo";
+
             return `
-          <div class="conjunto-card">
-            <div class="card-header">
-              <h3>${conjunto.nombre}</h3>
-              <p style="font-size: 0.9rem; color: #888;">por ${
-                conjunto.usuario || "Anónimo"
-              }</p>
-            </div>
-            <div class="card-body">
-              <div class="prendas-container">
-                ${prendasConjunto
-                  .map(
-                    (p) => `
-                  <div class="prenda-item">
-                    <img src="${p.img}" alt="${p.nombre}" />
-                  </div>
-                `
-                  )
-                  .join("")}
+      <div class="conjunto-card">
+        <div class="card-header">
+          <h3>${conjunto.nombre}</h3>
+          <p style="font-size: 0.9rem; color: #888;">por ${usuarioNombre}</p>
+        </div>
+        <div class="card-body">
+          <div class="prendas-container">
+            ${prendasConjunto
+              .map(
+                (p) => `
+              <div class="prenda-item">
+                <img src="${p.img}" alt="${p.nombre}" />
               </div>
-            </div>
-            <div class="card-footer">
-              <button class="btn btn-compartir" onclick="compartirConjunto('${
-                conjunto.codigo
-              }')">Compartir</button>
-              <button class="btn" onclick="verConjunto('${
-                conjunto.codigo
-              }')">Ver más</button>
-            </div>
+            `
+              )
+              .join("")}
           </div>
-        `;
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-compartir" onclick="compartirConjunto('${
+            conjunto.codigo
+          }')">Compartir</button>
+          <button class="btn" onclick="verConjunto('${
+            conjunto.codigo
+          }')">Ver más</button>
+        </div>
+      </div>
+    `;
           })
           .join("");
       }
