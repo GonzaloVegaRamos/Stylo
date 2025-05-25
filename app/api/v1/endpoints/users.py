@@ -460,7 +460,7 @@ async def google_login():
     return RedirectResponse(authorization_url)
 
 
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, Form
 from fastapi import APIRouter, Request, HTTPException
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
@@ -470,10 +470,8 @@ GOOGLE_CLIENT_ID = "tu-client-id-aqui"
 FRONTEND_URL = "https://stylo-4u8w.onrender.com/"  # Cambia por tu URL frontend
 
 @router.post("/google/callback")
-async def google_callback(request: Request):
-    # Obtiene el token desde los query params (Google envía 'credential')
-    id_token_str = request.query_params.get("credential") or request.query_params.get("id_token")
-
+async def google_callback(credential: str = Form(...)):
+    id_token_str = credential 
     if not id_token_str:
         raise HTTPException(status_code=400, detail="No id_token provided")
 
