@@ -464,6 +464,7 @@ from fastapi import APIRouter, Request, HTTPException, Form
 from fastapi import APIRouter, Request, HTTPException
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+import requests
 
 FRONTEND_URL = "https://stylo-4u8w.onrender.com/"  # Cambia por tu URL frontend
 
@@ -507,12 +508,21 @@ async def google_callback(credential: str = Form(...)):
 
 
     # Aquí deberías crear tu token JWT propio o usar el de supabase si puedes
-    session = supabase.auth.sign_in_with_id_token({
+
+    response = requests.post(
+    "https://fcuoobbozbpwobfzbfwb.supabase.co/auth/v1/token?grant_type=id_token",
+    headers={"Content-Type": "application/json"},
+    json={
         "provider": "google",
         "id_token": id_token_str
-    })
+    }
+)
 
-    token = session.session.access_token if session.session else None
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail="No se pudo intercambiar el token")
+
+    token_data = response.json()
+    token = token_data.get("access_token")
 
     # Redirige al frontend pasando el token como query param o como cookie (mejor usar cookie)
     redirect_url = f"{FRONTEND_URL}?token={token}"
