@@ -460,7 +460,7 @@ async def google_login():
     return RedirectResponse(authorization_url)
 
 
-@router.get("/google/callback")
+@router.api_route("/google/callback", methods=["GET", "POST"])
 async def google_callback(request: Request):
     flow = Flow.from_client_config(
         {
