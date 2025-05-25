@@ -528,6 +528,39 @@
         });
       }
 
+      // Función para determinar el estilo predominante
+      function determinarEstiloPredominante() {
+        const estilos = {
+          casual: 0,
+          preppy: 0,
+          urbano: 0,
+          formal: 0,
+        };
+
+        // Contar los estilos de las prendas seleccionadas
+        Object.values(seleccion).forEach((prenda) => {
+          if (
+            prenda.estilo &&
+            estilos.hasOwnProperty(prenda.estilo.toLowerCase())
+          ) {
+            estilos[prenda.estilo.toLowerCase()]++;
+          }
+        });
+
+        // Encontrar el máximo valor
+        const maxCount = Math.max(...Object.values(estilos));
+
+        // Si no hay estilos definidos, retornar null
+        if (maxCount === 0) return null;
+
+        // Filtrar los estilos con el máximo valor
+        const estilosPredominantes = Object.entries(estilos)
+          .filter(([_, count]) => count === maxCount)
+          .map(([estilo, _]) => estilo);
+
+        // Si hay empate, devolver todos los estilos predominantes separados por coma
+        return estilosPredominantes.join(", ");
+      }
       // Función para eliminar una prenda de la selección
       function eliminarPrenda(categoria) {
         delete seleccion[categoria];
@@ -535,6 +568,7 @@
       }
 
       // Función para mostrar el popup de confirmación
+      // Modificar la función mostrarPopup para mostrar el estilo detectado
       function mostrarPopup() {
         const modal = document.getElementById("myModal");
         document.getElementById("nombreConjunto").value = "";
@@ -548,11 +582,22 @@
           item.classList.add("modal-item");
 
           item.innerHTML = `
-                <img src="${prenda.img}" alt="${prenda.nombre}" />
-                <p>${prenda.nombre}</p>
-              `;
+            <img src="${prenda.img}" alt="${prenda.nombre}" />
+            <p>${prenda.nombre}</p>
+            <small>Estilo: ${prenda.estilo || "No definido"}</small>
+        `;
           modalContainer.appendChild(item);
         });
+
+        // Mostrar el estilo predominante detectado
+        const estiloPredominante = determinarEstiloPredominante();
+        if (estiloPredominante) {
+          const estiloElement = document.createElement("div");
+          estiloElement.style.margin = "10px 0";
+          estiloElement.style.fontWeight = "bold";
+          estiloElement.textContent = `Estilo detectado: ${estiloPredominante}`;
+          modalContainer.appendChild(estiloElement);
+        }
       }
 
       // Función para cerrar el popup
@@ -702,7 +747,7 @@
           alert("Por favor ingresa un nombre para tu conjunto.");
           return;
         }
-
+        const estiloPredominante = determinarEstiloPredominante();
         const conjuntoData = {
           nombre: nombreConjunto,
           camiseta: seleccion["Camiseta"]?.id || null,
@@ -711,6 +756,7 @@
           calzado: seleccion["Calzado"]?.id || null,
           accesorio: seleccion["Accesorio"]?.id || null,
           chaqueta: seleccion["Chaqueta"]?.id || null,
+          estilo: estiloPredominante || null,
         };
 
         // Filtrar valores null
