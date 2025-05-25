@@ -492,7 +492,8 @@ async def google_callback(credential: str = Form(...)):
     try:
         existing_user_response = supabase.table("users").select("*").eq("auth_id", auth_id).maybe_single().execute()
 
-        if existing_user_response.data is None:
+    # Verificamos si hay una respuesta válida antes de acceder a .data
+        if not existing_user_response or not getattr(existing_user_response, "data", None):
             supabase.table("users").insert({
             "auth_id": auth_id,
             "email": email,
@@ -516,3 +517,6 @@ async def google_callback(credential: str = Form(...)):
     # Redirige al frontend pasando el token como query param o como cookie (mejor usar cookie)
     redirect_url = f"{FRONTEND_URL}?token={token}"
     return RedirectResponse(url=redirect_url)
+
+
+
