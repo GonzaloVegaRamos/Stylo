@@ -470,25 +470,27 @@ router = APIRouter()
 @router.post("/google/callback")
 async def google_callback(request: Request):
     body = await request.json()
-    id_token_str = body.get("id_token") or body.get("credential")  # depende qué envíes desde frontend
+    id_token_str = body.get("id_token") or body.get("credential")  # según envíes desde frontend
 
     if not id_token_str:
         raise HTTPException(status_code=400, detail="No id_token provided")
 
     try:
-        # Validar token con Google
-        id_info = id_token.verify_oauth2_token(id_token_str, google_requests.Request(), GOOGLE_CLIENT_ID)
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid token")
+        id_info = id_token.verify_oauth2_token(
+            id_token_str,
+            google_requests.Request(),
+            GOOGLE_CLIENT_ID,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid token: {str(e)}")
 
     email = id_info.get("email")
     username = id_info.get("name", email.split("@")[0])
-    auth_id = id_info.get("sub")  # id único de Google
+    auth_id = id_info.get("sub")
 
     if not email or not auth_id:
         raise HTTPException(status_code=400, detail="Token missing required info")
 
-    # Buscar o crear usuario en Supabase
     try:
         existing_user_response = supabase.table("users").select("*").eq("auth_id", auth_id).single().execute()
 
@@ -502,9 +504,10 @@ async def google_callback(request: Request):
                 "edad": None
             }).execute()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al registrar usuario con Google: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error registering user: {str(e)}")
 
-    # Aquí generas tu token propio (ejemplo con Supabase)
+    # Genera aquí tu token propio — si supabase.auth.sign_in_with_id_token no te funciona,
+    # considera crear un JWT propio con PyJWT u otro método.
     session = supabase.auth.sign_in_with_id_token({
         "provider": "google",
         "id_token": id_token_str
@@ -516,5 +519,5 @@ async def google_callback(request: Request):
         "access_token": token,
         "token_type": "bearer",
         "email": email,
-        "username": username
+        "username": username,
     }
