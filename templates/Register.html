@@ -209,8 +209,9 @@
               id="g_id_onload"
               data-client_id="877188738468-ii89l196hcgoajgt7thvm3ff2th3nvit.apps.googleusercontent.com"
               data-context="signin"
-              data-ux_mode="redirect"
+              data-ux_mode="popup"
               data-login_uri="https://stylo-4u8w.onrender.com/users/google/callback"
+              data-callback="handleCredentialResponse"
             ></div>
 
             <div
@@ -322,6 +323,29 @@
             errorMsg.textContent = error.message;
           }
         });
+
+      async function handleCredentialResponse(response) {
+        const id_token = response.credential;
+
+        try {
+          const result = await fetch(
+            "https://stylo-4u8w.onrender.com/users/google/callback",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_token }),
+            }
+          );
+
+          if (!result.ok) throw new Error("Error al autenticar con Google");
+
+          const data = await result.json();
+          localStorage.setItem("token", data.access_token);
+          window.location.href = "/";
+        } catch (error) {
+          alert("Error de Google Login: " + error.message);
+        }
+      }
 
       // Register
       document
