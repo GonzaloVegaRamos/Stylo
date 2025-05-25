@@ -805,6 +805,11 @@
             console.error("Error al guardar el conjunto:", error);
             alert("Hubo un error al guardar el conjunto: " + error.message);
           });
+
+        const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
+
+        // Mostrar la URL en el input
+        document.getElementById("urlCompartir").value = urlCompartir;
       }
 
       // Función para compartir el conjunto
@@ -817,9 +822,6 @@
         }
 
         const urlCompartir = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${conjuntoGuardadoId}`;
-
-        // Mostrar la URL en el input
-        document.getElementById("urlCompartir").value = urlCompartir;
 
         copiarAlPortapapeles(urlCompartir);
         // No cerramos el modal inmediatamente para que el usuario vea la URL
