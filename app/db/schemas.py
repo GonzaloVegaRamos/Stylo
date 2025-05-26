@@ -16,7 +16,7 @@ class UserCreate(BaseModel):
 
 class GoogleUserCreate(BaseModel):
     id: str
-    email: EmailStr
+    email: str
     full_name: Optional[str]
     avatar_url: Optional[str]
 
