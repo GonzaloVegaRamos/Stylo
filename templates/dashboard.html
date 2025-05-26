@@ -576,6 +576,8 @@
 
           // Mostrar bienvenida
           document.body.innerHTML += `<p>Bienvenido, ${session.access_token}</p>`;
+
+          await checkAuth();
         } else {
           console.log("No hay sesión activa");
         }
@@ -624,6 +626,7 @@
           }
 
           const data = await response.json();
+          console.log("Datos recibidos de /me:", data);
           currentUser = data;
           userInfoElement.textContent = data.username;
           logoutBtn.style.display = "inline-block";
@@ -739,7 +742,6 @@
       });
 
       // Inicialización
-      checkAuth();
     </script>
   </body>
 </html>
