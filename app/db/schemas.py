@@ -14,6 +14,13 @@ class UserCreate(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class GoogleUserCreate(BaseModel):
+    id: str
+    email: EmailStr
+    full_name: Optional[str]
+    avatar_url: Optional[str]
+
+
 
 class UserLogin(BaseModel):
     email: str

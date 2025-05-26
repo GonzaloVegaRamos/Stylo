@@ -576,7 +576,23 @@
           localStorage.setItem("token", session.access_token);
 
           // Mostrar bienvenida
-          document.body.innerHTML += `<p>Bienvenido, ${session.access_token}</p>`;
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+
+          if (user) {
+            // Llamas a tu backend para guardar en la tabla users
+            await fetch("https://stylo-4u8w.onrender.com/google-register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id: user.id,
+                email: user.email,
+                full_name: user.user_metadata.full_name,
+                avatar_url: user.user_metadata.avatar_url,
+              }),
+            });
+          }
 
           await checkAuth();
         } else {

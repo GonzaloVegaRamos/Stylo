@@ -96,6 +96,25 @@ async def register_user(user: schemas.UserCreate):
         edad=user.edad
     )
 
+@router.post("/google-register")
+async def google_register(user: schemas.GoogleUserCreate):
+    try:
+        # Ya está autenticado, solo vas a guardar en tabla users
+        supabase.table("users").upsert({
+            "auth_id": user.id,  # ID de Supabase Auth
+            "email": user.email,
+            "full_name": user.full_name,
+            "avatar_url": user.avatar_url
+        }, on_conflict="auth_id").execute()
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al insertar usuario desde Google: {str(e)}"
+        )
+
+    return {"msg": "Usuario insertado o actualizado correctamente"}
+
 
 @router.get("/users/{user_id}")
 async def obtener_usuario(user_id: int):
