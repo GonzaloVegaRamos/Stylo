@@ -581,15 +581,16 @@
           } = await supabaseClient.auth.getUser();
 
           if (user) {
-            // Llamas a tu backend para guardar en la tabla users
             await fetch("https://stylo-4u8w.onrender.com/google-register", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 id: user.id,
                 email: user.email,
-                full_name: user.user_metadata.full_name,
-                avatar_url: user.user_metadata.avatar_url,
+                full_name:
+                  user.user_metadata.full_name || user.email.split("@")[0],
+                avatar_url: user.user_metadata.avatar_url || "",
+                // Agrega campos adicionales si es necesario
               }),
             });
           }

@@ -98,18 +98,22 @@ async def register_user(user: schemas.UserCreate):
     )
 
 
-from app.db.schemas import GoogleUserCreate
-
 
 @router.post("/google-register")
 async def google_register(user: schemas.GoogleUserCreate):
     try:
-        # Ya está autenticado, solo vas a guardar en tabla users
+        # Generar un username a partir del email si no existe
+        username = user.email.split('@')[0] if user.email else f"user_{user.id[:8]}"
+        
         supabase.table("users").upsert({
-            "auth_id": user.id,  # ID de Supabase Auth
+            "auth_id": user.id,
             "email": user.email,
             "full_name": user.full_name,
-            "avatar_url": user.avatar_url
+            "avatar_url": user.avatar_url,
+            "username": username,  # Campo requerido
+            "edad": 18,  # Valor por defecto
+            "gender": "other",  # Valor por defecto
+            "style_preference": "casual"  # Valor por defecto
         }, on_conflict="auth_id").execute()
 
     except Exception as e:
@@ -119,7 +123,6 @@ async def google_register(user: schemas.GoogleUserCreate):
         )
 
     return {"msg": "Usuario insertado o actualizado correctamente"}
-
 
 @router.get("/users/{user_id}")
 async def obtener_usuario(user_id: int):
