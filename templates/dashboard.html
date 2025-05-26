@@ -504,6 +504,7 @@
         <button class="boton boton2" onclick="window.location.href='/armario'">
           Ver tu armario
         </button>
+        <button id="logt">Cerrar sesión</button>
       </div>
     </div>
 
@@ -738,6 +739,17 @@
           )
         ) {
           deleteAccount();
+        }
+      });
+
+      document.getElementById("logt").addEventListener("click", async () => {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+          console.error("Error al cerrar sesión:", error.message);
+          alert("Error al cerrar sesión: " + error.message);
+        } else {
+          localStorage.removeItem("token"); // Limpia el token si lo usas
+          location.reload(); // Recarga para reiniciar el estado
         }
       });
 
