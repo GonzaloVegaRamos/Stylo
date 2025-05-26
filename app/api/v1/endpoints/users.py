@@ -13,6 +13,7 @@ from supabase import Client
 from uuid import UUID, uuid4
 from fastapi import Path
 
+
 # Crear el router de usuarios
 router = APIRouter()
 
@@ -38,16 +39,19 @@ async def register_user(user: schemas.UserCreate):
             detail="El formato del correo electrónico no es válido"
         )
     
-    # Verificar si ya existe en Auth
+    # Verificar si ya existe en tu tabla "users"
     try:
-        existing_user = supabase.auth.get_user_by_email(user.email)
-        if existing_user:
+        response = supabase.table("users").select("email").eq("email", user.email).execute()
+        if response.data and len(response.data) > 0:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Este correo electrónico ya está registrado",
             )
-    except Exception:
-        pass
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al verificar el usuario existente: {str(e)}"
+        )
 
     # Validar campos obligatorios
     if not user.password or not user.username or not user.edad:
@@ -65,28 +69,25 @@ async def register_user(user: schemas.UserCreate):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error al crear el usuario: {str(e)}"
+            detail=f"Error al crear el usuario en Auth: {str(e)}"
         )
 
-    # Crear usuario en la tabla personalizada (users o profiles)
+    # Crear usuario en la tabla personalizada (users)
     try:
-        # Aquí insertamos el nuevo usuario en la tabla 'users'
         supabase.table("users").insert({
-            "auth_id": new_user.user.id,  # UUID de Supabase Auth
+            "auth_id": new_user.user.id,
             "email": user.email,
             "username": user.username,
             "gender": user.gender,
             "style_preference": user.style_preference,
             "edad": user.edad
         }).execute()
-
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al crear usuario en tabla users: {str(e)}"
+            detail=f"Error al guardar usuario en la tabla: {str(e)}"
         )
 
-    # Respuesta final, no necesitamos detalles adicionales
     return schemas.UserResponse(
         id=new_user.user.id,
         email=user.email,
@@ -95,6 +96,10 @@ async def register_user(user: schemas.UserCreate):
         style_preference=user.style_preference,
         edad=user.edad
     )
+
+
+from app.db.schemas import GoogleUserCreate
+
 
 @router.post("/google-register")
 async def google_register(user: schemas.GoogleUserCreate):
