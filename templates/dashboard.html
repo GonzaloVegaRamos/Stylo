@@ -578,7 +578,7 @@
           // Mostrar bienvenida
           const {
             data: { user },
-          } = await supabase.auth.getUser();
+          } = await supabaseClient.auth.getUser();
 
           if (user) {
             // Llamas a tu backend para guardar en la tabla users
