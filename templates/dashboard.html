@@ -562,7 +562,8 @@
         supabaseUrl,
         supabaseAnonKey
       );
-      supabaseClient.auth.onAuthStateChange((event, session) => {
+      // 1. Al cargar la página, chequea si hay sesión y guarda el token
+      supabaseClient.auth.getSession().then(({ data: { session } }) => {
         if (session) {
           localStorage.setItem("token", session.access_token);
         } else {
@@ -570,6 +571,14 @@
         }
       });
 
+      // 2. Escucha cambios en la sesión para actualizar el token
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          localStorage.setItem("token", session.access_token);
+        } else {
+          localStorage.removeItem("token");
+        }
+      });
       // Elementos del DOM
       const userInfoElement = document.getElementById("user-info");
       const loginBtn = document.getElementById("login-btn");
