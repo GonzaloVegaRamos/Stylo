@@ -554,17 +554,14 @@
     </footer>
 
     <script>
-      const urlParams = new URLSearchParams(
-        window.location.hash || window.location.search
-      );
-      const token =
-        localStorage.getItem("token") || urlParams.get("access_token");
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          localStorage.setItem("token", session.access_token);
+        } else {
+          localStorage.removeItem("token");
+        }
+      });
 
-      if (token) {
-        localStorage.setItem("token", token);
-        // Limpia la URL
-        history.replaceState(null, "", window.location.pathname);
-      }
       // Elementos del DOM
       const userInfoElement = document.getElementById("user-info");
       const loginBtn = document.getElementById("login-btn");
