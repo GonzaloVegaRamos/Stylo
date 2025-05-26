@@ -554,6 +554,17 @@
     </footer>
 
     <script>
+      const urlParams = new URLSearchParams(
+        window.location.hash || window.location.search
+      );
+      const token =
+        localStorage.getItem("token") || urlParams.get("access_token");
+
+      if (token) {
+        localStorage.setItem("token", token);
+        // Limpia la URL
+        history.replaceState(null, "", window.location.pathname);
+      }
       // Elementos del DOM
       const userInfoElement = document.getElementById("user-info");
       const loginBtn = document.getElementById("login-btn");
@@ -566,7 +577,7 @@
       const newUsernameInput = document.getElementById("new-username");
 
       // Variables de estado
-      const token = localStorage.getItem("token");
+
       let currentUser = null;
 
       // Función principal de autenticación
