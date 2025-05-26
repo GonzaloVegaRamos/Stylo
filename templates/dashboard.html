@@ -554,7 +554,7 @@
     </footer>
 
     <script>
-      supabase.auth.onAuthStateChange((event, session) => {
+      Supabase.auth.onAuthStateChange((event, session) => {
         if (session) {
           localStorage.setItem("token", session.access_token);
         } else {
