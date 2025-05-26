@@ -109,7 +109,6 @@ async def google_register(user: schemas.GoogleUserCreate):
             "auth_id": user.id,
             "email": user.email,
             "full_name": user.full_name,
-            "avatar_url": user.avatar_url,
             "username": username,  # Campo requerido
             "edad": 18,  # Valor por defecto
             "gender": "other",  # Valor por defecto
