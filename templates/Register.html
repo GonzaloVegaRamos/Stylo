@@ -35,6 +35,7 @@
         });
 
       // Opcional: para manejar la sesión después del redirect
+
       window.onload = async () => {
         const {
           data: { session },
@@ -42,8 +43,12 @@
 
         if (session) {
           console.log("Usuario logueado:", session.user);
-          // Por ejemplo, mostrar mensaje o redirigir
-          document.body.innerHTML += `<p>Bienvenido, ${session.user.email}</p>`;
+
+          // Guardar el token
+          localStorage.setItem("token", session.access_token);
+
+          // Mostrar bienvenida
+          document.body.innerHTML += `<p>Bienvenido, ${session.access_token}</p>`;
         } else {
           console.log("No hay sesión activa");
         }

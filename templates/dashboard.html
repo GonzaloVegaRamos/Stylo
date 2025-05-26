@@ -562,23 +562,25 @@
         supabaseUrl,
         supabaseAnonKey
       );
-      // 1. Al cargar la página, chequea si hay sesión y guarda el token
-      supabaseClient.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          localStorage.setItem("token", session.access_token);
-        } else {
-          localStorage.removeItem("token");
-        }
-      });
 
-      // 2. Escucha cambios en la sesión para actualizar el token
-      supabaseClient.auth.onAuthStateChange((event, session) => {
+      window.onload = async () => {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
         if (session) {
+          console.log("Usuario logueado:", session.user);
+
+          // Guardar el token
           localStorage.setItem("token", session.access_token);
+
+          // Mostrar bienvenida
+          document.body.innerHTML += `<p>Bienvenido, ${session.access_token}</p>`;
         } else {
-          localStorage.removeItem("token");
+          console.log("No hay sesión activa");
         }
-      });
+      };
+
       // Elementos del DOM
       const userInfoElement = document.getElementById("user-info");
       const loginBtn = document.getElementById("login-btn");
