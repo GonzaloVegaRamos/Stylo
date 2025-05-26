@@ -14,12 +14,15 @@
       const supabaseUrl = "https://fcuoobbozbpwobfzbfwb.supabase.co";
       const supabaseAnonKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdW9vYmJvemJwd29iZnpiZndiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDk2OTUsImV4cCI6MjA1Njg4NTY5NX0.kBnE22zwoUuTU2LORXr5llC2XmkM92s1nPAIG4yisyQ";
-      const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+      const supabaseClient = supabase.createClient(
+        supabaseUrl,
+        supabaseAnonKey
+      );
 
       document
         .getElementById("google-login")
         .addEventListener("click", async () => {
-          const { error } = await supabase.auth.signInWithOAuth({
+          const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: "google",
             options: {
               // Aquí puedes poner redirectTo si quieres que después vuelva a tu web
