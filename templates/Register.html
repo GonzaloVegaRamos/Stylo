@@ -35,12 +35,19 @@
         });
 
       // Opcional: para manejar la sesión después del redirect
-      supabase.auth.getSession().then(({ data: { session } }) => {
+      window.onload = async () => {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
         if (session) {
           console.log("Usuario logueado:", session.user);
-          // Aquí puedes redirigir o mostrar contenido
+          // Por ejemplo, mostrar mensaje o redirigir
+          document.body.innerHTML += `<p>Bienvenido, ${session.user.email}</p>`;
+        } else {
+          console.log("No hay sesión activa");
         }
-      });
+      };
     </script>
   </body>
 </html>
