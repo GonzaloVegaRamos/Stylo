@@ -200,7 +200,7 @@
                 required
               />
               <input type="submit" value="Login" />
-              <button id="google-login">Iniciar sesión con Google</button>
+              <button class="google-login">Iniciar sesión con Google</button>
               <p class="signup">
                 No tienes cuenta?
                 <a href="#" onclick="toggleForm();">Crear cuenta.</a>
@@ -252,7 +252,7 @@
                 required
               />
               <input type="submit" value="Registrarse" />
-              <button id="google-login">Iniciar sesión con Google</button>
+              <button class="google-login">Iniciar sesión con Google</button>
               <p class="signup">
                 ¿Ya tienes cuenta?
                 <a href="#" onclick="toggleForm();">Iniciar sesión.</a>
@@ -338,7 +338,9 @@
             return;
           }
 
-          const userData = { username, email, age, password };
+          const edad = parseInt(document.getElementById("age").value);
+
+          const userData = { username, email, edad, password };
 
           try {
             const response = await fetch(
@@ -350,7 +352,10 @@
               }
             );
 
-            if (!response.ok) throw new Error("Error al registrar usuario");
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error("Error al registrar usuario: " + errorText);
+            }
 
             const data = await response.json();
             alert("Registro exitoso!");
@@ -370,7 +375,7 @@
       );
 
       document
-        .getElementById("google-login")
+        .getElementsByClassName("google-login")
         .addEventListener("click", async () => {
           const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: "google",
