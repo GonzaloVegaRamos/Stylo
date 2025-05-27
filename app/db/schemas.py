@@ -35,6 +35,7 @@ class UserResponse(BaseModel):
     gender: Optional[str] = None
     style_preference: Optional[str] = None
     edad: int
+    is_google_account: Optional[bool] = False
 
     model_config = ConfigDict(from_attributes=True)
 

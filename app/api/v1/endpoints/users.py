@@ -67,7 +67,8 @@ async def register_user(user: schemas.UserCreate):
                 "username": user.username,
                 "gender": user.gender,
                 "style_preference": user.style_preference,
-                "edad": user.edad
+                "edad": user.edad,
+                "is_google_account" :False
             }).execute()
             
             if not insert_response.data:
@@ -99,7 +100,8 @@ async def register_user(user: schemas.UserCreate):
         username=user.username,
         gender=user.gender,
         style_preference=user.style_preference,
-        edad=user.edad
+        edad=user.edad,
+        is_google_account=False
         )
             print("Respuesta generada:", result)
             return result
