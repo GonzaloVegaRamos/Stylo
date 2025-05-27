@@ -61,16 +61,16 @@ async def register_user(user: schemas.UserCreate):
 
         # 2. Insertar en la tabla users con manejo de errores específico
         try:
-            insert_response = supabase.table("users").insert({
-                "auth_id": auth_response.user.id,
-                "email": user.email,
-                "username": user.username,
-                "gender": user.gender,
-                "style_preference": user.style_preference,
-                "edad": user.edad,
-                "is_google_account" :False
-            }).execute()
-            
+            insert_response = supabase.table("users").upsert({
+            "auth_id": auth_response.user.id,
+            "email": user.email,
+            "username": user.username,
+            "gender": user.gender,
+            "style_preference": user.style_preference,
+            "edad": user.edad,
+            "is_google_account": False
+                }, on_conflict="auth_id").execute()
+
             if not insert_response.data:
                 # Si falla, limpiamos el usuario de Auth
                 try:
@@ -108,10 +108,7 @@ async def register_user(user: schemas.UserCreate):
         except Exception as e:
             print("Error al generar UserResponse:", e)
             raise HTTPException(status_code=500, detail="Error al construir la respuesta")
-
-    except HTTPException:
-        raise
-
+        
     except Exception as e:
         raise HTTPException(
         status_code=500,
