@@ -1,3 +1,4 @@
+import asyncio
 import re
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.core.auth import authenticate_token  # Importar funciones de auth
@@ -62,11 +63,28 @@ async def register_user(user: schemas.UserCreate):
 
     # Crear usuario en Supabase Auth
     try:
-        new_user = supabase.auth.sign_up({
+        auth_response = supabase.auth.sign_up({
             'email': user.email,
             'password': user.password
         })
+        
+        # Verificar si el usuario fue realmente creado
+        if not auth_response.user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No se pudo crear el usuario en Auth"
+            )
+            
+        # Esperar un breve momento para asegurar que el usuario se haya creado
+        await asyncio.sleep(1)
+        
     except Exception as e:
+        # Verificar si el error es porque el usuario ya existe
+        if "User already registered" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Este correo electrónico ya está registrado"
+            )
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Error al crear el usuario en Auth: {str(e)}"
@@ -74,22 +92,32 @@ async def register_user(user: schemas.UserCreate):
 
     # Crear usuario en la tabla personalizada (users)
     try:
-        supabase.table("users").insert({
-            "auth_id": new_user.user.id,
+        insert_response = supabase.table("users").insert({
+            "auth_id": auth_response.user.id,
             "email": user.email,
             "username": user.username,
             "gender": user.gender,
             "style_preference": user.style_preference,
             "edad": user.edad
         }).execute()
+        
+        if not insert_response.data:
+            raise Exception("No se recibieron datos de inserción")
+            
     except Exception as e:
+        # Intentar eliminar el usuario de Auth si falla la inserción en la tabla
+        try:
+            supabase.auth.admin.delete_user(auth_response.user.id)
+        except:
+            pass
+            
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error al guardar usuario en la tabla: {str(e)}"
         )
 
     return schemas.UserResponse(
-        id=new_user.user.id,
+        id=auth_response.user.id,
         email=user.email,
         username=user.username,
         gender=user.gender,
@@ -178,7 +206,7 @@ async def login_user(user: schemas.UserLogin):
 
         token = db_user.session.access_token
         refresh_token = db_user.session.refresh_token
-        
+
         return {
     "access_token": token,
     "refresh_token": refresh_token,

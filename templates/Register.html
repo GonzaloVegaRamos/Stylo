@@ -321,6 +321,10 @@
         .getElementById("register-form")
         .addEventListener("submit", async function (event) {
           event.preventDefault();
+          const submitButton = event.target.querySelector(
+            'input[type="submit"]'
+          );
+          submitButton.disabled = true;
           const username = document.getElementById("username").value;
           const email = document.getElementById("email-register").value;
           const age = parseInt(document.getElementById("age").value);
@@ -331,21 +335,21 @@
 
           errorMsg.textContent = "";
 
-          if (password !== confirmPassword) {
-            errorMsg.textContent = "Las contraseñas no coinciden";
-            return;
-          }
-
-          if (age < 18) {
-            errorMsg.textContent = "Debes tener al menos 18 años";
-            return;
-          }
-
-          const edad = parseInt(document.getElementById("age").value);
-
-          const userData = { username, email, edad, password };
-
           try {
+            // Validaciones
+            if (password !== confirmPassword) {
+              errorMsg.textContent = "Las contraseñas no coinciden";
+              return;
+            }
+
+            if (age < 18) {
+              errorMsg.textContent = "Debes tener al menos 18 años";
+              return;
+            }
+
+            const edad = parseInt(document.getElementById("age").value);
+            const userData = { username, email, edad, password };
+
             const response = await fetch(
               "https://stylo-4u8w.onrender.com/users/register",
               {
@@ -366,6 +370,8 @@
             toggleForm();
           } catch (error) {
             errorMsg.textContent = error.message;
+          } finally {
+            submitButton.disabled = false;
           }
         });
 
