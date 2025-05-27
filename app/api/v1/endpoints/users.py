@@ -92,15 +92,21 @@ async def register_user(user: schemas.UserCreate):
                     detail="El email ya está registrado"
                 )
             raise
-
-        return schemas.UserResponse(
-            id=auth_response.user.id,
-            email=user.email,
-            username=user.username,
-            gender=user.gender,
-            style_preference=user.style_preference,
-            edad=user.edad
+        try:
+            result = schemas.UserResponse(
+        id=str(auth_response.user.id),  # <- conversión segura a str
+        email=user.email,
+        username=user.username,
+        gender=user.gender,
+        style_preference=user.style_preference,
+        edad=user.edad
         )
+            print("Respuesta generada:", result)
+            return result
+        except Exception as e:
+            print("Error al generar UserResponse:", e)
+            raise HTTPException(status_code=500, detail="Error al construir la respuesta")
+
     except HTTPException:
         raise
 

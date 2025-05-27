@@ -29,7 +29,7 @@ class UserLogin(BaseModel):
 
 
 class UserResponse(BaseModel):
-    id: str
+    id: UUID
     email: str
     username: str
     gender: Optional[str] = None
