@@ -108,8 +108,7 @@ async def google_register(user: schemas.GoogleUserCreate):
         supabase.table("users").upsert({
             "auth_id": user.id,
             "email": user.email,
-            "full_name": user.full_name,
-            "username": username,  # Campo requerido
+            "username": user.full_name,
             "edad": 18,  # Valor por defecto
             "gender": "other",  # Valor por defecto
             "style_preference": "casual"  # Valor por defecto
