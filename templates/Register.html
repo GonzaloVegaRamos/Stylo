@@ -288,6 +288,7 @@
 
           errorMsg.textContent = "";
           const userData = { email, password };
+          console.log("ENVIANDO REGISTRO:", userData);
 
           try {
             const response = await fetch(
@@ -368,6 +369,8 @@
           }
         });
 
+      //Registro Google
+
       const supabaseUrl = "https://fcuoobbozbpwobfzbfwb.supabase.co";
       const supabaseAnonKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdW9vYmJvemJwd29iZnpiZndiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDk2OTUsImV4cCI6MjA1Njg4NTY5NX0.kBnE22zwoUuTU2LORXr5llC2XmkM92s1nPAIG4yisyQ";
@@ -376,20 +379,21 @@
         supabaseAnonKey
       );
 
-      document
-        .getElementsByClassName("google-login")
-        .addEventListener("click", async () => {
-          const { error } = await supabaseClient.auth.signInWithOAuth({
-            provider: "google",
-            options: {
-              // Aquí puedes poner redirectTo si quieres que después vuelva a tu web
-              redirectTo: window.location.origin,
-            },
+      Array.from(document.getElementsByClassName("google-login")).forEach(
+        (button) => {
+          button.addEventListener("click", async () => {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+              provider: "google",
+              options: {
+                redirectTo: window.location.origin,
+              },
+            });
+            if (error) {
+              alert("Error al iniciar sesión: " + error.message);
+            }
           });
-          if (error) {
-            alert("Error al iniciar sesión: " + error.message);
-          }
-        });
+        }
+      );
 
       // Opcional: para manejar la sesión después del redirect
 
