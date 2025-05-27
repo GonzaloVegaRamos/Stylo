@@ -172,6 +172,82 @@
           width: 100%;
         }
       }
+      @media (max-width: 991px) {
+        section .container {
+          width: 100%;
+          height: auto;
+          flex-direction: column;
+          max-width: 400px;
+        }
+
+        section .container .imgBx {
+          display: none;
+        }
+
+        section .container .user {
+          flex-direction: column;
+        }
+
+        section .container .user .formBx {
+          width: 100%;
+          height: auto;
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        section {
+          padding: 10px;
+        }
+
+        section .container {
+          box-shadow: none;
+        }
+
+        section .container .user .formBx form h2 {
+          font-size: 20px;
+        }
+
+        section .container .user .formBx form input {
+          font-size: 16px;
+          padding: 12px;
+        }
+
+        section .container .user .formBx form input[type="submit"] {
+          max-width: 100%;
+          font-size: 16px;
+        }
+
+        .google-login {
+          width: 100%;
+          padding: 10px;
+          margin-top: 10px;
+          font-size: 16px;
+          background-color: #db4437;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+
+        .google-login:hover {
+          opacity: 0.9;
+        }
+      }
+
+      @media (max-width: 480px) {
+        section .container .user .formBx {
+          padding: 15px;
+        }
+
+        section .container .user .formBx form input {
+          padding: 10px;
+          font-size: 14px;
+        }
+
+        .google-login {
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body>

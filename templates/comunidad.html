@@ -28,13 +28,13 @@
       }
 
       .header .logo img {
-        height: 80px;
+        height: 60px;
         vertical-align: middle;
       }
 
       .header h1 {
         margin-top: 10px;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         color: #444;
       }
 
@@ -42,13 +42,13 @@
       .container {
         max-width: 1200px;
         margin: 30px auto;
-        padding: 0 20px;
+        padding: 0 16px;
       }
 
       /* Grilla de conjuntos */
       .conjuntos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 20px;
       }
 
@@ -74,6 +74,11 @@
         font-size: 1.2rem;
         margin-bottom: 5px;
         color: #222;
+      }
+
+      .card-header p {
+        font-size: 0.9rem;
+        color: #888;
       }
 
       .card-body {
@@ -107,11 +112,15 @@
         padding: 10px 15px 15px;
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         gap: 10px;
       }
 
       .btn {
-        padding: 8px 14px;
+        flex: 1;
+        min-width: 100px;
+        text-align: center;
+        padding: 10px 14px;
         background-color: #6666cc;
         color: white;
         border: none;
@@ -138,6 +147,42 @@
         text-align: center;
         padding: 40px 20px;
         color: #888;
+        font-size: 1rem;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 1.4rem;
+        }
+
+        .conjuntos-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card-footer {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header .logo img {
+          height: 50px;
+        }
+
+        .header h1 {
+          font-size: 1.2rem;
+        }
+
+        .prenda-item {
+          width: 50px;
+          height: 50px;
+        }
       }
     </style>
   </head>
