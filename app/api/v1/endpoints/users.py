@@ -101,27 +101,14 @@ async def register_user(user: schemas.UserCreate):
             style_preference=user.style_preference,
             edad=user.edad
         )
-
     except HTTPException:
-        # Re-lanzamos las excepciones HTTP que ya hemos creado
         raise
-        
-    except Exception as e:
-        # Manejo de otros errores
-        error_msg = str(e)
-        
-        # Detectamos específicamente errores de email duplicado en Auth
-        if "already registered" in error_msg.lower():
-            raise HTTPException(
-                status_code=400,
-                detail="El email ya está registrado"
-            )
-            
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error en el proceso de registro: {error_msg}"
-        )
 
+    except Exception as e:
+        raise HTTPException(
+        status_code=500,
+        detail=f"Error en el proceso de registro: {str(e)}"
+    )
 
 @router.post("/google-register")
 async def google_register(user: schemas.GoogleUserCreate):
