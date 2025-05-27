@@ -2,15 +2,357 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Login con Google - Supabase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Register</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      section {
+        position: relative;
+        min-height: 100vh;
+        background-color: #ffe5d4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        transition: background-color 0.5s ease;
+      }
+
+      section .container {
+        position: relative;
+        width: 800px;
+        height: 500px;
+        background: #ffe5d4;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+
+      section .container .user {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+
+      section .container .user .imgBx {
+        position: relative;
+        width: 50%;
+        height: 100%;
+        background: #fff;
+        transition: 0.5s;
+      }
+
+      section .container .user .imgBx img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      section .container .user .formBx {
+        position: relative;
+        width: 50%;
+        height: 100%;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        transition: 0.5s;
+      }
+
+      section .container .user .formBx form h2 {
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+        color: #555;
+      }
+
+      section .container .user .formBx form input {
+        position: relative;
+        width: 100%;
+        padding: 10px;
+        background: #f5f5f5;
+        color: #333;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        margin: 8px 0;
+        font-size: 14px;
+        letter-spacing: 1px;
+        font-weight: 300;
+      }
+
+      section .container .user .formBx form input[type="submit"] {
+        max-width: 100px;
+        background: #677eff;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        transition: 0.5s;
+      }
+
+      section .container .user .formBx form .signup {
+        position: relative;
+        margin-top: 20px;
+        font-size: 12px;
+        letter-spacing: 1px;
+        color: #555;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+
+      section .container .user .formBx form .signup a {
+        font-weight: 600;
+        text-decoration: none;
+        color: #677eff;
+      }
+
+      section.active {
+        background-color: #00bfae;
+      }
+
+      section .container .signupBx,
+      section .container .signinBx {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+
+      section .container .signupBx {
+        transform: translateX(100%);
+      }
+
+      section .container.active .signupBx {
+        transform: translateX(0);
+      }
+
+      section .container .signinBx {
+        transform: translateX(0);
+      }
+
+      section .container.active .signinBx {
+        transform: translateX(-100%);
+      }
+
+      @media (max-width: 991px) {
+        section .container {
+          max-width: 400px;
+        }
+
+        section .container .imgBx {
+          display: none;
+        }
+
+        section .container .user .formBx {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Login con Google</h1>
-    <button id="google-login">Iniciar sesión con Google</button>
+    <section>
+      <div class="container">
+        <!-- Login -->
+        <div class="user signinBx">
+          <div class="imgBx">
+            <img src="img/ama.webp" alt="" />
+          </div>
+          <div class="formBx">
+            <form id="login-form" onsubmit="return false;">
+              <h2>Iniciar Sesión</h2>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                required
+              />
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Contraseña"
+                required
+              />
+              <input type="submit" value="Login" />
+              <button id="google-login">Iniciar sesión con Google</button>
+              <p class="signup">
+                No tienes cuenta?
+                <a href="#" onclick="toggleForm();">Crear cuenta.</a>
+              </p>
+            </form>
+            <div class="error" id="login-error-msg"></div>
+          </div>
+        </div>
+
+        <!-- Registro -->
+        <div class="user signupBx">
+          <div class="formBx">
+            <form id="register-form" onsubmit="return false;">
+              <h2>Crear una cuenta</h2>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Nombre de usuario"
+                required
+              />
+              <input
+                type="email"
+                id="email-register"
+                name="email"
+                placeholder="Email"
+                required
+              />
+              <input
+                type="number"
+                id="age"
+                name="age"
+                placeholder="Edad"
+                min="1"
+                required
+              />
+              <input
+                type="password"
+                id="password-register"
+                name="password"
+                placeholder="Contraseña"
+                required
+              />
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirm-password"
+                placeholder="Confirmar contraseña"
+                required
+              />
+              <input type="submit" value="Registrarse" />
+              <button id="google-login">Iniciar sesión con Google</button>
+              <p class="signup">
+                ¿Ya tienes cuenta?
+                <a href="#" onclick="toggleForm();">Iniciar sesión.</a>
+              </p>
+            </form>
+            <div class="error" id="register-error-msg"></div>
+          </div>
+          <div class="imgBx">
+            <img src="img/verde.webp" alt="" />
+          </div>
+        </div>
+      </div>
+    </section>
 
     <script>
-      // Inicializa Supabase con tu URL y anon key (pon las tuyas reales aquí)
+      const toggleForm = () => {
+        const section = document.querySelector("section");
+        const container = document.querySelector(".container");
+        section.classList.toggle("active");
+        container.classList.toggle("active");
+      };
+
+      // Login
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const errorMsg = document.getElementById("login-error-msg");
+
+          errorMsg.textContent = "";
+          const userData = { email, password };
+
+          try {
+            const response = await fetch("http://127.0.0.1:8000/users/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(userData),
+            });
+
+            if (!response.ok) throw new Error("Credenciales incorrectas");
+
+            const data = await response.json();
+            localStorage.setItem("token", data.access_token);
+
+            window.location.href = "dashboard.html";
+          } catch (error) {
+            errorMsg.textContent = error.message;
+          }
+        });
+
+      // Register
+      document
+        .getElementById("register-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email-register").value;
+          const age = parseInt(document.getElementById("age").value);
+          const password = document.getElementById("password-register").value;
+          const confirmPassword =
+            document.getElementById("confirm-password").value;
+          const errorMsg = document.getElementById("register-error-msg");
+
+          errorMsg.textContent = "";
+
+          if (password !== confirmPassword) {
+            errorMsg.textContent = "Las contraseñas no coinciden";
+            return;
+          }
+
+          if (age < 18) {
+            errorMsg.textContent = "Debes tener al menos 18 años";
+            return;
+          }
+
+          const userData = { username, email, age, password };
+
+          try {
+            const response = await fetch(
+              "http://127.0.0.1:8000/users/register",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+              }
+            );
+
+            if (!response.ok) throw new Error("Error al registrar usuario");
+
+            const data = await response.json();
+            alert("Registro exitoso!");
+            document.getElementById("register-form").reset();
+            toggleForm();
+          } catch (error) {
+            errorMsg.textContent = error.message;
+          }
+        });
+
       const supabaseUrl = "https://fcuoobbozbpwobfzbfwb.supabase.co";
       const supabaseAnonKey =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdW9vYmJvemJwd29iZnpiZndiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDk2OTUsImV4cCI6MjA1Njg4NTY5NX0.kBnE22zwoUuTU2LORXr5llC2XmkM92s1nPAIG4yisyQ";
@@ -53,6 +395,23 @@
           console.log("No hay sesión activa");
         }
       };
+    </script>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login con Google - Supabase</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <h1>Login con Google</h1>
+    <button id="google-login">Iniciar sesión con Google</button>
+
+    <script>
+      // Inicializa Supabase con tu URL y anon key (pon las tuyas reales aquí)
     </script>
   </body>
 </html>
