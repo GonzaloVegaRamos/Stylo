@@ -494,7 +494,7 @@
       </div>
 
       <div class="contenedor">
-        <h2>🌟 Armario Virtual 🌟</h2>
+        <h2>Armario Virtual</h2>
         <button
           class="boton boton1"
           onclick="window.location.href='/crear-conjunto'"
@@ -504,7 +504,6 @@
         <button class="boton boton2" onclick="window.location.href='/armario'">
           Ver tu armario
         </button>
-        <button id="logt">Cerrar sesión</button>
       </div>
     </div>
 
@@ -564,6 +563,16 @@
         supabaseAnonKey
       );
 
+      const userInfoElement = document.getElementById("user-info");
+      const loginBtn = document.getElementById("login-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const userManagementBtn = document.getElementById("user-management-btn");
+      const userModal = document.getElementById("user-modal");
+      const closeModal = document.querySelector(".close-modal");
+      const updateUsernameBtn = document.getElementById("update-username-btn");
+      const deleteAccountBtn = document.getElementById("delete-account-btn");
+      const newUsernameInput = document.getElementById("new-username");
+
       window.onload = async () => {
         const {
           data: { session },
@@ -612,21 +621,12 @@
           await checkAuth();
         } else {
           console.log("No hay sesión activa");
+          userInfoElement.textContent = "Nadie registrado";
+          loginBtn.style.display = "inline-block";
+          logoutBtn.style.display = "none";
+          userManagementBtn.style.display = "none";
         }
       };
-
-      // Elementos del DOM
-      const userInfoElement = document.getElementById("user-info");
-      const loginBtn = document.getElementById("login-btn");
-      const logoutBtn = document.getElementById("logout-btn");
-      const userManagementBtn = document.getElementById("user-management-btn");
-      const userModal = document.getElementById("user-modal");
-      const closeModal = document.querySelector(".close-modal");
-      const updateUsernameBtn = document.getElementById("update-username-btn");
-      const deleteAccountBtn = document.getElementById("delete-account-btn");
-      const newUsernameInput = document.getElementById("new-username");
-
-      // Variables de estado
 
       let currentUser = null;
 
@@ -773,16 +773,18 @@
         }
       });
 
-      document.getElementById("logt").addEventListener("click", async () => {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) {
-          console.error("Error al cerrar sesión:", error.message);
-          alert("Error al cerrar sesión: " + error.message);
-        } else {
-          localStorage.removeItem("token"); // Limpia el token si lo usas
-          location.reload(); // Recarga para reiniciar el estado
-        }
-      });
+      document
+        .getElementById("logout-btn")
+        .addEventListener("click", async () => {
+          const { error } = await supabaseClient.auth.signOut();
+          if (error) {
+            console.error("Error al cerrar sesión:", error.message);
+            alert("Error al cerrar sesión: " + error.message);
+          } else {
+            localStorage.removeItem("token"); // Limpia el token si lo usas
+            location.reload(); // Recarga para reiniciar el estado
+          }
+        });
 
       // Inicialización
     </script>
