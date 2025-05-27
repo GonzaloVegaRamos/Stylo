@@ -660,8 +660,6 @@
         alert("Redirigiendo a tu armario... (Función en desarrollo)");
         cerrarConfirmationModal();
       }
-
-      // Función principal para mostrar las opciones de ropa
       async function showOptions(category) {
         currentCategory = category;
 
@@ -675,24 +673,30 @@
         ).value;
 
         // Construir la URL con los parámetros
-        let url = `https://stylo-4u8w.onrender.com/users/ropa?tipo=${encodeURIComponent(
-          category.trim()
-        )}`;
+        const url = new URL("https://stylo-4u8w.onrender.com/users/ropa");
+        url.searchParams.append("tipo", category.trim());
 
         // Agregar filtro de género si está seleccionado
-        if (selectedGender) {
-          url += `&genero=${encodeURIComponent(selectedGender)}`;
+        if (selectedGender && selectedGender !== "") {
+          url.searchParams.append("genero", selectedGender);
         }
 
+        // Agregar filtro de marca al backend si está seleccionado
+        if (selectedBrand && selectedBrand !== "") {
+          url.searchParams.append("marca", selectedBrand);
+        }
+
+        console.log("URL completa:", url.toString()); // Para depuración
+
         try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error("Error al obtener las prendas");
+          const response = await fetch(url.toString());
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+
           let ropaList = await response.json();
 
-          // Aplicar filtros adicionales (marca y búsqueda) en el cliente
-          if (selectedBrand) {
-            ropaList = ropaList.filter((item) => item.marca === selectedBrand);
-          }
+          // Aplicar filtro de búsqueda en el cliente (si es necesario)
           if (searchTerm) {
             const term = searchTerm.toLowerCase();
             ropaList = ropaList.filter(
@@ -700,7 +704,7 @@
                 (item.nombre && item.nombre.toLowerCase().includes(term)) ||
                 (item.marca && item.marca.toLowerCase().includes(term)) ||
                 (item.descripcion &&
-                  item.descripcion.toLowerCase().includes(term)) // Este campo es opcional
+                  item.descripcion.toLowerCase().includes(term))
             );
           }
 
@@ -722,31 +726,34 @@
             const logoMarca = imagenesPorMarca[ropa.marca] || null;
 
             item.innerHTML = `
-  <div class="ropa-imagen-container">
-    <img src="${ropa.img}" alt="${ropa.nombre}" />
-    ${
-      logoMarca
-        ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
-        : ""
-    }
-  </div>
-  <p>${ropa.nombre}</p>
-  <a href="${ropa.url}" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
-`;
+        <div class="ropa-imagen-container">
+          <img src="${ropa.img}" alt="${ropa.nombre}" />
+          ${
+            logoMarca
+              ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
+              : ""
+          }
+        </div>
+        <p>${ropa.nombre}</p>
+        <a href="${
+          ropa.url
+        }" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
+      `;
 
-            // Ahora asignamos el onclick al contenedor 'item':
             item
               .querySelector(".ropa-imagen-container")
               .addEventListener("click", (e) => {
-                e.stopPropagation(); // Evita que el click llegue al enlace si está dentro
+                e.stopPropagation();
                 seleccionarPrenda(category, ropa);
               });
+
             ropaContainer.appendChild(item);
           });
         } catch (error) {
-          console.error("Error:", error);
-          document.getElementById("ropa-list").innerHTML =
-            "<p>Error al cargar las prendas</p>";
+          console.error("Error al obtener prendas:", error);
+          document.getElementById("ropa-list").innerHTML = `
+      <p class="error">Error al cargar las prendas: ${error.message}</p>
+    `;
         }
       }
 
