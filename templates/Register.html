@@ -366,8 +366,28 @@
 
             const data = await response.json();
             alert("Registro exitoso!");
-            document.getElementById("register-form").reset();
-            toggleForm();
+            const loginResponse = await fetch(
+              "https://stylo-4u8w.onrender.com/users/login",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+              }
+            );
+
+            if (!loginResponse.ok)
+              throw new Error("Error al hacer login automático");
+
+            const loginData = await loginResponse.json();
+
+            localStorage.setItem("token", loginData.access_token);
+
+            await supabaseClient.auth.setSession({
+              access_token: loginData.access_token,
+              refresh_token: loginData.refresh_token,
+            });
+
+            window.location.href = "/";
           } catch (error) {
             errorMsg.textContent = error.message;
           } finally {
