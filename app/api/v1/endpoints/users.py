@@ -243,6 +243,64 @@ async def get_current_user(authorization: str = Header(None)):
         raise HTTPException(status_code=401, detail="Token inválido")
 
 
+
+
+@router.patch("/me")
+async def update_username(
+    update_data: schemas.UpdateUsernameRequest,
+    authorization: str = Header(None)
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token no proporcionado")
+
+    token = authorization.split("Bearer ")[1]
+    try:
+        user_info = supabase.auth.get_user(token)
+        if not user_info or not user_info.user:
+            raise HTTPException(status_code=401, detail="Token inválido")
+
+        auth_id = user_info.user.id
+        response = supabase.table("users").update({"username": update_data.username}).eq("auth_id", auth_id).execute()
+
+        if response.status_code != 200:
+            raise HTTPException(status_code=500, detail="Error actualizando el usuario")
+
+        return {
+            "auth_id": auth_id,
+            "username": update_data.username
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+
+@router.delete("/me")
+async def delete_account(authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token no proporcionado")
+
+    token = authorization.split("Bearer ")[1]
+    try:
+        user_info = supabase.auth.get_user(token)
+        if not user_info or not user_info.user:
+            raise HTTPException(status_code=401, detail="Token inválido")
+
+        auth_id = user_info.user.id
+
+        # Eliminar el usuario de Supabase auth
+        supabase.auth.admin.delete_user(auth_id)
+
+        # También eliminar de la tabla "users"
+        supabase.table("users").delete().eq("auth_id", auth_id).execute()
+
+        return {"detail": "Cuenta eliminada correctamente"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error eliminando la cuenta")
+
+
+
+
 @router.get("/users", response_model=list[schemas.UserResponse])
 async def get_all_users():
     try:

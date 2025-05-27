@@ -14,6 +14,9 @@ class UserCreate(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class UpdateUsernameRequest(BaseModel):
+    username: str
+
 class GoogleUserCreate(BaseModel):
     id: str
     email: str
