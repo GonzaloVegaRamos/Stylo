@@ -90,7 +90,7 @@ async def register_user(user: schemas.UserCreate):
                     
                 raise HTTPException(
                     status_code=400,
-                    detail="El email ya está registrado"
+                    detail="El email ya estaaaaaaa"
                 )
             raise
         try:
