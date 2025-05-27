@@ -33,98 +33,94 @@ def is_valid_email(email: str) -> bool:
 
 @router.post("/register", response_model=schemas.UserResponse)
 async def register_user(user: schemas.UserCreate):
-    # Validar el formato del email
+    # Validaciones iniciales
     if not is_valid_email(user.email):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El formato del correo electrónico no es válido"
+            status_code=400,
+            detail="Formato de email inválido"
         )
     
-    # Verificar si ya existe en tu tabla "users"
-    try:
-        response = supabase.table("users").select("email").eq("email", user.email).execute()
-        if response.data and len(response.data) > 0:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Este correo electrónico ya está registrado",
-            )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al verificar el usuario existente: {str(e)}"
-        )
-
-    # Validar campos obligatorios
     if not user.password or not user.username or not user.edad:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Todos los campos son requeridos: username, password, y edad"
+            status_code=400,
+            detail="Todos los campos son requeridos"
         )
 
-    # Crear usuario en Supabase Auth
     try:
+        # 1. Primero intentamos crear en Auth (esto ya verifica duplicados)
         auth_response = supabase.auth.sign_up({
             'email': user.email,
             'password': user.password
         })
         
-        # Verificar si el usuario fue realmente creado
         if not auth_response.user:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No se pudo crear el usuario en Auth"
+                status_code=400,
+                detail="No se pudo crear usuario en Auth"
             )
-            
-        # Esperar un breve momento para asegurar que el usuario se haya creado
-        await asyncio.sleep(1)
-        
-    except Exception as e:
-        # Verificar si el error es porque el usuario ya existe
-        if "User already registered" in str(e):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Este correo electrónico ya está registrado"
-            )
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error al crear el usuario en Auth: {str(e)}"
-        )
 
-    # Crear usuario en la tabla personalizada (users)
-    try:
-        insert_response = supabase.table("users").insert({
-            "auth_id": auth_response.user.id,
-            "email": user.email,
-            "username": user.username,
-            "gender": user.gender,
-            "style_preference": user.style_preference,
-            "edad": user.edad
-        }).execute()
-        
-        if not insert_response.data:
-            raise Exception("No se recibieron datos de inserción")
-            
-    except Exception as e:
-        # Intentar eliminar el usuario de Auth si falla la inserción en la tabla
+        # 2. Insertar en la tabla users con manejo de errores específico
         try:
-            supabase.auth.admin.delete_user(auth_response.user.id)
-        except:
-            pass
+            insert_response = supabase.table("users").insert({
+                "auth_id": auth_response.user.id,
+                "email": user.email,
+                "username": user.username,
+                "gender": user.gender,
+                "style_preference": user.style_preference,
+                "edad": user.edad
+            }).execute()
             
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al guardar usuario en la tabla: {str(e)}"
+            if not insert_response.data:
+                # Si falla, limpiamos el usuario de Auth
+                try:
+                    supabase.auth.admin.delete_user(auth_response.user.id)
+                except Exception as cleanup_error:
+                    print(f"Error en limpieza: {cleanup_error}")
+                
+                raise Exception("Inserción fallida en la tabla users")
+                
+        except Exception as e:
+            # Manejo específico para errores de duplicado
+            if "duplicate key" in str(e).lower():
+                try:
+                    supabase.auth.admin.delete_user(auth_response.user.id)
+                except:
+                    pass
+                    
+                raise HTTPException(
+                    status_code=400,
+                    detail="El email ya está registrado"
+                )
+            raise
+
+        return schemas.UserResponse(
+            id=auth_response.user.id,
+            email=user.email,
+            username=user.username,
+            gender=user.gender,
+            style_preference=user.style_preference,
+            edad=user.edad
         )
 
-    return schemas.UserResponse(
-        id=auth_response.user.id,
-        email=user.email,
-        username=user.username,
-        gender=user.gender,
-        style_preference=user.style_preference,
-        edad=user.edad
-    )
-
+    except HTTPException:
+        # Re-lanzamos las excepciones HTTP que ya hemos creado
+        raise
+        
+    except Exception as e:
+        # Manejo de otros errores
+        error_msg = str(e)
+        
+        # Detectamos específicamente errores de email duplicado en Auth
+        if "already registered" in error_msg.lower():
+            raise HTTPException(
+                status_code=400,
+                detail="El email ya está registrado"
+            )
+            
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error en el proceso de registro: {error_msg}"
+        )
 
 
 @router.post("/google-register")
