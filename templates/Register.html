@@ -302,6 +302,11 @@
             const data = await response.json();
             localStorage.setItem("token", data.access_token);
 
+            await supabaseClient.auth.setSession({
+              access_token: data.access_token,
+              refresh_token: data.refresh_token,
+            });
+
             window.location.href = "/";
           } catch (error) {
             errorMsg.textContent = error.message;

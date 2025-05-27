@@ -177,7 +177,13 @@ async def login_user(user: schemas.UserLogin):
             )
 
         token = db_user.session.access_token
-        return {"access_token": token, "token_type": "bearer"}
+        refresh_token = db_user.session.refresh_token
+        
+        return {
+    "access_token": token,
+    "refresh_token": refresh_token,
+    "token_type": "bearer"
+}
 
     except Exception:
         raise HTTPException(
