@@ -674,6 +674,7 @@
       // Función para actualizar el nombre de usuario
       async function updateUsername(newUsername) {
         try {
+          const token = localStorage.getItem("token");
           const response = await fetch(
             "https://stylo-4u8w.onrender.com/users/me",
             {
@@ -704,6 +705,7 @@
       // Función para eliminar la cuenta
       async function deleteAccount() {
         try {
+          const token = localStorage.getItem("token");
           const response = await fetch(
             "https://stylo-4u8w.onrender.com/users/me",
             {
