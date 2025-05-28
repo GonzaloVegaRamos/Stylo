@@ -702,9 +702,6 @@
 
           // Guardar el token
           localStorage.setItem("token", session.access_token);
-
-          // Mostrar bienvenida
-          document.body.innerHTML += `<p>Bienvenido, ${session.access_token}</p>`;
         } else {
           console.log("No hay sesión activa");
         }

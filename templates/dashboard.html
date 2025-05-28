@@ -12,8 +12,9 @@
         margin: 0;
         padding: 0;
       }
+
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: #f0f4f8;
         color: #444;
         min-height: 100vh;
@@ -21,83 +22,106 @@
         flex-direction: column;
         overflow-x: hidden;
       }
-      /* Header con fondo claro y sombra sutil */
+
+      /* Header */
       .header {
         background: #ffe5d4;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         padding: 15px 20px;
         position: relative;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
         flex-wrap: wrap;
+        align-items: center;
+        gap: 15px;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: #666;
         z-index: 10;
       }
+
       .logo {
         flex: 1 1 100%;
         display: flex;
         justify-content: center;
-        margin-bottom: 10px;
       }
+
+      .logo img {
+        height: 70px;
+        transition: height 0.3s ease;
+      }
+
       .account-info {
         display: flex;
         flex: 1 1 100%;
         justify-content: center;
+        align-items: center;
         flex-wrap: wrap;
         gap: 10px;
       }
 
       .header button {
         background: #ffe5d4;
-        border: none;
+        border: 1px solid #60b1a7;
         color: #666;
         padding: 8px 16px;
         border-radius: 25px;
         cursor: pointer;
         font-weight: 600;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        white-space: nowrap;
       }
 
       .header button:hover {
         background: #60b1a7;
+        color: white;
       }
+
       /* Navegación */
       nav {
         background: #fff;
         display: flex;
-        padding: 10px 40px;
+        padding: 10px 20px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-        gap: 30px;
-        font-weight: 700;
+        gap: 15px;
+        font-weight: 600;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none; /* Firefox */
       }
+
+      nav::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
+
       nav a {
         color: #60b1a7;
         text-decoration: none;
-        font-size: 1.15rem;
+        font-size: 1rem;
         position: relative;
-        padding-bottom: 5px;
+        padding: 5px 0;
         transition: color 0.3s ease;
       }
+
       nav a::after {
         content: "";
         position: absolute;
         left: 0;
         bottom: 0;
         width: 0%;
-        height: 3px;
+        height: 2px;
         background: #60b1a7;
         transition: width 0.3s ease;
         border-radius: 2px;
       }
+
       nav a:hover {
         color: #666;
       }
+
       nav a:hover::after {
         width: 100%;
       }
+
       /* Imagen principal y fondo animado */
       .main-image {
         display: flex;
@@ -106,8 +130,8 @@
         position: relative;
         width: 100%;
         height: 60vh;
+        min-height: 400px;
         overflow: hidden;
-        /* background: rgba(138, 43, 226, 0.4);  <-- esta línea la quitamos */
       }
 
       .fondo {
@@ -115,7 +139,7 @@
         top: 0;
         left: 0;
         display: flex;
-        width: 300vw; /* 3 imágenes */
+        width: 300vw;
         height: 100%;
         animation: slideBackground 30s linear infinite;
         opacity: 0.2;
@@ -123,6 +147,7 @@
         pointer-events: none;
         user-select: none;
       }
+
       .fondo img {
         width: 100vw;
         height: 100%;
@@ -131,6 +156,7 @@
         filter: brightness(0.8);
         border-radius: 20px;
       }
+
       @keyframes slideBackground {
         0% {
           transform: translateX(0);
@@ -139,31 +165,34 @@
           transform: translateX(-100vw);
         }
       }
-      /* Contenedor principal con estilo card */
+
+      /* Contenedor principal */
       .contenedor {
         position: relative;
         background: #ffe5d4;
-        padding: 50px 60px;
+        padding: 40px;
         border-radius: 25px;
         box-shadow: 0 12px 30px rgba(55, 66, 250, 0.25);
-        max-width: 500px; /* <- antes 350px */
+        max-width: 500px;
         width: 90%;
         text-align: center;
         z-index: 1;
         color: #2f3542;
+        margin: 0 20px;
       }
 
       .contenedor h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
         margin-bottom: 20px;
         user-select: none;
         letter-spacing: 0.04em;
       }
+
       .boton {
         display: inline-block;
         padding: 12px 28px;
         margin: 10px 8px 0;
-        font-weight: 700;
+        font-weight: 600;
         border-radius: 50px;
         border: none;
         cursor: pointer;
@@ -171,75 +200,77 @@
         transition: all 0.3s ease;
         box-shadow: 0 6px 15px rgba(55, 66, 250, 0.3);
         user-select: none;
+        width: 100%;
+        max-width: 200px;
       }
-      .boton1 {
-        background: #60b1a7;
-        color: white;
-      }
-      .boton1:hover {
-        background: #2f3542;
-        box-shadow: 0 8px 20px rgba(47, 53, 66, 0.5);
-        transform: translateY(-3px);
-      }
+
+      .boton1,
       .boton2 {
         background: #60b1a7;
         color: white;
       }
+
+      .boton1:hover,
       .boton2:hover {
         background: #2f3542;
         box-shadow: 0 8px 20px rgba(47, 53, 66, 0.5);
         transform: translateY(-3px);
       }
+
       /* Sección noticias */
       .news-section {
         max-width: 900px;
+        width: 95%;
         margin: 40px auto 60px;
-        padding: 20px 30px;
+        padding: 20px;
         background: white;
         border-radius: 20px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
       }
+
       .news-section h2 {
-        font-size: 2.5rem;
+        font-size: 2rem;
         text-align: center;
         margin-bottom: 30px;
         color: #60b1a7;
         letter-spacing: 0.03em;
         user-select: none;
       }
+
       .news-item {
         background: #f7f9fc;
         border-radius: 15px;
-        padding: 20px 25px;
-        margin-bottom: 25px;
+        padding: 20px;
+        margin-bottom: 20px;
         box-shadow: 0 3px 10px rgba(55, 66, 250, 0.05);
         transition: background-color 0.3s ease;
       }
+
       .news-item:hover {
         background-color: #e1e8ff;
       }
+
       .news-item h3 {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         margin-bottom: 12px;
         color: #2f3542;
-        user-select: text;
       }
+
       .news-item p {
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: #555;
         line-height: 1.4;
-        user-select: text;
       }
+
       .news-item .date {
         font-size: 0.85rem;
         color: #888;
         text-align: right;
         margin-top: 10px;
         font-style: italic;
-        user-select: none;
       }
 
-      /* Banner de anuncio - MODIFICADO */
+      /* Banner de anuncio */
       .ad-section {
         width: 100%;
         background: #ffe5d4;
@@ -249,7 +280,7 @@
 
       .ad-banner {
         max-width: 1200px;
-        width: 100%;
+        width: 95%;
         margin: 0 auto;
         background: #ffe5d4;
         padding: 20px;
@@ -270,17 +301,17 @@
 
       .ad-text {
         flex: 1;
-        padding: 0 20px;
+        padding: 0 10px;
       }
 
       .ad-text h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         color: #2f3542;
         margin-bottom: 10px;
       }
 
       .ad-text p {
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: #555;
         margin-bottom: 15px;
       }
@@ -311,52 +342,10 @@
         color: #999;
         font-size: 0.9rem;
         box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-        user-select: none;
+        margin-top: auto;
       }
-      /* Responsive */
-      @media (max-width: 768px) {
-        .contenedor {
-          width: 95%;
-          padding: 25px 20px;
-        }
-        .news-section {
-          margin: 20px 15px 40px;
-          padding: 15px 20px;
-        }
-        nav {
-          justify-content: center;
-          gap: 20px;
-          padding: 10px 15px;
-        }
 
-        /* Responsive para el banner */
-        .ad-section {
-          padding: 20px 0;
-          margin: 30px 0;
-        }
-
-        .ad-banner {
-          flex-direction: column;
-          padding: 15px;
-          margin: 0 auto;
-          width: 95%;
-        }
-
-        .ad-banner img {
-          max-width: 100%;
-          width: 100%;
-          margin-bottom: 15px;
-        }
-
-        .ad-text {
-          padding: 0;
-          text-align: center;
-        }
-
-        .ad-text h2 {
-          font-size: 1.5rem;
-        }
-      }
+      /* Gestión de usuario */
       .user-management {
         position: relative;
         display: inline-flex;
@@ -377,7 +366,7 @@
         transform: scale(1.1);
       }
 
-      /* Estilos para el modal de gestión de usuario */
+      /* Modal de gestión de usuario */
       .user-modal {
         display: none;
         position: fixed;
@@ -393,9 +382,9 @@
 
       .user-modal-content {
         background: white;
-        padding: 30px;
+        padding: 25px;
         border-radius: 15px;
-        width: 90%;
+        width: 95%;
         max-width: 400px;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         position: relative;
@@ -414,6 +403,7 @@
         margin-bottom: 20px;
         color: #2f3542;
         text-align: center;
+        font-size: 1.3rem;
       }
 
       .user-option {
@@ -425,6 +415,7 @@
         margin-bottom: 5px;
         font-weight: 600;
         color: #555;
+        font-size: 0.9rem;
       }
 
       .user-option input {
@@ -438,16 +429,18 @@
       .user-actions {
         display: flex;
         justify-content: space-between;
-        margin-top: 25px;
+        margin-top: 20px;
+        gap: 10px;
       }
 
       .user-actions button {
-        padding: 10px 20px;
+        padding: 10px 15px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s ease;
+        flex: 1;
       }
 
       .update-btn {
@@ -468,47 +461,23 @@
         background: #e05555;
       }
 
-      @media (max-width: 480px) {
-        .contenedor h2 {
-          font-size: 1.5rem;
-        }
-
-        .boton {
-          font-size: 0.9rem;
-          padding: 10px 20px;
-        }
-
-        .news-item h3 {
-          font-size: 1.3rem;
-        }
-
-        .news-item p {
-          font-size: 1rem;
-        }
-
-        .ad-text h2 {
-          font-size: 1.3rem;
-        }
-
-        nav a {
-          font-size: 1rem;
-        }
-
+      /* Media Queries */
+      @media (max-width: 992px) {
         .main-image {
           height: 50vh;
-          flex-direction: column;
-        }
-
-        .fondo {
-          width: 300vw;
-          height: 100%;
-          animation-duration: 60s; /* Más lento en móviles */
+          min-height: 350px;
         }
 
         .contenedor {
-          padding: 20px 10px;
-          max-width: 100%;
-          border-radius: 20px;
+          padding: 30px;
+        }
+
+        .contenedor h2 {
+          font-size: 1.6rem;
+        }
+
+        .news-section h2 {
+          font-size: 1.8rem;
         }
 
         .ad-banner {
@@ -516,13 +485,159 @@
           text-align: center;
         }
 
+        .ad-banner img {
+          max-width: 100%;
+          margin-bottom: 15px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          flex-direction: column;
+          gap: 10px;
+          padding: 15px 10px;
+        }
+
+        .logo img {
+          height: 60px;
+        }
+
+        .account-info {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .header button {
+          width: 100%;
+          max-width: 200px;
+        }
+
+        nav {
+          padding: 10px 15px;
+          justify-content: flex-start;
+        }
+
+        .main-image {
+          height: 45vh;
+          min-height: 300px;
+        }
+
+        .contenedor {
+          padding: 25px 20px;
+        }
+
+        .boton {
+          padding: 10px 20px;
+          font-size: 0.95rem;
+        }
+
+        .news-section {
+          margin: 30px auto 50px;
+        }
+
+        .news-item h3 {
+          font-size: 1.3rem;
+        }
+
+        .ad-text h2 {
+          font-size: 1.4rem;
+        }
+
         .user-modal-content {
-          padding: 20px;
+          padding: 20px 15px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .logo img {
+          height: 50px;
+        }
+
+        nav a {
+          font-size: 0.9rem;
+        }
+
+        .main-image {
+          height: 40vh;
+          min-height: 250px;
+        }
+
+        .contenedor {
+          padding: 20px 15px;
+        }
+
+        .contenedor h2 {
+          font-size: 1.4rem;
+        }
+
+        .boton {
+          padding: 10px 15px;
+          margin: 8px 0;
+          max-width: 100%;
+        }
+
+        .news-section {
+          padding: 15px;
+        }
+
+        .news-section h2 {
+          font-size: 1.5rem;
+        }
+
+        .news-item {
+          padding: 15px;
+        }
+
+        .news-item h3 {
+          font-size: 1.2rem;
+        }
+
+        .news-item p {
+          font-size: 0.95rem;
+        }
+
+        .ad-section {
+          padding: 20px 0;
+        }
+
+        .ad-banner {
+          padding: 15px;
+        }
+
+        .ad-text h2 {
+          font-size: 1.2rem;
+        }
+
+        .ad-text button {
+          padding: 10px 20px;
+          font-size: 0.9rem;
         }
 
         .user-actions {
           flex-direction: column;
-          gap: 10px;
+        }
+
+        .user-actions button {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .header button {
+          padding: 6px 12px;
+          font-size: 0.9rem;
+        }
+
+        .contenedor h2 {
+          font-size: 1.3rem;
+        }
+
+        .boton {
+          font-size: 0.9rem;
+        }
+
+        .fondo {
+          animation-duration: 45s;
         }
       }
     </style>
