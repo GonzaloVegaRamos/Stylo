@@ -1036,8 +1036,25 @@
       });
 
       function toggleMenu() {
-        document.querySelector(".menu").classList.toggle("open");
-        menu.classList.toggle("active");
+        const menu = document.querySelector(".menu");
+        const menuToggleMenu = document.querySelector(".menu-toggle-menu");
+
+        // Alternar estado del menú principal
+        menu.classList.toggle("open");
+
+        // Alternar visibilidad del elemento .menu-toggle-menu
+        if (menu.classList.contains("open")) {
+          // Cuando el menú está ABIERTO
+          menuToggleMenu.style.display = "none";
+        } else {
+          // Cuando el menú está CERRADO
+          menuToggleMenu.style.display = "block";
+          menuToggleMenu.style.position = "fixed";
+          // Añade aquí otros estilos que necesites para la posición fija
+          menuToggleMenu.style.top = "20px";
+          menuToggleMenu.style.left = "20px";
+          menuToggleMenu.style.zIndex = "1001";
+        }
       }
 
       window.addEventListener("DOMContentLoaded", function () {
