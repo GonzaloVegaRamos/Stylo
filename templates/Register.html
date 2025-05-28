@@ -207,72 +207,56 @@
           width: 100%;
           padding: 60px 40px; /* Doble de padding */
         }
+        .imgBx {
+          display: none;
+        }
       }
 
-      /* Reset para móviles - Todo XXL */
       @media (max-width: 768px) {
-        * {
-          font-size: 28px !important; /* Tamaño base gigante */
-        }
-
         section {
-          padding: 50px !important;
-          min-height: 120vh !important; /* Pantalla extra alta */
-        }
-
-        section .container {
-          min-height: 1000px !important; /* Contenedor enorme */
+          padding: 40px; /* Doble de espacio alrededor */
+          padding-top: 60px;
         }
 
         section .container .user .formBx {
-          padding: 80px 50px !important; /* Espacio interno masivo */
+          padding: 60px 40px; /* Caja más grande */
         }
 
         section .container .user .formBx form h2 {
-          font-size: 42px !important; /* Título como cartel */
-          margin-bottom: 50px !important;
-          letter-spacing: 4px !important;
+          font-size: 32px !important; /* Gigante (antes 18px) */
+          margin-bottom: 30px !important;
         }
 
         section .container .user .formBx form input {
-          font-size: 32px !important; /* Texto gigante */
-          padding: 30px 20px !important; /* Cajas altísimas */
-          margin: 30px 0 !important;
-          border-radius: 15px !important;
+          font-size: 24px !important; /* Texto enorme */
+          padding: 20px 15px !important; /* Inputs altos */
+          margin: 20px 0 !important;
         }
 
         section .container .user .formBx form input[type="submit"] {
-          font-size: 36px !important;
-          padding: 30px !important;
-          margin-top: 50px !important;
+          font-size: 24px !important;
+          padding: 20px !important;
+          margin-top: 30px !important;
           max-width: 100% !important;
-          border-radius: 20px !important;
         }
 
         .google-login {
-          padding: 30px !important;
-          font-size: 32px !important;
-          margin-top: 40px !important;
-          border-radius: 20px !important;
+          padding: 20px !important;
+          font-size: 24px !important;
+          margin-top: 20px !important;
         }
 
         .google-login svg {
-          width: 40px !important; /* Icono enorme */
-          height: 40px !important;
+          width: 24px !important; /* Icono más grande */
+          height: 24px !important;
         }
 
         .signup {
-          margin-top: 50px !important;
-          font-size: 28px !important; /* Texto legible desde lejos */
+          margin-top: 30px !important;
+          font-size: 18px !important; /* Texto legible */
         }
-
-        .signup a {
-          font-size: 28px !important;
-        }
-
-        .error {
-          font-size: 24px !important; /* Mensajes de error visibles */
-          margin-top: 20px !important;
+        .imgBx {
+          display: none;
         }
       }
 
@@ -287,6 +271,9 @@
 
         .signup {
           font-size: 16px !important;
+        }
+        .imgBx {
+          display: none;
         }
       }
     </style>
