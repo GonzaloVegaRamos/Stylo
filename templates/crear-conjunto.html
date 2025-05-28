@@ -450,6 +450,18 @@
           padding: 15px;
         }
       }
+
+      @media (max-width: 768px) {
+        .seleccion-list {
+          flex-wrap: nowrap; /* No permite que se envuelvan */
+          overflow-x: auto; /* Activa el scroll horizontal */
+          -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+        }
+
+        .seleccion-list .ropa-item {
+          flex: 0 0 auto; /* Evita que el item se estire o encoge */
+        }
+      }
     </style>
   </head>
   <body>
