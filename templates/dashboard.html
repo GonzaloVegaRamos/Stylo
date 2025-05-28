@@ -30,8 +30,9 @@
         padding: 15px 20px;
         position: relative;
         display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: flex-start; /* ← esta línea es la clave */
         gap: 15px;
         font-weight: 600;
         font-size: 1rem;
@@ -40,7 +41,7 @@
       }
 
       .logo {
-        flex: 1 1 100%;
+        flex: 1 1 auto; /* o un valor como 40% si quieres limitar el tamaño */
         display: flex;
         justify-content: center;
       }
@@ -52,7 +53,7 @@
 
       .account-info {
         display: flex;
-        flex: 1 1 100%;
+        flex: 1 1 auto; /* o 60%, si das 40% a .logo */
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
@@ -508,7 +509,7 @@
         }
 
         .header button {
-          width: 100%;
+          width: auto;
           max-width: 200px;
         }
 
