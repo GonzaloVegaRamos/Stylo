@@ -750,7 +750,13 @@
         navigator.clipboard
           .writeText(texto)
           .then(() => {
-            Swal.fire("¡Enlace copiado al portapeles!\n" + texto);
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "¡Enlace copiado al portapeles!\n" + texto,
+              showConfirmButton: false,
+              timer: 1500,
+            });
           })
           .catch((err) => {
             console.error("Error al copiar:", err);
