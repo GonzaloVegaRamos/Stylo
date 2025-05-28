@@ -26,28 +26,13 @@
       body {
         height: 100%;
         margin: 0;
+        padding: 0;
       }
 
       body {
         display: flex;
-        height: 100vh;
-      }
-
-      .menu {
-        width: 200px;
-        background: #fff;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        overflow-y: auto;
-        flex-shrink: 0; /* que no se reduzca */
-        position: sticky;
-        top: 0;
-      }
-
-      .content {
-        flex-grow: 1;
-        padding: 20px;
-        overflow-y: auto;
+        min-height: 100vh;
+        margin-left: 250px; /* Para compensar el menú fijo */
       }
 
       /* Layout principal */
@@ -55,6 +40,7 @@
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        width: 100%;
       }
 
       /* Menú lateral */
@@ -64,12 +50,11 @@
         padding: 20px;
         overflow-y: auto;
         z-index: 10;
-        display: block; /* visible en escritorio */
         position: fixed; /* fijamos en escritorio */
         top: 0;
         left: 0;
-        width: 250px; /* ancho fijo */
-        height: 100vh; /* que ocupe toda la altura */
+        width: 250px;
+        height: 100vh;
       }
 
       .menu h2 {
@@ -92,6 +77,13 @@
 
       .menu li:hover {
         background: var(--gray-light);
+      }
+
+      .content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: 250px; /* Para compensar el menú fijo */
+        width: calc(100% - 250px);
       }
 
       .main {
@@ -356,6 +348,7 @@
       .close:hover {
         color: #000;
       }
+
       .menu-toggle {
         margin-top: 15px;
         margin-bottom: 15px;
@@ -367,66 +360,59 @@
         border-radius: 35px;
         width: 40%;
         text-align: center;
+        cursor: pointer;
       }
-      @media (max-width: 767px) {
-        .menu {
-          position: fixed;
-          top: 0;
-          left: -100%; /* Lo empujamos fuera de la vista */
-          width: 80%;
-          height: 100%;
-          background: var(--white);
-          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-          transition: left 0.3s ease;
-          z-index: 1000;
-          display: block; /* Importante: debe estar en pantalla para animarse */
-        }
-
-        .menu.open {
-          left: 0; /* Entra a la vista */
-        }
-
-        .menu-toggle {
-          display: block;
-        }
-      }
-
-      /* Por defecto: escritorio */
-      .menu {
-        background: var(--white);
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        overflow-y: auto;
-        z-index: 10;
-        display: block; /* Importante: visible en escritorio */
-      }
-
-      /* Botón oculto en escritorio */
-      .menu-toggle {
+      .menu-toggle-menu {
+        margin-top: 15px;
+        margin-bottom: 15px;
         display: none;
+        background-color: #ffe5d4;
+        color: #2f3542;
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 35px;
+        width: 40%;
+        text-align: center;
+        cursor: pointer;
       }
 
-      /* Estilos solo para móvil */
+      /* Estilos para móvil */
       @media (max-width: 767px) {
+        body {
+          margin-left: 0;
+        }
+
+        .content {
+          margin-left: 0;
+          width: 100%;
+        }
+
         .menu {
           position: fixed;
           top: 0;
-          left: -100%; /* Lo empujamos fuera de la vista */
+          left: -100%;
           width: 80%;
           height: 100%;
-          background: var(--white);
-          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
           transition: left 0.3s ease;
           z-index: 1000;
-          display: block; /* Importante: debe estar en pantalla para animarse */
         }
 
         .menu.open {
-          left: 0; /* Entra a la vista */
+          left: 0;
         }
 
         .menu-toggle {
           display: block;
+        }
+        .menu-toggle-menu {
+          display: block;
+          position: fixed; /* Hacemos flotante */
+          top: 20px; /* Posición desde arriba */
+          left: 20px; /* Posición desde la izquierda */
+          z-index: 1001; /* Encima de todo */
+          margin: 0; /* Eliminamos márgenes */
+          width: auto; /* Ancho según contenido */
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para mejor visibilidad */
         }
         .menu ul {
           display: flex;
@@ -487,6 +473,7 @@
           padding: 15px;
         }
       }
+
       .categoria-seleccion {
         overflow-x: auto;
       }
@@ -506,7 +493,9 @@
     </style>
   </head>
   <body>
-    <button class="menu-toggle" onclick="toggleMenu()">☰ Categorías</button>
+    <button class="menu-toggle-menu" onclick="toggleMenu()">
+      ☰ Categorías
+    </button>
     <div class="menu">
       <div class="logo">
         <a href="/">
