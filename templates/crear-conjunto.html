@@ -765,7 +765,7 @@
             const logoMarca = imagenesPorMarca[ropa.marca] || null;
 
             item.innerHTML = `
-  <div class="ropa-imagen-container">
+  <div class="ropa-imagen-container" class="ropa-imagen-container">
     <img src="${ropa.img}" alt="${ropa.nombre}" />
     ${
       logoMarca
@@ -775,6 +775,7 @@
   </div>
   <p>${ropa.nombre}</p>
   <a href="${ropa.url}" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
+  <a class="btn-anadir" target="_blank">Añadir</a>
 `;
 
             // Ahora asignamos el onclick al contenedor 'item':
@@ -785,6 +786,10 @@
                 seleccionarPrenda(category, ropa);
               });
             ropaContainer.appendChild(item);
+          });
+          item.querySelector(".btn-anadir").addEventListener("click", (e) => {
+            e.preventDefault(); // Si fuera un <a>, evita navegación
+            seleccionarPrenda(category, ropa);
           });
         } catch (error) {
           console.error("Error:", error);
