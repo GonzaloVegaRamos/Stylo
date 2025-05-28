@@ -634,7 +634,10 @@
             }
 
             const data = await response.json();
-            alert("Registro exitoso!");
+            Swal.fire({
+              text: "Registro Exitoso!",
+              icon: "success",
+            });
             const loginResponse = await fetch(
               "https://stylo-4u8w.onrender.com/users/login",
               {

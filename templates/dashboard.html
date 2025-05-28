@@ -464,6 +464,12 @@
 
       /* Media Queries */
       @media (max-width: 992px) {
+        .logo {
+          flex: 1 1 100%; /* o un valor como 40% si quieres limitar el tamaño */
+          display: flex;
+          justify-content: center;
+        }
+
         .main-image {
           height: 50vh;
           min-height: 350px;
@@ -493,10 +499,10 @@
       }
 
       @media (max-width: 768px) {
-        .header {
-          flex-direction: column;
-          gap: 10px;
-          padding: 15px 10px;
+        .logo {
+          flex: 1 1 100%; /* o un valor como 40% si quieres limitar el tamaño */
+          display: flex;
+          justify-content: center;
         }
 
         .logo img {
@@ -515,7 +521,6 @@
 
         nav {
           padding: 10px 15px;
-          justify-content: flex-start;
         }
 
         .main-image {
@@ -550,6 +555,13 @@
       }
 
       @media (max-width: 576px) {
+        .logo {
+          flex: 1 1 100%; /* o un valor como 40% si quieres limitar el tamaño */
+          display: flex;
+          justify-content: center;
+          position: center;
+        }
+
         .logo img {
           height: 50px;
         }
@@ -624,6 +636,12 @@
       }
 
       @media (max-width: 400px) {
+        .logo {
+          flex: 1 1 100%; /* o un valor como 40% si quieres limitar el tamaño */
+          display: flex;
+          justify-content: center;
+        }
+
         .header button {
           padding: 6px 12px;
           font-size: 0.9rem;

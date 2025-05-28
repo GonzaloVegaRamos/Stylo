@@ -323,34 +323,34 @@
                 : "Anónimo";
 
             return `
-      <div class="conjunto-card">
-        <div class="card-header">
-          <h3>${conjunto.nombre}</h3>
-          <p style="font-size: 0.9rem; color: #888;">por ${usuarioNombre}</p>
-        </div>
-        <div class="card-body">
-          <div class="prendas-container">
-            ${prendasConjunto
-              .map(
-                (p) => `
-              <div class="prenda-item">
-                <img src="${p.img}" alt="${p.nombre}" />
-              </div>
-            `
-              )
-              .join("")}
+        <div class="conjunto-card">
+          <div class="card-header">
+            <h3>${conjunto.nombre}</h3>
+            <p style="font-size: 0.9rem; color: #888;">por ${usuarioNombre}</p>
+          </div>
+          <div class="card-body">
+            <div class="prendas-container">
+              ${prendasConjunto
+                .map(
+                  (p) => `
+                <div class="prenda-item">
+                  <img src="${p.img}" alt="${p.nombre}" />
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-compartir" onclick="compartirConjunto('${
+              conjunto.codigo
+            }')">Compartir</button>
+            <button class="btn" onclick="verConjunto('${
+              conjunto.codigo
+            }')">Ver más</button>
           </div>
         </div>
-        <div class="card-footer">
-          <button class="btn btn-compartir" onclick="compartirConjunto('${
-            conjunto.codigo
-          }')">Compartir</button>
-          <button class="btn" onclick="verConjunto('${
-            conjunto.codigo
-          }')">Ver más</button>
-        </div>
-      </div>
-    `;
+      `;
           })
           .join("");
       }
@@ -363,7 +363,15 @@
         const url = `https://stylo-4u8w.onrender.com/ver-conjunto?id=${id}`;
         navigator.clipboard
           .writeText(url)
-          .then(() => alert("¡Enlace copiado!\n" + url))
+          .then(() =>
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "¡Enlace copiado al portapeles!\n" + texto,
+              showConfirmButton: false,
+              timer: 1500,
+            })
+          )
           .catch((err) => alert("Error al copiar enlace: " + err));
       }
 
