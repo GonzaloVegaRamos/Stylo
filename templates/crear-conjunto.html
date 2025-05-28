@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Stylo - Creacion de conjuntos</title>
+    <script src="sweetalert2.all.min.js"></script>
     <style>
       :root {
         --primary-color: #007bff;
@@ -637,9 +638,9 @@
             item.classList.add("ropa-item");
 
             item.innerHTML = `
-                  <img src="${prenda.img}" alt="${prenda.nombre}" />
-                  <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">×</button>
-                `;
+                              <img src="${prenda.img}" alt="${prenda.nombre}" />
+                              <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">×</button>
+                            `;
             lista.appendChild(item);
           }
 
@@ -702,10 +703,10 @@
           item.classList.add("modal-item");
 
           item.innerHTML = `
-            <img src="${prenda.img}" alt="${prenda.nombre}" />
-            <p>${prenda.nombre}</p>
-            <small>${prenda.estilo || "No definido"}</small>
-        `;
+                        <img src="${prenda.img}" alt="${prenda.nombre}" />
+                        <p>${prenda.nombre}</p>
+                        <small>${prenda.estilo || "No definido"}</small>
+                    `;
           modalContainer.appendChild(item);
         });
 
@@ -749,7 +750,7 @@
         navigator.clipboard
           .writeText(texto)
           .then(() => {
-            alert("¡Enlace copiado al portapeles!\n" + texto);
+            Swal.fire("¡Enlace copiado al portapeles!\n" + texto);
           })
           .catch((err) => {
             console.error("Error al copiar:", err);
@@ -827,18 +828,20 @@
             const logoMarca = imagenesPorMarca[ropa.marca] || null;
 
             item.innerHTML = `
-  <div class="ropa-imagen-container" class="ropa-imagen-container">
-    <img src="${ropa.img}" alt="${ropa.nombre}" />
-    ${
-      logoMarca
-        ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
-        : ""
-    }
-  </div>
-  <p>${ropa.nombre}</p>
-  <a href="${ropa.url}" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
-  <a class="btn-anadir" target="_blank">Añadir</a>
-`;
+              <div class="ropa-imagen-container" class="ropa-imagen-container">
+                <img src="${ropa.img}" alt="${ropa.nombre}" />
+                ${
+                  logoMarca
+                    ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
+                    : ""
+                }
+              </div>
+              <p>${ropa.nombre}</p>
+              <a href="${
+                ropa.url
+              }" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
+              <a class="btn-anadir" target="_blank">Añadir</a>
+            `;
 
             // Ahora asignamos el onclick al contenedor 'item':
             item
@@ -865,7 +868,12 @@
       function guardarConjunto() {
         const token = localStorage.getItem("token");
         if (!token) {
-          alert("Debes iniciar sesión para guardar conjuntos.");
+          Swal.fire({
+            title: "The Internet?",
+            text: "Debes iniciar sesión para guardar conjuntos.",
+            icon: "question",
+          });
+
           window.location.href = "/login";
           return;
         }
@@ -874,7 +882,22 @@
         const nombreConjunto = nombreInput.value.trim();
 
         if (!nombreConjunto) {
-          alert("Por favor ingresa un nombre para tu conjunto.");
+          let timerInterval;
+          Swal.fire({
+            title: "Por favor ingresa un nombre para tu conjunto",
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+              const timer = Swal.getPopup().querySelector("b");
+              timerInterval = setInterval(() => {
+                timer.textContent = `${Swal.getTimerLeft()}`;
+              }, 2000);
+            },
+            willClose: () => {
+              clearInterval(timerInterval);
+            },
+          }).then((result) => {});
           return;
         }
         const estiloPredominante = determinarEstiloPredominante();
@@ -947,7 +970,11 @@
 
         try {
           document.execCommand("copy");
-          alert("✅ Enlace copiado:\n" + url);
+
+          Swal.fire({
+            text: "Enlace copiado:\n" + url,
+            icon: "success",
+          });
         } catch (err) {
           console.error("Error al copiar:", err);
           prompt("Por favor copia este enlace manualmente:", url);
