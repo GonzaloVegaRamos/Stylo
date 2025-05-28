@@ -926,7 +926,6 @@
         const token = localStorage.getItem("token");
         if (!token) {
           Swal.fire({
-            title: "The Internet?",
             text: "Debes iniciar sesión para guardar conjuntos.",
             icon: "question",
           });
@@ -973,6 +972,13 @@
         const datosFiltrados = Object.fromEntries(
           Object.entries(conjuntoData).filter(([_, value]) => value !== null)
         );
+        if (Object.keys(datosFiltrados).length === 0) {
+          Swal.fire({
+            text: "Debes tener almenos una prenda para guardar conjunto",
+            icon: "question",
+          });
+          return;
+        }
 
         fetch("https://stylo-4u8w.onrender.com/users/conjuntos", {
           method: "POST",
