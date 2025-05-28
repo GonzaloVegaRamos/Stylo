@@ -450,21 +450,20 @@
           padding: 15px;
         }
       }
+      .categoria-seleccion {
+        overflow-x: auto;
+      }
 
       @media (max-width: 768px) {
         .seleccion-list {
           display: flex;
-          flex-direction: row; /* Alineación horizontal */
-          flex-wrap: nowrap; /* No envolver, todo en una línea */
-          overflow-x: auto; /* Scroll horizontal */
-          overflow-y: hidden;
-          -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-          gap: 10px;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
         .seleccion-list .ropa-item {
-          flex: 0 0 auto; /* Evita que se estiren o encogan */
-          width: 80px; /* Tamaño fijo para cada ítem */
+          flex: 0 0 auto;
         }
       }
     </style>
