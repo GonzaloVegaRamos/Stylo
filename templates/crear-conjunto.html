@@ -328,6 +328,42 @@
       .close:hover {
         color: #000;
       }
+      .menu-toggle {
+        display: none;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px 15px;
+        font-size: 16px;
+        border: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      @media (max-width: 767px) {
+        .menu {
+          position: fixed;
+          top: 0;
+          left: -100%;
+          width: 80%;
+          height: 100%;
+          background: var(--white);
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+          transition: left 0.3s ease;
+          z-index: 1000;
+        }
+
+        .menu.open {
+          left: 0;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        .main {
+          padding-top: 60px; /* espacio para el botón */
+        }
+      }
 
       /* Responsive Design */
       @media (min-width: 768px) {
@@ -406,7 +442,7 @@
         }
 
         .ropa-list {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         }
 
         .modal-content {
@@ -417,13 +453,13 @@
     </style>
   </head>
   <body>
+    <div class="logo">
+      <a href="/">
+        <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+      </a>
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Categorías</button>
     <div class="menu">
-      <div class="logo">
-        <a href="/">
-          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
-        </a>
-      </div>
-
       <ul>
         <li onclick="showOptions('Camiseta')">Camisetas</li>
         <li onclick="showOptions('RAL')">Sudaderas</li>
@@ -922,6 +958,10 @@
             }
           });
       });
+
+      function toggleMenu() {
+        document.querySelector(".menu").classList.toggle("open");
+      }
     </script>
   </body>
 </html>
