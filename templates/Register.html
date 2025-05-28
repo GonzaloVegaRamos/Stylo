@@ -15,6 +15,10 @@
         font-family: "Poppins", sans-serif;
       }
 
+      body {
+        overflow-x: hidden;
+      }
+
       section {
         position: relative;
         min-height: 100vh;
@@ -73,6 +77,10 @@
         align-items: center;
         padding: 40px;
         transition: 0.5s;
+      }
+
+      section .container .user .formBx form {
+        width: 100%;
       }
 
       section .container .user .formBx form h2 {
@@ -159,84 +167,115 @@
         transform: translateX(-100%);
       }
 
-      @media (max-width: 991px) {
-        section .container {
-          max-width: 400px;
-        }
-
-        section .container .imgBx {
-          display: none;
-        }
-
-        section .container .user .formBx {
-          width: 100%;
-        }
+      .google-login {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+        background-color: #db4437;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
       }
+
+      .google-login:hover {
+        opacity: 0.9;
+      }
+
+      .error {
+        color: #ff3333;
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: center;
+      }
+
+      /* Media Queries para móviles */
       @media (max-width: 991px) {
         section .container {
-          width: 100%;
+          max-width: 100%;
           height: auto;
-          flex-direction: column;
-          max-width: 400px;
-        }
-
-        section .container .imgBx {
-          display: none;
+          min-height: 600px;
         }
 
         section .container .user {
           flex-direction: column;
         }
 
+        section .container .user .imgBx {
+          display: none;
+        }
+
         section .container .user .formBx {
           width: 100%;
-          height: auto;
-          padding: 20px;
+          padding: 30px;
+        }
+
+        section .container .signupBx .imgBx {
+          display: none;
         }
       }
 
       @media (max-width: 768px) {
         section {
           padding: 10px;
+          min-height: 100vh;
+          align-items: flex-start;
+          padding-top: 40px;
+          padding-bottom: 40px;
         }
 
         section .container {
           box-shadow: none;
+          background: transparent;
+          height: auto;
+        }
+
+        section .container .user .formBx {
+          background: #fff;
+          border-radius: 10px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         section .container .user .formBx form h2 {
           font-size: 20px;
+          margin-bottom: 15px;
         }
 
         section .container .user .formBx form input {
           font-size: 16px;
           padding: 12px;
+          margin: 10px 0;
         }
 
         section .container .user .formBx form input[type="submit"] {
           max-width: 100%;
           font-size: 16px;
+          padding: 12px;
+          margin-top: 15px;
         }
 
         .google-login {
-          width: 100%;
-          padding: 10px;
-          margin-top: 10px;
+          padding: 12px;
           font-size: 16px;
-          background-color: #db4437;
-          color: white;
-          border: none;
-          cursor: pointer;
         }
 
-        .google-login:hover {
-          opacity: 0.9;
+        .signup {
+          margin-top: 15px !important;
         }
       }
 
       @media (max-width: 480px) {
         section .container .user .formBx {
-          padding: 15px;
+          padding: 20px;
+        }
+
+        section .container .user .formBx form h2 {
+          font-size: 18px;
         }
 
         section .container .user .formBx form input {
@@ -244,8 +283,27 @@
           font-size: 14px;
         }
 
+        section .container .user .formBx form input[type="submit"] {
+          font-size: 14px;
+        }
+
         .google-login {
           font-size: 14px;
+          padding: 10px;
+        }
+
+        .signup {
+          font-size: 11px !important;
+        }
+      }
+
+      @media (max-width: 360px) {
+        section .container .user .formBx {
+          padding: 15px;
+        }
+
+        section .container .user .formBx form h2 {
+          font-size: 16px;
         }
       }
     </style>
@@ -276,7 +334,20 @@
                 required
               />
               <input type="submit" value="Login" />
-              <button class="google-login">Iniciar sesión con Google</button>
+              <button type="button" class="google-login">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"
+                  />
+                </svg>
+                Iniciar sesión con Google
+              </button>
               <p class="signup">
                 No tienes cuenta?
                 <a href="#" onclick="toggleForm();">Crear cuenta.</a>
@@ -329,6 +400,17 @@
               />
               <input type="submit" value="Registrarse" />
               <button type="button" class="google-login">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"
+                  />
+                </svg>
                 Iniciar sesión con Google
               </button>
               <p class="signup">
