@@ -338,59 +338,66 @@
         width: 100%;
         text-align: left;
       }
-
       @media (max-width: 767px) {
         .menu {
           position: fixed;
           top: 0;
-          left: -100%;
+          left: -100%; /* Lo empujamos fuera de la vista */
           width: 80%;
           height: 100%;
           background: var(--white);
           box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
           transition: left 0.3s ease;
           z-index: 1000;
+          display: block; /* Importante: debe estar en pantalla para animarse */
         }
 
         .menu.open {
-          left: 0;
+          left: 0; /* Entra a la vista */
         }
 
         .menu-toggle {
           display: block;
         }
-
-        .main {
-          padding-top: 60px; /* espacio para el botón */
-        }
       }
 
-      /* Responsive Design */
-      @media (min-width: 768px) {
-        .app-container {
-          flex-direction: row;
-        }
-
-        .menu {
-          width: 250px;
-          height: 100vh;
-          position: sticky;
-          top: 0;
-        }
-
-        .main {
-          margin-left: 0;
-          padding-left: 20px;
-        }
+      /* Por defecto: escritorio */
+      .menu {
+        background: var(--white);
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 10;
+        display: block; /* Importante: visible en escritorio */
       }
 
+      /* Botón oculto en escritorio */
+      .menu-toggle {
+        display: none;
+      }
+
+      /* Estilos solo para móvil */
       @media (max-width: 767px) {
         .menu {
-          position: relative;
-          width: 100%;
-          height: auto;
+          position: fixed;
+          top: 0;
+          left: -100%; /* Lo empujamos fuera de la vista */
+          width: 80%;
+          height: 100%;
+          background: var(--white);
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+          transition: left 0.3s ease;
+          z-index: 1000;
+          display: block; /* Importante: debe estar en pantalla para animarse */
         }
 
+        .menu.open {
+          left: 0; /* Entra a la vista */
+        }
+
+        .menu-toggle {
+          display: block;
+        }
         .menu ul {
           display: flex;
           flex-wrap: wrap;
@@ -978,6 +985,7 @@
 
       function toggleMenu() {
         document.querySelector(".menu").classList.toggle("open");
+        menu.classList.toggle("active");
       }
     </script>
   </body>
