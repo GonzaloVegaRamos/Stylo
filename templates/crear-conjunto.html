@@ -207,6 +207,12 @@
         border-top: 1px solid var(--gray-medium);
         border-radius: var(--border-radius);
       }
+      .logo-movil {
+        display: none;
+      }
+      .logo {
+        display: block;
+      }
 
       .seleccion-list {
         display: flex;
@@ -384,6 +390,13 @@
         body {
           margin-left: 0;
         }
+        .logo-movil {
+          display: block;
+          align-self: center;
+        }
+        .logo {
+          display: none;
+        }
 
         .content {
           margin-left: 0;
@@ -431,7 +444,6 @@
 
         .search-container {
           flex-direction: column;
-          margin-top: 50px;
         }
 
         .search-container input,
@@ -462,6 +474,13 @@
         .menu ul {
           flex-direction: column;
         }
+        .logo-movil {
+          display: block;
+          align-self: center;
+        }
+        .logo {
+          display: none;
+        }
 
         .menu li {
           width: 100%;
@@ -483,6 +502,13 @@
       }
 
       @media (max-width: 768px) {
+        .logo-movil {
+          display: block;
+          align-self: center;
+        }
+        .logo {
+          display: none;
+        }
         .seleccion-list {
           display: flex;
           flex-wrap: nowrap;
@@ -497,15 +523,15 @@
     </style>
   </head>
   <body>
-    <div class="logo">
-      <a href="/">
-        <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
-      </a>
-    </div>
     <button class="menu-toggle-menu" onclick="toggleMenu()">
       ☰ Categorías
     </button>
     <div class="menu">
+      <div class="logo">
+        <a href="/">
+          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+        </a>
+      </div>
       <button class="menu-toggle" onclick="toggleMenu()">Cerrar</button>
       <ul>
         <li onclick="showOptions('Camiseta')">Camisetas</li>
@@ -525,6 +551,11 @@
     </div>
 
     <div class="main">
+      <div class="logo-movil">
+        <a href="/">
+          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+        </a>
+      </div>
       <div class="search-container">
         <input type="text" id="search-bar" placeholder="Buscar..." />
         <select id="brand-dropdown">
