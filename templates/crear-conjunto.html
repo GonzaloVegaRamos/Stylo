@@ -22,11 +22,32 @@
         box-sizing: border-box;
       }
 
+      html,
       body {
+        height: 100%;
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: var(--background-color);
-        min-height: 100vh;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+      }
+
+      .menu {
+        width: 200px;
+        background: #fff;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow-y: auto;
+        flex-shrink: 0; /* que no se reduzca */
+        position: sticky;
+        top: 0;
+      }
+
+      .content {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
       }
 
       /* Layout principal */
@@ -43,6 +64,12 @@
         padding: 20px;
         overflow-y: auto;
         z-index: 10;
+        display: block; /* visible en escritorio */
+        position: fixed; /* fijamos en escritorio */
+        top: 0;
+        left: 0;
+        width: 250px; /* ancho fijo */
+        height: 100vh; /* que ocupe toda la altura */
       }
 
       .menu h2 {
@@ -479,13 +506,13 @@
     </style>
   </head>
   <body>
-    <div class="logo">
-      <a href="/">
-        <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
-      </a>
-    </div>
     <button class="menu-toggle" onclick="toggleMenu()">☰ Categorías</button>
     <div class="menu">
+      <div class="logo">
+        <a href="/">
+          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+        </a>
+      </div>
       <button class="menu-toggle" onclick="toggleMenu()">Cerrar</button>
       <ul>
         <li onclick="showOptions('Camiseta')">Camisetas</li>
