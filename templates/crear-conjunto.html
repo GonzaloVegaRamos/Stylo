@@ -821,11 +821,12 @@
                 e.stopPropagation(); // Evita que el click llegue al enlace si está dentro
                 seleccionarPrenda(category, ropa);
               });
+
+            item.querySelector(".btn-anadir").addEventListener("click", (e) => {
+              e.preventDefault(); // Si fuera un <a>, evita navegación
+              seleccionarPrenda(category, ropa);
+            });
             ropaContainer.appendChild(item);
-          });
-          item.querySelector(".btn-anadir").addEventListener("click", (e) => {
-            e.preventDefault(); // Si fuera un <a>, evita navegación
-            seleccionarPrenda(category, ropa);
           });
         } catch (error) {
           console.error("Error:", error);
