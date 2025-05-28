@@ -194,79 +194,95 @@
         text-align: center;
       }
 
-      /* Media Queries para móviles */
-      /* Media Queries para móviles - Versión XXL */
-
+      /* Media Queries mejoradas */
       @media (max-width: 991px) {
         section .container {
           max-width: 100%;
-          height: 1000px;
-          min-height: 800px; /* Mucho más alto */
+          height: auto;
+          min-height: auto;
+          flex-direction: column;
+        }
+
+        section .container .user {
+          position: relative;
+          flex-direction: column;
+        }
+
+        section .container .user .imgBx {
+          width: 100%;
+          height: 200px; /* Altura fija para la imagen en móvil */
         }
 
         section .container .user .formBx {
           width: 100%;
-          padding: 60px 20px; /* Doble de padding */
+          padding: 30px;
+        }
+
+        section .container .signupBx .imgBx {
+          order: 2; /* Mueve la imagen al final en el formulario de registro */
+        }
+
+        section .container .signupBx .formBx {
+          order: 1;
         }
       }
 
       @media (max-width: 768px) {
         section {
-          padding: 40px; /* Doble de espacio alrededor */
-          padding-top: 20px;
-          height: 700px;
+          padding: 20px;
+          min-height: 100vh;
         }
 
         section .container .user .formBx {
-          padding: 60px 40px; /* Caja más grande */
+          padding: 30px 20px;
         }
 
         section .container .user .formBx form h2 {
-          font-size: 32px !important; /* Gigante (antes 18px) */
-          margin-bottom: 30px !important;
+          font-size: 20px !important;
+          margin-bottom: 15px !important;
         }
 
         section .container .user .formBx form input {
-          font-size: 24px !important; /* Texto enorme */
-          padding: 20px 15px !important; /* Inputs altos */
-          margin: 20px 0 !important;
+          font-size: 14px !important;
+          padding: 12px 10px !important;
+          margin: 10px 0 !important;
         }
 
         section .container .user .formBx form input[type="submit"] {
-          font-size: 24px !important;
-          padding: 20px !important;
-          margin-top: 30px !important;
+          font-size: 14px !important;
+          padding: 12px !important;
+          margin-top: 15px !important;
           max-width: 100% !important;
         }
 
         .google-login {
-          padding: 20px !important;
-          font-size: 24px !important;
-          margin-top: 20px !important;
+          padding: 12px !important;
+          font-size: 14px !important;
+          margin-top: 15px !important;
         }
 
         .google-login svg {
-          width: 24px !important; /* Icono más grande */
-          height: 24px !important;
+          width: 16px !important;
+          height: 16px !important;
         }
 
         .signup {
-          margin-top: 30px !important;
-          font-size: 18px !important; /* Texto legible */
+          margin-top: 20px !important;
+          font-size: 12px !important;
         }
       }
 
       @media (max-width: 480px) {
         section .container .user .formBx {
-          padding: 50px 30px !important;
+          padding: 25px 15px !important;
         }
 
         section .container .user .formBx form h2 {
-          font-size: 28px !important;
+          font-size: 18px !important;
         }
 
         .signup {
-          font-size: 16px !important;
+          font-size: 12px !important;
         }
       }
     </style>
