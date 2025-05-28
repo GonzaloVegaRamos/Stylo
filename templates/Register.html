@@ -286,6 +286,94 @@
           font-size: 12px !important;
         }
       }
+      /* Añade estas reglas al final de tu CSS */
+
+      /* Asegurar que ambos formularios tengan la misma altura y estén alineados */
+      section .container .user .formBx {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Centra verticalmente el contenido */
+        align-items: center;
+        height: 100%;
+        padding: 40px;
+        box-sizing: border-box;
+        overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+      }
+
+      /* Contenedor del formulario para mantener consistencia */
+      .form-content-container {
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+      }
+
+      /* Ajustar el formulario para ocupar el espacio disponible */
+      section .container .user .formBx form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Espacio uniforme entre elementos */
+      }
+
+      /* Asegurar que el botón de cambio de formulario quede al final */
+      .signup {
+        margin-top: auto; /* Empuja el elemento hacia abajo */
+        padding-top: 20px; /* Espacio adicional */
+      }
+
+      @media (max-width: 991px) {
+        section .container {
+          height: 100vh;
+          max-width: 100%;
+          position: relative;
+          overflow: hidden;
+        }
+
+        section .container .user {
+          flex-direction: row; /* Omitimos column */
+        }
+
+        section .container .signinBx,
+        section .container .signupBx {
+          flex-direction: column;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          transition: transform 0.5s ease;
+        }
+
+        section .container .signinBx {
+          transform: translateX(0%);
+        }
+
+        section .container.active .signinBx {
+          transform: translateX(-100%);
+        }
+
+        section .container .signupBx {
+          transform: translateX(100%);
+        }
+
+        section .container.active .signupBx {
+          transform: translateX(0%);
+        }
+
+        section .container .user .imgBx {
+          height: 200px;
+          width: 100%;
+        }
+
+        section .container .user .formBx {
+          height: calc(100% - 200px);
+          width: 100%;
+          overflow-y: auto;
+        }
+      }
     </style>
   </head>
   <body>
@@ -297,42 +385,44 @@
             <img src="static/img/ama.webp" alt="" />
           </div>
           <div class="formBx">
-            <form id="login-form" onsubmit="return false;">
-              <h2>Iniciar Sesión</h2>
-              <input
-                type="email"
-                id="email"
-                name="email-login"
-                placeholder="Email"
-                required
-              />
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Contraseña"
-                required
-              />
-              <input type="submit" value="Login" />
-              <button type="button" class="google-login">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"
-                  />
-                </svg>
-                Iniciar sesión con Google
-              </button>
-              <p class="signup">
-                No tienes cuenta?
-                <a href="#" onclick="toggleForm();">Crear cuenta.</a>
-              </p>
-            </form>
+            <div class="form-content-container">
+              <form id="login-form" onsubmit="return false;">
+                <h2>Iniciar Sesión</h2>
+                <input
+                  type="email"
+                  id="email"
+                  name="email-login"
+                  placeholder="Email"
+                  required
+                />
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Contraseña"
+                  required
+                />
+                <input type="submit" value="Login" />
+                <button type="button" class="google-login">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"
+                    />
+                  </svg>
+                  Iniciar sesión con Google
+                </button>
+                <p class="signup">
+                  No tienes cuenta?
+                  <a href="#" onclick="toggleForm();">Crear cuenta.</a>
+                </p>
+              </form>
+            </div>
             <div class="error" id="login-error-msg"></div>
           </div>
         </div>
@@ -340,64 +430,66 @@
         <!-- Registro -->
         <div class="user signupBx">
           <div class="formBx">
-            <form id="register-form">
-              <h2>Crear una cuenta</h2>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Nombre de usuario"
-                required
-              />
-              <input
-                type="email"
-                id="email-register"
-                name="email"
-                placeholder="Email"
-                required
-              />
-              <input
-                type="number"
-                id="age"
-                name="age"
-                placeholder="Edad"
-                min="1"
-                required
-              />
-              <input
-                type="password"
-                id="password-register"
-                name="password"
-                placeholder="Contraseña"
-                required
-              />
-              <input
-                type="password"
-                id="confirm-password"
-                name="confirm-password"
-                placeholder="Confirmar contraseña"
-                required
-              />
-              <input type="submit" value="Registrarse" />
-              <button type="button" class="google-login">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"
-                  />
-                </svg>
-                Iniciar sesión con Google
-              </button>
-              <p class="signup">
-                ¿Ya tienes cuenta?
-                <a href="#" onclick="toggleForm();">Iniciar sesión.</a>
-              </p>
-            </form>
+            <div class="form-content-container">
+              <form id="register-form">
+                <h2>Crear una cuenta</h2>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  placeholder="Nombre de usuario"
+                  required
+                />
+                <input
+                  type="email"
+                  id="email-register"
+                  name="email"
+                  placeholder="Email"
+                  required
+                />
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  placeholder="Edad"
+                  min="1"
+                  required
+                />
+                <input
+                  type="password"
+                  id="password-register"
+                  name="password"
+                  placeholder="Contraseña"
+                  required
+                />
+                <input
+                  type="password"
+                  id="confirm-password"
+                  name="confirm-password"
+                  placeholder="Confirmar contraseña"
+                  required
+                />
+                <input type="submit" value="Registrarse" />
+                <button type="button" class="google-login">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"
+                    />
+                  </svg>
+                  Iniciar sesión con Google
+                </button>
+                <p class="signup">
+                  ¿Ya tienes cuenta?
+                  <a href="#" onclick="toggleForm();">Iniciar sesión.</a>
+                </p>
+              </form>
+            </div>
             <div class="error" id="register-error-msg"></div>
           </div>
           <div class="imgBx">
