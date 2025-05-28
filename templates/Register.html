@@ -375,6 +375,44 @@
           overflow-y: auto;
         }
       }
+      .form-content-container {
+        padding: 16px;
+        max-height: 100vh;
+        overflow-y: auto;
+      }
+
+      form#register-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Espaciado menor entre campos */
+      }
+
+      form#register-form input,
+      form#register-form button {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      @media (max-width: 600px) {
+        .formBx {
+          padding: 10px;
+        }
+
+        form#register-form h2 {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+
+        form#register-form input,
+        form#register-form button {
+          font-size: 13px;
+          padding: 6px 8px;
+        }
+
+        .google-login svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
     </style>
   </head>
   <body>
