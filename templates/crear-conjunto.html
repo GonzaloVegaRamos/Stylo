@@ -497,15 +497,15 @@
     </style>
   </head>
   <body>
+    <div class="logo">
+      <a href="/">
+        <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
+      </a>
+    </div>
     <button class="menu-toggle-menu" onclick="toggleMenu()">
       ☰ Categorías
     </button>
     <div class="menu">
-      <div class="logo">
-        <a href="/">
-          <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
-        </a>
-      </div>
       <button class="menu-toggle" onclick="toggleMenu()">Cerrar</button>
       <ul>
         <li onclick="showOptions('Camiseta')">Camisetas</li>
@@ -789,7 +789,7 @@
 
       // Función para redirigir al armario
       function verArmario() {
-        alert("Redirigiendo a tu armario... (Función en desarrollo)");
+        window.location.href = "/armario";
         cerrarConfirmationModal();
       }
 
