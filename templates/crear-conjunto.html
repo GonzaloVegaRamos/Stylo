@@ -754,7 +754,7 @@
           })
           .catch((err) => {
             console.error("Error al copiar:", err);
-            alert(
+            Swal.fire(
               "No se pudo copiar el enlace automáticamente. Cópialo manualmente:\n" +
                 texto
             );
