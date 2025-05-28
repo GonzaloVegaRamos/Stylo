@@ -195,119 +195,76 @@
       }
 
       /* Media Queries para móviles */
-      /* Media Queries para móviles */
+      /* Media Queries para móviles - Versión XXL */
       @media (max-width: 991px) {
         section .container {
           max-width: 100%;
           height: auto;
-          min-height: 600px;
-        }
-
-        section .container .user {
-          flex-direction: column;
-        }
-
-        section .container .user .imgBx {
-          display: none;
+          min-height: 800px; /* Mucho más alto */
         }
 
         section .container .user .formBx {
           width: 100%;
-          padding: 40px; /* Aumentado de 30px */
-        }
-
-        section .container .signupBx .imgBx {
-          display: none;
+          padding: 60px 40px; /* Doble de padding */
         }
       }
 
       @media (max-width: 768px) {
         section {
-          padding: 20px; /* Aumentado de 10px */
-          min-height: 100vh;
-          align-items: flex-start;
-          padding-top: 40px;
-          padding-bottom: 40px;
-        }
-
-        section .container {
-          box-shadow: none;
-          background: transparent;
-          height: auto;
+          padding: 40px; /* Doble de espacio alrededor */
+          padding-top: 60px;
         }
 
         section .container .user .formBx {
-          background: #fff;
-          border-radius: 10px;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-          padding: 40px 30px; /* Aumentado */
+          padding: 60px 40px; /* Caja más grande */
         }
 
         section .container .user .formBx form h2 {
-          font-size: 24px; /* Aumentado de 20px */
-          margin-bottom: 20px; /* Aumentado */
+          font-size: 32px !important; /* Gigante (antes 18px) */
+          margin-bottom: 30px !important;
         }
 
         section .container .user .formBx form input {
-          font-size: 18px; /* Aumentado de 16px */
-          padding: 15px; /* Aumentado de 12px */
-          margin: 12px 0; /* Aumentado */
+          font-size: 24px !important; /* Texto enorme */
+          padding: 20px 15px !important; /* Inputs altos */
+          margin: 20px 0 !important;
         }
 
         section .container .user .formBx form input[type="submit"] {
-          max-width: 100%;
-          font-size: 18px; /* Aumentado de 16px */
-          padding: 15px; /* Aumentado de 12px */
-          margin-top: 20px; /* Aumentado de 15px */
+          font-size: 24px !important;
+          padding: 20px !important;
+          margin-top: 30px !important;
+          max-width: 100% !important;
         }
 
         .google-login {
-          padding: 15px; /* Aumentado de 12px */
-          font-size: 18px; /* Aumentado de 16px */
-          margin-top: 15px;
+          padding: 20px !important;
+          font-size: 24px !important;
+          margin-top: 20px !important;
+        }
+
+        .google-login svg {
+          width: 24px !important; /* Icono más grande */
+          height: 24px !important;
         }
 
         .signup {
-          margin-top: 25px !important; /* Aumentado de 15px */
-          font-size: 14px !important; /* Aumentado */
+          margin-top: 30px !important;
+          font-size: 18px !important; /* Texto legible */
         }
       }
 
       @media (max-width: 480px) {
         section .container .user .formBx {
-          padding: 30px 20px; /* Aumentado de 20px */
+          padding: 50px 30px !important;
         }
 
         section .container .user .formBx form h2 {
-          font-size: 22px; /* Aumentado de 18px */
-        }
-
-        section .container .user .formBx form input {
-          padding: 12px; /* Aumentado de 10px */
-          font-size: 16px; /* Aumentado de 14px */
-        }
-
-        section .container .user .formBx form input[type="submit"] {
-          font-size: 16px; /* Aumentado de 14px */
-        }
-
-        .google-login {
-          font-size: 16px; /* Aumentado de 14px */
-          padding: 12px; /* Aumentado de 10px */
+          font-size: 28px !important;
         }
 
         .signup {
-          font-size: 13px !important; /* Aumentado de 11px */
-        }
-      }
-
-      @media (max-width: 360px) {
-        section .container .user .formBx {
-          padding: 25px 15px; /* Aumentado de 15px */
-        }
-
-        section .container .user .formBx form h2 {
-          font-size: 20px; /* Aumentado de 16px */
+          font-size: 16px !important;
         }
       }
     </style>
