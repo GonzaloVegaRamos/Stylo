@@ -972,10 +972,17 @@
         const datosFiltrados = Object.fromEntries(
           Object.entries(conjuntoData).filter(([_, value]) => value !== null)
         );
-        if (Object.keys(datosFiltrados).length === 0) {
+
+        const prendasFiltradas = Object.fromEntries(
+          Object.entries(datosFiltrados).filter(
+            ([key, _]) => key !== "nombre" && key !== "estilo"
+          )
+        );
+
+        if (Object.keys(prendasFiltradas).length === 0) {
           Swal.fire({
-            text: "Debes tener almenos una prenda para guardar conjunto",
-            icon: "question",
+            text: "Debes tener al menos una prenda para guardar el conjunto",
+            icon: "warning",
           });
           return;
         }
