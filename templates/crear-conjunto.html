@@ -697,7 +697,7 @@
 
             item.innerHTML = `
                               <img src="${prenda.img}" alt="${prenda.nombre}" />
-                              <button class="remove-btn" onclick="eliminarPrenda('${categoria}')">×</button>
+                              <button class="remove-btn" onclick="eliminarPrenda('${categoria}', this)">×</button>
                             `;
             lista.appendChild(item);
           }
@@ -741,10 +741,17 @@
         return estilosPredominantes.join(", ");
       }
       // Función para eliminar una prenda de la selección
-      function eliminarPrenda(categoria) {
+      function eliminarPrenda(categoria, boton) {
         delete seleccion[categoria];
         actualizarSeleccion();
-        item.classList.add("seleccionada");
+
+        // Quitar clase 'seleccionada' del item padre (puedes ajustar el nivel si necesario)
+        const itemOriginal = document.querySelector(
+          `.ropa-item[data-categoria="${categoria}"]`
+        );
+        if (itemOriginal) {
+          itemOriginal.classList.remove("seleccionada");
+        }
       }
 
       // Función para mostrar el popup de confirmación
