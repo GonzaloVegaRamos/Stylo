@@ -520,6 +520,11 @@
           flex: 0 0 auto;
         }
       }
+      .ropa-item.seleccionada {
+        background-color: #d0f0c0; /* un verde clarito */
+        border: 2px solid #4caf50; /* borde verde */
+        border-radius: 5px;
+      }
     </style>
   </head>
   <body>
@@ -660,6 +665,7 @@
       function seleccionarPrenda(categoria, prenda) {
         seleccion[categoria] = prenda;
         actualizarSeleccion();
+        showOptions(categoria);
       }
 
       // Función para actualizar la visualización de la selección
@@ -899,7 +905,12 @@
               }" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
               <a class="btn-anadir" target="_blank">Añadir</a>
             `;
-
+            if (
+              seleccion[currentCategory] &&
+              seleccion[currentCategory].id === ropa.id
+            ) {
+              item.classList.add("seleccionada");
+            }
             // Ahora asignamos el onclick al contenedor 'item':
             item
               .querySelector(".ropa-imagen-container")
@@ -912,6 +923,7 @@
               e.preventDefault(); // Si fuera un <a>, evita navegación
               seleccionarPrenda(category, ropa);
             });
+
             ropaContainer.appendChild(item);
           });
         } catch (error) {
@@ -920,6 +932,12 @@
             "<p>Error al cargar las prendas</p>";
         }
       }
+
+      item.querySelector(".btn-anadir").addEventListener("click", (e) => {
+        e.preventDefault();
+        seleccionarPrenda(category, ropa);
+        showOptions(currentCategory); // recarga las prendas con el marcado actualizado
+      });
 
       // Función para guardar el conjunto
       function guardarConjunto() {
