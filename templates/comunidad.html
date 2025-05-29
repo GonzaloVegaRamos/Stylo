@@ -229,6 +229,27 @@
         }));
       }
 
+      async function obtenerUsuariosPorIds(ids) {
+        const usuariosData = {};
+        const promises = ids.map(async (id) => {
+          try {
+            const response = await fetch(
+              `https://stylo-4u8w.onrender.com/users/users/${id}`
+            );
+            if (response.ok) {
+              const usuario = await response.json();
+              usuariosData[id] = usuario;
+            } else {
+              console.warn(`Usuario con id ${id} no encontrado`);
+            }
+          } catch (error) {
+            console.error(`Error al obtener usuario ${id}:`, error);
+          }
+        });
+        await Promise.all(promises);
+        return usuariosData;
+      }
+
       async function renderizarConjuntos(conjuntos) {
         const container = document.getElementById("feed-conjuntos");
 
@@ -255,37 +276,29 @@
         // Obtener datos de prendas
         let prendasData = {};
         try {
-          const response = await fetch(
-            `https://stylo-4u8w.onrender.com/users/ropa?id=${Array.from(
-              prendasIds
-            ).join(",")}`
-          );
-          if (response.ok) {
-            const data = await response.json();
-            data.forEach((prenda) => {
-              prendasData[prenda.id] = prenda;
-            });
+          if (prendasIds.size > 0) {
+            const response = await fetch(
+              `https://stylo-4u8w.onrender.com/users/ropa?id=${Array.from(
+                prendasIds
+              ).join(",")}`
+            );
+            if (response.ok) {
+              const data = await response.json();
+              data.forEach((prenda) => {
+                prendasData[prenda.id] = prenda;
+              });
+            }
           }
         } catch (error) {
           console.error("Error al obtener prendas:", error);
         }
 
-        // Obtener datos de usuarios
+        // Obtener datos de usuarios usando la función para múltiples fetch
         let usuariosData = {};
         try {
           const usuariosArray = Array.from(usuariosIds);
           if (usuariosArray.length > 0) {
-            const response = await fetch(
-              `https://stylo-4u8w.onrender.com/users/users?id=${usuariosArray.join(
-                ","
-              )}`
-            );
-            if (response.ok) {
-              const data = await response.json();
-              data.forEach((usuario) => {
-                usuariosData[usuario.id] = usuario;
-              });
-            }
+            usuariosData = await obtenerUsuariosPorIds(usuariosArray);
           }
         } catch (error) {
           console.error("Error al obtener usuarios:", error);
@@ -323,34 +336,34 @@
                 : "Anónimo";
 
             return `
-        <div class="conjunto-card">
-          <div class="card-header">
-            <h3>${conjunto.nombre}</h3>
-            <p style="font-size: 0.9rem; color: #888;">por ${usuarioNombre}</p>
-          </div>
-          <div class="card-body">
-            <div class="prendas-container">
-              ${prendasConjunto
-                .map(
-                  (p) => `
-                <div class="prenda-item">
-                  <img src="${p.img}" alt="${p.nombre}" />
-                </div>
-              `
-                )
-                .join("")}
+          <div class="conjunto-card">
+            <div class="card-header">
+              <h3>${conjunto.nombre}</h3>
+              <p style="font-size: 0.9rem; color: #888;">por ${usuarioNombre}</p>
+            </div>
+            <div class="card-body">
+              <div class="prendas-container">
+                ${prendasConjunto
+                  .map(
+                    (p) => `
+                  <div class="prenda-item">
+                    <img src="${p.img}" alt="${p.nombre}" />
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-compartir" onclick="compartirConjunto('${
+                conjunto.codigo
+              }')">Compartir</button>
+              <button class="btn" onclick="verConjunto('${
+                conjunto.codigo
+              }')">Ver más</button>
             </div>
           </div>
-          <div class="card-footer">
-            <button class="btn btn-compartir" onclick="compartirConjunto('${
-              conjunto.codigo
-            }')">Compartir</button>
-            <button class="btn" onclick="verConjunto('${
-              conjunto.codigo
-            }')">Ver más</button>
-          </div>
-        </div>
-      `;
+        `;
           })
           .join("");
       }
@@ -367,7 +380,7 @@
             Swal.fire({
               position: "top-end",
               icon: "success",
-              title: "¡Enlace copiado al portapeles!\n" + texto,
+              title: "¡Enlace copiado al portapeles!",
               showConfirmButton: false,
               timer: 1500,
             })
