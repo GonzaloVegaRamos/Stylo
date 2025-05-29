@@ -744,7 +744,7 @@
       function eliminarPrenda(categoria) {
         delete seleccion[categoria];
         actualizarSeleccion();
-        showOptions();
+        item.classList.add("seleccionada");
       }
 
       // Función para mostrar el popup de confirmación
@@ -1126,14 +1126,18 @@
         }
       }
 
-      window.addEventListener("DOMContentLoaded", function () {
-        // Busca el elemento <li> que contiene el texto "Camisetas"
-        const camisetasLi = document.querySelector(
-          "li[onclick=\"showOptions('Camiseta')\"]"
-        );
-        if (camisetasLi) {
-          camisetasLi.click(); // Simula el clic
-        }
+      window.addEventListener("DOMContentLoaded", () => {
+        const observer = new MutationObserver(() => {
+          const camisetasLi = document.querySelector(
+            "li[onclick=\"showOptions('Camiseta')\"]"
+          );
+          if (camisetasLi) {
+            camisetasLi.click();
+            observer.disconnect(); // Detiene el observer para evitar repeticiones
+          }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
       });
     </script>
   </body>
