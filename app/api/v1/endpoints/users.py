@@ -244,34 +244,51 @@ async def get_current_user(authorization: str = Header(None)):
 
 
 
+from fastapi import HTTPException, Header, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+security = HTTPBearer()
 
 @router.patch("/me")
 async def update_username(
     update_data: schemas.UpdateUsernameRequest,
-    authorization: str = Header(None)
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Token no proporcionado")
-
-    token = authorization.split("Bearer ")[1]
+    token = credentials.credentials
+    
     try:
+        # Verificar el token y obtener el usuario
         user_info = supabase.auth.get_user(token)
         if not user_info or not user_info.user:
-            raise HTTPException(status_code=401, detail="Token inválido")
-
+            raise HTTPException(status_code=401, detail="Token inválido o usuario no encontrado")
+        
         auth_id = user_info.user.id
-        response = supabase.table("users").update({"username": update_data.username}).eq("auth_id", auth_id).execute()
-
-        if response.status_code != 200:
-            raise HTTPException(status_code=500, detail="Error actualizando el usuario")
-
+        
+        # Actualizar el username
+        response = supabase.table("users").update(
+            {"username": update_data.username}
+        ).eq("auth_id", auth_id).execute()
+        
+        # Verificar si la actualización fue exitosa
+        if len(response.data) == 0:
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado o no se pudo actualizar"
+            )
+            
         return {
             "auth_id": auth_id,
             "username": update_data.username
         }
 
+    except HTTPException:
+        raise  # Re-lanza las excepciones HTTP que ya hemos capturado
     except Exception as e:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        print(f"Error inesperado: {str(e)}")  # Log para debugging
+        raise HTTPException(
+            status_code=500,
+            detail="Error interno del servidor al procesar la solicitud"
+        )
 
 
 @router.delete("/me")
