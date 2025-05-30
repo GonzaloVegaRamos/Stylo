@@ -290,10 +290,7 @@ async def update_username(
             detail="Error interno del servidor al procesar la solicitud"
         )
 
-from fastapi import HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-security = HTTPBearer()
 
 @router.delete("/me")
 async def delete_account(
