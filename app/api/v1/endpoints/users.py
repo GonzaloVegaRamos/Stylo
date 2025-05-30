@@ -11,6 +11,10 @@ from fastapi import Header, HTTPException
 from fastapi import Path
 import os 
 from supabase import create_client, Client
+import os
+from supabase.client import create_client, Client  # Importación corregida
+
+
 
 # Crear el router de usuarios
 router = APIRouter()
@@ -21,10 +25,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Obtener cliente de Supabase
 supabase = get_supabase_client()
 
-
+# Configuración con Service Key
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
-supabase_admin = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+
+
 
 # Función para validar el formato del email
 def is_valid_email(email: str) -> bool:
@@ -293,30 +297,36 @@ async def update_username(
         )
 
 
-
-
 @router.delete("/me")
-async def delete_account(credentials: HTTPAuthorizationCredentials = Depends(security)):
+async def delete_account(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     token = credentials.credentials
     
     try:
-        # Verificación normal con el token del usuario
+        # Verificar el token y obtener el usuario
         user_info = supabase.auth.get_user(token)
         if not user_info or not user_info.user:
             raise HTTPException(status_code=401, detail="Token inválido")
 
         auth_id = user_info.user.id
 
-        # Eliminar primero de tu tabla users
-        supabase.table("users").delete().eq("auth_id", auth_id).execute()
+        # Solo eliminamos de nuestra tabla users
+        delete_response = supabase.table("users").delete().eq("auth_id", auth_id).execute()
 
-        # Eliminar de Auth usando la service key (operación admin)
-        supabase_admin.auth.admin.delete_user(auth_id)
+        # Opcional: Cerrar sesión del usuario
+        supabase.auth.sign_out()
 
-        return {"detail": "Cuenta eliminada correctamente"}
-    
+        return {
+            "detail": "Cuenta desactivada correctamente",
+            "note": "El usuario sigue existiendo en auth pero fue eliminado de nuestra base de datos"
+        }
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al desactivar la cuenta: {str(e)}"
+        )
 
 
 @router.get("/users", response_model=list[schemas.UserResponse])
