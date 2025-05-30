@@ -8,12 +8,9 @@ from app.db import schemas  # Tus esquemas de Pydantic
 from fastapi import Header
 from uuid import UUID, uuid4
 from fastapi import Header, HTTPException
-from uuid import UUID, uuid4
-from fastapi import Header, HTTPException
-from supabase import Client
-from uuid import UUID, uuid4
 from fastapi import Path
-
+import os 
+from supabase import create_client, Client
 
 # Crear el router de usuarios
 router = APIRouter()
@@ -24,9 +21,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Obtener cliente de Supabase
 supabase = get_supabase_client()
 
+
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
-supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+supabase_admin = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 # Función para validar el formato del email
 def is_valid_email(email: str) -> bool:
@@ -294,7 +292,7 @@ async def update_username(
             detail="Error interno del servidor al procesar la solicitud"
         )
 
-from supabase import create_client, Client
+
 
 
 @router.delete("/me")
