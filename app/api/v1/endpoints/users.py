@@ -290,50 +290,6 @@ async def update_username(
             detail="Error interno del servidor al procesar la solicitud"
         )
 
-@router.delete("/me")
-async def delete_account(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
-):
-    token = credentials.credentials
-    
-    try:
-        # Verificar el token y obtener el usuario
-        user_info = supabase.auth.get_user(token)
-        if not user_info or not user_info.user:
-            raise HTTPException(status_code=401, detail="Token inválido o usuario no encontrado")
-        
-        auth_id = user_info.user.id
-        email = user_info.user.email  # Podría ser útil para logs
-
-        # Primero eliminar de la tabla users (si es necesario)
-        delete_response = supabase.table("users").delete().eq("auth_id", auth_id).execute()
-        
-        # Luego eliminar el usuario de auth (esto requiere permisos de admin)
-        try:
-            supabase.auth.admin.delete_user(auth_id)
-        except Exception as admin_error:
-            print(f"Error eliminando usuario de auth: {str(admin_error)}")
-            raise HTTPException(
-                status_code=500,
-                detail="Error eliminando la cuenta de autenticación"
-            )
-
-        # Verificar que se eliminó correctamente de la tabla users
-        if len(delete_response.data) == 0:
-            print(f"Advertencia: No se encontró usuario con auth_id {auth_id} en la tabla users")
-            # No necesariamente es un error, podría no existir en la tabla
-
-        return {"detail": "Cuenta eliminada correctamente"}
-
-    except HTTPException:
-        raise  # Re-lanzamos las excepciones HTTP que ya hemos capturado
-        
-    except Exception as e:
-        print(f"Error inesperado al eliminar cuenta: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail="Error interno del servidor al procesar la solicitud"
-        )
 
 
 @router.get("/users", response_model=list[schemas.UserResponse])
