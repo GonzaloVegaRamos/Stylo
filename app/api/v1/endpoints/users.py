@@ -24,6 +24,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Obtener cliente de Supabase
 supabase = get_supabase_client()
 
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
+supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+
 # Función para validar el formato del email
 def is_valid_email(email: str) -> bool:
     # Expresión regular para validar el formato de correo electrónico
@@ -290,53 +294,31 @@ async def update_username(
             detail="Error interno del servidor al procesar la solicitud"
         )
 
+from supabase import create_client, Client
 
 
 @router.delete("/me")
-async def delete_account(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
-):
+async def delete_account(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
     
     try:
-        # Verificar el token y obtener el usuario
+        # Verificación normal con el token del usuario
         user_info = supabase.auth.get_user(token)
         if not user_info or not user_info.user:
-            raise HTTPException(status_code=401, detail="Token inválido o usuario no encontrado")
-        
+            raise HTTPException(status_code=401, detail="Token inválido")
+
         auth_id = user_info.user.id
-        email = user_info.user.email  # Podría ser útil para logs
 
-        # Primero eliminar de la tabla users (si es necesario)
-        delete_response = supabase.table("users").delete().eq("auth_id", auth_id).execute()
-        
-        # Luego eliminar el usuario de auth (esto requiere permisos de admin)
-        try:
-            supabase.auth.admin.delete_user(auth_id)
-        except Exception as admin_error:
-            print(f"Error eliminando usuario de auth: {str(admin_error)}")
-            raise HTTPException(
-                status_code=500,
-                detail="Error eliminando la cuenta de autenticación"
-            )
+        # Eliminar primero de tu tabla users
+        supabase.table("users").delete().eq("auth_id", auth_id).execute()
 
-        # Verificar que se eliminó correctamente de la tabla users
-        if len(delete_response.data) == 0:
-            print(f"Advertencia: No se encontró usuario con auth_id {auth_id} en la tabla users")
-            # No necesariamente es un error, podría no existir en la tabla
+        # Eliminar de Auth usando la service key (operación admin)
+        supabase_admin.auth.admin.delete_user(auth_id)
 
         return {"detail": "Cuenta eliminada correctamente"}
-
-    except HTTPException:
-        raise  # Re-lanzamos las excepciones HTTP que ya hemos capturado
-        
+    
     except Exception as e:
-        print(f"Error inesperado al eliminar cuenta: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail="Error interno del servidor al procesar la solicitud"
-        )
-
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/users", response_model=list[schemas.UserResponse])
@@ -575,7 +557,7 @@ import os
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
+
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = os.environ.get("OAUTHLIB_INSECURE_TRANSPORT", "1")
 
