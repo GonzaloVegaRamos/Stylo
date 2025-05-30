@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>STYLO</title>
+    <script src="/static/js/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       /* Reset básico */
@@ -898,6 +899,11 @@
           const data = await response.json();
           currentUser = data;
           userInfoElement.textContent = data.username;
+
+          Swal.fire({
+            text: "Has cambiado el nombre!",
+            icon: "success",
+          });
 
           userModal.style.display = "none";
         } catch (error) {
