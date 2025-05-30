@@ -898,10 +898,7 @@
           const data = await response.json();
           currentUser = data;
           userInfoElement.textContent = data.username;
-          Swal.fire({
-            text: "Has cambiado el nombre!",
-            icon: "success",
-          });
+
           userModal.style.display = "none";
         } catch (error) {
           alert("Hubo un error al actualizar el nombre de usuario");
@@ -928,7 +925,7 @@
 
           localStorage.removeItem("token");
           Swal.fire({
-            text: "YTu cuenta ha sido eliminada",
+            text: "Tu cuenta ha sido eliminada",
             icon: "success",
           });
           location.reload();
@@ -986,11 +983,6 @@
         }).then((result) => {
           if (result.isConfirmed) {
             deleteAccount();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
           }
         });
       });
