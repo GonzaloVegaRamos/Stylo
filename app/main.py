@@ -35,6 +35,10 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 def read_root(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+@app.get("/Guia-Estilo", response_class=HTMLResponse)
+def read_guia(request: Request):
+    return templates.TemplateResponse("guia.html", {"request": request})
+
 @app.get("/armario", response_class=HTMLResponse)
 async def read_armario(request: Request):
     return templates.TemplateResponse("armario.html", {"request": request})

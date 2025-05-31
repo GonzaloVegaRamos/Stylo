@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/static/js/sweetalert2.all.min.js"></script>
+    <title>Guía Moda Responsive</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        background: #ffe5d4;
+        color: black;
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h2 {
+        text-align: center;
+        color: #60b1a7;
+        margin-bottom: 40px;
+      }
+      .contenedor-secciones {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+      .tarjeta {
+        flex: 1 1 420px; /* mínimo 420px, crecer/encoger */
+        max-width: 480px;
+        background-color: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-sizing: border-box;
+
+        transition: transform 0.3s ease;
+      }
+
+      .tarjeta h3 {
+        margin-top: 0;
+        color: #60b1a7;
+      }
+      .contenido {
+        margin-top: 15px;
+      }
+      .estilo-item {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      .estilo-item img {
+        width: 120px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+      .info h3 {
+        margin: 0 0 5px 0;
+        color: #8cd6c2;
+      }
+      .info p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: black;
+      }
+      .info a {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 0.85rem;
+        color: #60b1a7;
+        text-decoration: none;
+      }
+      .info a:hover {
+        text-decoration: underline;
+      }
+
+      .grid-container {
+        margin-top: -20px;
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 20px;
+        grid-template-rows: 400px auto auto; /* Dos filas */
+        max-width: 1200px;
+        width: 100%;
+        padding: 20px;
+        margin-right: -50px;
+      }
+      .contenedor-grande {
+        margin-top: -10px;
+      }
+
+      /* Estilos: columna 1, filas 1 a 3 (ocupa ambas filas) */
+      .estilos {
+        grid-column: 1 / 4;
+        grid-row: 1/ 4;
+      }
+
+      /* Teoría del color: columna 2 a 4 (2 columnas juntas), fila 1 */
+      .teoria-color {
+        grid-column: 4 / 7; /* Ocupa columnas 2 y 3 */
+        grid-row: 1 / 2;
+      }
+
+      .tonos {
+        grid-column: 4 / 6;
+        grid-row: 2/ 3;
+      }
+
+      .tipos-cuerpo {
+        grid-column: 6 / 9;
+        grid-row: 2 / 3;
+      }
+      .color2 {
+        grid-column: 6 / 9; /* Ocupa columnas 2 y 3 */
+        grid-row: 1 / 2;
+      }
+
+      .tarjeta {
+        background-color: white;
+        padding: 15px;
+        border-radius: 10px;
+        width: 100%; /* Ocupa todo el ancho del contenedor */
+        height: 100%; /* Ocupa toda la altura del contenedor */
+        box-sizing: border-box;
+      }
+      .color-item {
+        color: black;
+      }
+      .teoria-color-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 30px;
+        flex-wrap: nowrap; /* Fuerza que estén en línea horizontal */
+      }
+
+      .color-text {
+        flex: 1;
+        min-width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .color-image {
+        flex: 0 0 300px; /* Fija el ancho de la imagen para que no crezca */
+      }
+
+      .color-image img {
+        width: 50%;
+        height: auto;
+        border-radius: 10px;
+      }
+
+      .cuerpo-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .cuerpo-item h4 {
+        margin: 0 0 5px 0;
+        color: #60b1a7;
+      }
+
+      .cuerpo-item p {
+        margin: 0;
+        color: black;
+        font-size: 0.9rem;
+      }
+      .tonos-piel {
+        background-color: #222;
+        padding: 20px;
+        border-radius: 16px;
+        color: black;
+      }
+
+      .tonos-piel-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .tono-item h4 {
+        margin: 0 0 5px 0;
+        color: #60b1a7;
+      }
+
+      .tono-item p,
+      .tono-item ul {
+        margin: 0;
+        color: black;
+        font-size: 0.9rem;
+        padding-left: 20px;
+      }
+
+      .tono-item ul li {
+        margin-bottom: 6px;
+      }
+      .titulo {
+        text-align: center;
+        color: #60b1a7;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+        background-color: white;
+        border-radius: 12px;
+        width: 985px;
+        margin-left: 20px;
+      }
+      .contenedor-grand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* --------------------Formulario------------------ */
+      form {
+        background: white;
+        max-width: 520px; /* ancho máximo menor */
+        width: 100%;
+        padding: 30px 20px; /* menos padding horizontal */
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgb(96 177 167 / 0.25);
+      }
+
+      h1 {
+        text-align: center;
+        color: #60b1a7;
+        margin-bottom: 30px;
+        font-weight: 700;
+        font-size: 2.2rem;
+      }
+
+      fieldset {
+        border: 2px solid #60b1a7;
+        border-radius: 10px;
+        padding: 20px 25px 25px;
+        margin-bottom: 25px;
+      }
+
+      legend {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #60b1a7;
+        padding: 0 8px;
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin: 10px 0;
+        font-size: 1rem;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      input[type="radio"],
+      input[type="checkbox"] {
+        margin-right: 10px;
+        cursor: pointer;
+      }
+
+      button[type="submit"] {
+        background-color: #60b1a7;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #4a897f;
+      }
+
+      .main-container {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        align-items: flex-start;
+        max-width: 4300px;
+
+        flex-wrap: wrap; /* para que en pantallas pequeñas baje en columna */
+      }
+      .form-titulo {
+        margin-top: -10px;
+      }
+      /* -----------RESPONSIVE--------- */
+      @media (max-width: 792px) {
+        .contenedor-grande {
+          display: none;
+        }
+      }
+
+      @media (max-width: 792px) {
+        .contenedor-grande {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <form id="styleForm">
+        <h1 class="form-titulo">Descubre tu estilo de vestir</h1>
+        <fieldset>
+          <legend>
+            1. Cuando alguien te ve por primera vez, ¿qué quieres que sienta o
+            perciba de ti?
+          </legend>
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Confianza y respeto"
+              required
+            />
+            Confianza y respeto</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Buen rollo y cercanía"
+            />
+            Buen rollo y cercanía</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Creatividad y originalidad"
+            />
+            Creatividad y originalidad</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Profesionalismo y seriedad"
+            />
+            Profesionalismo y seriedad</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Elegancia y sofisticación"
+            />
+            Elegancia y sofisticación</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Tranquilidad y calma"
+            />
+            Tranquilidad y calma</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="firstImpression"
+              value="Energía y dinamismo"
+            />
+            Energía y dinamismo</label
+          >
+        </fieldset>
+
+        <fieldset>
+          <legend>
+            2. ¿Cuáles son tus colores favoritos para vestir? (puedes
+            seleccionar más de uno)
+          </legend>
+          <label
+            ><input type="checkbox" name="favoriteColors" value="Neutros" />
+            Neutros (negro, gris, blanco, beige)</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="favoriteColors"
+              value="Colores vivos"
+            />
+            Colores vivos (rojo, naranja, azul intenso)</label
+          >
+          <label
+            ><input type="checkbox" name="favoriteColors" value="Pasteles" />
+            Pasteles (rosa, celeste, lavanda)</label
+          >
+          <label
+            ><input type="checkbox" name="favoriteColors" value="Tierra" />
+            Tierra (marrones, verdes, ocres)</label
+          >
+        </fieldset>
+
+        <fieldset>
+          <legend>3. ¿Cuál es tu prioridad al vestir?</legend>
+          <label
+            ><input type="radio" name="priority" value="Comodidad" required />
+            Comodidad</label
+          >
+          <label
+            ><input type="radio" name="priority" value="Elegancia" />
+            Elegancia</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="priority"
+              value="Originalidad / destacar"
+            />
+            Originalidad / destacar</label
+          >
+          <label
+            ><input type="radio" name="priority" value="Seguir tendencias" />
+            Seguir tendencias</label
+          >
+          <label
+            ><input type="radio" name="priority" value="Funcionalidad" />
+            Funcionalidad (trabajo, actividades)</label
+          >
+        </fieldset>
+
+        <fieldset>
+          <legend>4. ¿Qué tipo de accesorios usas más?</legend>
+          <label
+            ><input
+              type="radio"
+              name="accessories"
+              value="Joyería fina"
+              required
+            />
+            Joyería fina (collares, anillos)</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="accessories"
+              value="Accesorios llamativos"
+            />
+            Accesorios llamativos o grandes</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="accessories"
+              value="Gorras o sombreros"
+            />
+            Gorras o sombreros</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="accessories"
+              value="Bolsos o mochilas grandes"
+            />
+            Bolsos o mochilas grandes</label
+          >
+          <label
+            ><input type="radio" name="accessories" value="No uso accesorios" />
+            No uso accesorios</label
+          >
+        </fieldset>
+
+        <fieldset>
+          <legend>
+            5. ¿Cómo describirías tu rutina diaria o estilo de vida?
+          </legend>
+          <label
+            ><input
+              type="radio"
+              name="lifestyle"
+              value="Activo/a y en movimiento"
+              required
+            />
+            Activo/a y en movimiento (deportes, socializar, trabajo
+            dinámico)</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="lifestyle"
+              value="Relajado/a y tranquilo/a"
+            />
+            Relajado/a y tranquilo/a (casa, lecturas, actividades
+            pausadas)</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="lifestyle"
+              value="Profesional y estructurado/a"
+            />
+            Profesional y estructurado/a (oficina, reuniones)</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="lifestyle"
+              value="Creativo/a y flexible"
+            />
+            Creativo/a y flexible (trabajo artístico o freelance)</label
+          >
+          <label
+            ><input type="radio" name="lifestyle" value="Social y fiestero/a" />
+            Social y fiestero/a (eventos, salir con amigos)</label
+          >
+        </fieldset>
+
+        <button type="submit">Descubrir mi estilo</button>
+      </form>
+
+      <!-- -------------GUIA--------------- -->
+      <div class="contenedor-grande">
+        <h1 class="titulo">Guia de estilo</h1>
+        <div class="grid-container">
+          <div class="estilos">
+            <div class="tarjeta">
+              <h3>5. Estilos Personales (y cómo identificarlos)</h3>
+              <div class="contenido">
+                <div class="estilo-item">
+                  <img
+                    src="https://hips.hearstapps.com/hmg-prod/images/gettyimages-1677245785.jpg?resize=980:*"
+                    alt="Estilo Urbano"
+                  />
+                  <div class="info">
+                    <h3>Urbano</h3>
+                    <p>Cortes limpios, colores neutros, elegancia atemporal.</p>
+                    <a href="#">Ver conjunto</a>
+                  </div>
+                </div>
+                <div class="estilo-item">
+                  <img
+                    src="https://img.freepik.com/fotos-premium/conversacion-casual-hipster-exterior-urbano-estilo-casual-hombre-barbudo-hablar-telefono-movil-tendencias-moda-casual-moda-estilo-uso-diario-tienda-ropa-casual-masculina-vida-moderna_474717-10153.jpg?w=360"
+                    alt="Estilo Casual"
+                  />
+                  <div class="info">
+                    <h3>Casual</h3>
+                    <p>Estampados, telas fluidas, accesorios naturales.</p>
+                    <a href="#">Ver conjunto</a>
+                  </div>
+                </div>
+                <div class="estilo-item">
+                  <img
+                    src="https://belleza.ideal.es/wp-content/uploads/2024/04/vertical-shot-of-schoolgirl-wear.jpg"
+                    alt="Estilo Preppy"
+                  />
+                  <div class="info">
+                    <h3>Preppy</h3>
+                    <p>Ropa cómoda, oversize, zapatillas, logos.</p>
+                    <a href="#">Ver conjunto</a>
+                  </div>
+                </div>
+                <div class="estilo-item">
+                  <img
+                    src="https://i.pinimg.com/474x/33/b1/fc/33b1fc52945e5d3c5e22c003c2fe2a03.jpg"
+                    alt="Estilo Formal"
+                  />
+                  <div class="info">
+                    <h3>Formal</h3>
+                    <p>Ropa cómoda, oversize, zapatillas, logos.</p>
+                    <a href="#">Ver conjunto</a>
+                  </div>
+                </div>
+                <div class="estilo-item">
+                  <img
+                    src="https://i.pinimg.com/564x/ed/b9/b3/edb9b3e987a0f7628890d6c1d9318cdf.jpg"
+                    alt="Estilo Bohemio"
+                  />
+                  <div class="info">
+                    <h3>Bohemio</h3>
+                    <p>Ropa cómoda, oversize, zapatillas, logos.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="color2">
+            <div class="tarjeta"></div>
+          </div>
+          <!-- Este contenedor es el que se posiciona en la grid -->
+          <div class="teoria-color">
+            <div class="tarjeta">
+              <h3>2. Teoría del Color en Moda</h3>
+              <div class="teoria-color-content">
+                <!-- Texto -->
+                <div class="color-text">
+                  <div class="color-item">
+                    <h4>🔁 Colores complementarios</h4>
+                    <p>
+                      Están opuestos en la rueda (ej. azul y naranja) →
+                      combinaciones con contraste fuerte.
+                    </p>
+                  </div>
+                  <div class="color-item">
+                    <h4>🌈 Colores análogos</h4>
+                    <p>
+                      Colores vecinos (ej. azul, azul verdoso, verde) → look
+                      armónico y suave.
+                    </p>
+                  </div>
+                  <div class="color-item">
+                    <h4>⚪ Colores neutros</h4>
+                    <p>
+                      Blanco, negro, gris, beige, azul marino → combinan con
+                      todo y equilibran un outfit.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Imagen -->
+                <div class="color-image">
+                  <img
+                    src="https://media.istockphoto.com/id/517482777/es/vector/colored-circle.jpg?s=612x612&w=0&k=20&c=qsCJfQVUqPILiUUcR1FIDyBVT4aqXr7wrcoQc_DeAGM="
+                    alt="Rueda de color"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tonos">
+            <div class="tarjeta">
+              <h3>4. Tono de Piel y Colores Favorecedores</h3>
+              <div class="tonos-piel-content">
+                <div class="tono-item">
+                  <h4>❄️ Tono frío</h4>
+                  <p>
+                    Subtonos azulados: Colores como azul, verde esmeralda, gris,
+                    plateado.
+                  </p>
+                </div>
+                <div class="tono-item">
+                  <h4>🔥 Tono cálido</h4>
+                  <p>
+                    Subtonos dorados o amarillos: Colores tierra, naranja,
+                    marrón, dorado.
+                  </p>
+                </div>
+                <div class="tono-item">
+                  <h4>⚪ Tono neutro</h4>
+                  <p>Pueden llevar tanto fríos como cálidos.</p>
+                </div>
+                <div class="tono-item">
+                  <h4>¿Cómo saber tu tono?</h4>
+                  <ul>
+                    <li>
+                      <strong>Venas:</strong> Si se ven azules, eres subtono
+                      frío. Verdes, cálido.
+                    </li>
+                    <li>
+                      <strong>Joyas:</strong> Si te queda mejor el dorado,
+                      cálido. Plateado, frío.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tipos-cuerpo">
+            <div class="tarjeta">
+              <h3>2. Tipos de Cuerpo (y cómo vestir según ellos)</h3>
+              <div class="cuerpo-content">
+                <div class="cuerpo-item">
+                  <h4>🔺 Triángulo</h4>
+                  <p>
+                    Hombros estrechos, caderas anchas: Acentuar parte superior
+                    con hombreras, escotes o colores vivos.
+                  </p>
+                </div>
+                <div class="cuerpo-item">
+                  <h4>🔻 Triángulo invertido</h4>
+                  <p>
+                    Hombros anchos, caderas estrechas: Dar volumen abajo
+                    (pantalones anchos, colores vivos en la parte inferior).
+                  </p>
+                </div>
+                <div class="cuerpo-item">
+                  <h4>⬜ Rectángulo</h4>
+                  <p>
+                    Pocas curvas: Marcar cintura, usar cinturones, cortes
+                    entallados o capas.
+                  </p>
+                </div>
+                <div class="cuerpo-item">
+                  <h4>⏳ Reloj de arena</h4>
+                  <p>
+                    Hombros y caderas equilibrados, cintura marcada: Resaltar
+                    curvas con ropa ajustada o ceñida.
+                  </p>
+                </div>
+                <div class="cuerpo-item">
+                  <h4>⭕ Ovalado</h4>
+                  <p>
+                    Más volumen en el centro: Usar líneas verticales, colores
+                    oscuros, evitar ropa muy ajustada.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const styleMap = {
+        // Pregunta 1
+        "Confianza y respeto": ["Formal", "Preppy"],
+        "Buen rollo y cercanía": ["Urbano", "Casual"],
+        "Creatividad y originalidad": ["Bohemio", "Urbano"],
+        "Profesionalismo y seriedad": ["Formal", "Preppy"],
+        "Elegancia y sofisticación": ["Formal", "Preppy"],
+        "Tranquilidad y calma": ["Casual", "Bohemio"],
+        "Energía y dinamismo": ["Urbano", "Deportivo/Athleisure"],
+
+        // Pregunta 2 (checkbox)
+        Neutros: ["Formal", "Preppy", "Casual"],
+        "Colores vivos": ["Urbano", "Deportivo/Athleisure"],
+        Pasteles: ["Preppy", "Bohemio"],
+        Tierra: ["Bohemio", "Casual"],
+
+        // Pregunta 3
+        Comodidad: ["Casual", "Deportivo/Athleisure"],
+        Elegancia: ["Formal", "Preppy"],
+        "Originalidad / destacar": ["Urbano", "Bohemio"],
+        "Seguir tendencias": ["Urbano", "Preppy"],
+        Funcionalidad: ["Casual", "Deportivo/Athleisure", "Formal"],
+
+        // Pregunta 4
+        "Joyería fina": ["Formal", "Preppy"],
+        "Accesorios llamativos": ["Urbano", "Bohemio"],
+        "Gorras o sombreros": ["Urbano", "Deportivo/Athleisure", "Bohemio"],
+        "Bolsos o mochilas grandes": [
+          "Urbano",
+          "Deportivo/Athleisure",
+          "Casual",
+        ],
+        "No uso accesorios": ["Casual", "Formal"],
+
+        // Pregunta 5
+        "Activo/a y en movimiento": ["Deportivo/Athleisure", "Urbano"],
+        "Relajado/a y tranquilo/a": ["Casual", "Bohemio"],
+        "Profesional y estructurado/a": ["Formal", "Preppy"],
+        "Creativo/a y flexible": ["Bohemio", "Urbano"],
+        "Social y fiestero/a": ["Urbano", "Preppy"],
+      };
+
+      document
+        .getElementById("styleForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Evita que se recargue la página
+
+          const form = e.target;
+          const formData = new FormData(form);
+          const styleCounter = {};
+
+          // Recorremos todas las respuestas del usuario
+          for (let [key, value] of formData.entries()) {
+            if (key === "favoriteColors") {
+              // Si hay más de un checkbox, value es string
+              if (!Array.isArray(value)) value = [value];
+            } else {
+              value = [value];
+            }
+
+            value.forEach((v) => {
+              const styles = styleMap[v];
+              if (styles) {
+                styles.forEach((style) => {
+                  styleCounter[style] = (styleCounter[style] || 0) + 1;
+                });
+              }
+            });
+          }
+
+          // Encontrar estilo(s) con mayor puntuación
+          const maxCount = Math.max(...Object.values(styleCounter));
+          const winningStyles = Object.entries(styleCounter)
+            .filter(([style, count]) => count === maxCount)
+            .map(([style]) => style);
+
+          let message = "";
+
+          if (winningStyles.includes("Formal")) {
+            message +=
+              "🔵 Estilo Formal: Ideal para ambientes profesionales, transmite elegancia y seriedad.\n\n";
+          }
+          if (winningStyles.includes("Preppy")) {
+            message +=
+              "🟣 Estilo Preppy: Sofisticado, juvenil y pulido. Inspirado en la moda de universidades élite.\n\n";
+          }
+          if (winningStyles.includes("Casual")) {
+            message +=
+              "🟢 Estilo Casual: Cómodo, relajado y versátil para el día a día.\n\n";
+          }
+          if (winningStyles.includes("Urbano")) {
+            message +=
+              "🟡 Estilo Urbano: Moderno y desenfadado, inspirado en la moda de la calle y la cultura pop.\n\n";
+          }
+          if (winningStyles.includes("Bohemio")) {
+            message +=
+              "🟤 Estilo Bohemio: Creativo, artístico y relajado. Uso de estampados, colores tierra y texturas naturales.\n\n";
+          }
+          if (winningStyles.includes("Deportivo/Athleisure")) {
+            message +=
+              "🔴 Estilo Deportivo (Athleisure): Funcional y cómodo, ideal para una vida activa sin perder estilo.\n\n";
+          }
+
+          Swal.fire({
+            title: winningStyles.join(" + "),
+            text:
+              "🎯 Tu estilo ideal es:\n\n" +
+              winningStyles.join(" + ") +
+              "\n\n" +
+              message,
+
+            width: 1500,
+            background: "url(/static/img/guia/1.png)",
+            imageAlt: "Custom image",
+          });
+        });
+    </script>
+  </body>
+</html>

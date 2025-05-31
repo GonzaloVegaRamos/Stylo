@@ -228,8 +228,8 @@
             <option value="">Todos los conjuntos</option>
             <option value="casual">Casual</option>
             <option value="formal">Formal</option>
-            <option value="deporte">Deporte</option>
-            <option value="fiesta">Fiesta</option>
+            <option value="preppy">Preppy</option>
+            <option value="urbano">Urbano</option>
           </select>
         </div>
         <div class="filter-group">
@@ -255,6 +255,18 @@
     </div>
 
     <script>
+      let todosLosConjuntos = [];
+
+      document
+        .getElementById("filter-category")
+        .addEventListener("change", aplicarFiltros);
+      document
+        .getElementById("filter-date")
+        .addEventListener("change", aplicarFiltros);
+      document
+        .getElementById("filter-search")
+        .addEventListener("input", aplicarFiltros);
+
       async function obtenerConjuntosUsuario() {
         const container = document.getElementById("conjuntos-container");
         container.innerHTML = `<div class="empty-state"><h2>Cargando conjuntos...</h2></div>`;
@@ -278,7 +290,8 @@
           if (!response.ok) throw new Error("Error al obtener conjuntos");
 
           const conjuntos = await response.json();
-          renderizarConjuntos(conjuntos);
+          todosLosConjuntos = conjuntos;
+          aplicarFiltros(); // aquí llamamos a renderizar con filtros
         } catch (error) {
           console.error("Error:", error);
           container.innerHTML = `<div class="empty-state"><h2>Error al cargar conjuntos</h2></div>`;
@@ -459,6 +472,34 @@
                 texto
             );
           });
+      }
+      function aplicarFiltros() {
+        const categoria = document.getElementById("filter-category").value;
+        const orden = document.getElementById("filter-date").value;
+        const textoBusqueda = document
+          .getElementById("filter-search")
+          .value.toLowerCase();
+
+        let filtrados = [...todosLosConjuntos];
+
+        // Filtrar por categoría
+        if (categoria) {
+          filtrados = filtrados.filter((c) => c.categoria === categoria);
+        }
+
+        // Filtrar por nombre
+        if (textoBusqueda) {
+          filtrados = filtrados.filter((c) =>
+            c.nombre.toLowerCase().includes(textoBusqueda)
+          );
+        }
+
+        // Ordenar
+        if (orden === "newest") {
+          filtrados.reverse(); // Invertimos el orden original
+        }
+
+        renderizarConjuntos(filtrados);
       }
 
       document.addEventListener("DOMContentLoaded", obtenerConjuntosUsuario);
