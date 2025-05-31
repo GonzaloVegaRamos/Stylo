@@ -313,6 +313,63 @@
           display: none;
         }
       }
+      .my-popup-height1 {
+        height: 900px; /* o la altura que quieras */
+        background-image: url("/static/img/guia/1.png");
+        background-size: contain; /* ajusta tamaño */
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .my-popup-height2 {
+        height: 900px; /* o la altura que quieras */
+        background-image: url("/static/img/guia/2.png");
+        background-size: contain; /* ajusta tamaño */
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .my-popup-height3 {
+        height: 900px; /* o la altura que quieras */
+        background-image: url("/static/img/guia/3.png");
+        background-size: contain; /* ajusta tamaño */
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .my-popup-height4 {
+        height: 900px; /* o la altura que quieras */
+        background-image: url("/static/img/guia/4.png");
+        background-size: contain; /* ajusta tamaño */
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .my-popup-height5 {
+        height: 900px; /* o la altura que quieras */
+        background-image: url("/static/img/guia/5.png");
+        background-size: contain; /* ajusta tamaño */
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .swal2-popup {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* pone contenido arriba y botón abajo */
+      }
+
+      /* Opcional: centramos el botón */
+      .swal2-confirm {
+        align-self: center;
+        margin-top: auto;
+        display: block;
+        margin-left: -400px;
+        margin-right: auto;
+        margin-bottom: 60px;
+        background-color: #60b1a7;
+        font-size: 28px;
+        /* empuja el botón hacia abajo */
+      }
+      .swal2-confirm:hover {
+        background-color: #4a897f;
+      }
     </style>
   </head>
   <body>
@@ -731,34 +788,30 @@
         "Profesionalismo y seriedad": ["Formal", "Preppy"],
         "Elegancia y sofisticación": ["Formal", "Preppy"],
         "Tranquilidad y calma": ["Casual", "Bohemio"],
-        "Energía y dinamismo": ["Urbano", "Deportivo/Athleisure"],
+        "Energía y dinamismo": ["Urbano", "Preppy"],
 
         // Pregunta 2 (checkbox)
         Neutros: ["Formal", "Preppy", "Casual"],
-        "Colores vivos": ["Urbano", "Deportivo/Athleisure"],
+        "Colores vivos": ["Urbano", "Preppy"],
         Pasteles: ["Preppy", "Bohemio"],
         Tierra: ["Bohemio", "Casual"],
 
         // Pregunta 3
-        Comodidad: ["Casual", "Deportivo/Athleisure"],
+        Comodidad: ["Casual", "Bohemio"],
         Elegancia: ["Formal", "Preppy"],
         "Originalidad / destacar": ["Urbano", "Bohemio"],
         "Seguir tendencias": ["Urbano", "Preppy"],
-        Funcionalidad: ["Casual", "Deportivo/Athleisure", "Formal"],
+        Funcionalidad: ["Casual", "Formal"],
 
         // Pregunta 4
         "Joyería fina": ["Formal", "Preppy"],
         "Accesorios llamativos": ["Urbano", "Bohemio"],
-        "Gorras o sombreros": ["Urbano", "Deportivo/Athleisure", "Bohemio"],
-        "Bolsos o mochilas grandes": [
-          "Urbano",
-          "Deportivo/Athleisure",
-          "Casual",
-        ],
+        "Gorras o sombreros": ["Urbano", "Bohemio"],
+        "Bolsos o mochilas grandes": ["Urbano", "Casual"],
         "No uso accesorios": ["Casual", "Formal"],
 
         // Pregunta 5
-        "Activo/a y en movimiento": ["Deportivo/Athleisure", "Urbano"],
+        "Activo/a y en movimiento": ["Casual", "Urbano"],
         "Relajado/a y tranquilo/a": ["Casual", "Bohemio"],
         "Profesional y estructurado/a": ["Formal", "Preppy"],
         "Creativo/a y flexible": ["Bohemio", "Urbano"],
@@ -802,42 +855,75 @@
           let message = "";
 
           if (winningStyles.includes("Formal")) {
-            message +=
-              "🔵 Estilo Formal: Ideal para ambientes profesionales, transmite elegancia y seriedad.\n\n";
+            Swal.fire({
+              width: "85%",
+              confirmButtonText: "Vamos a Crearnos un Conjunto",
+              customClass: {
+                popup: "my-popup-height4",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirige a otra página
+                window.location.href = "/crear-conjunto";
+              }
+            });
           }
           if (winningStyles.includes("Preppy")) {
-            message +=
-              "🟣 Estilo Preppy: Sofisticado, juvenil y pulido. Inspirado en la moda de universidades élite.\n\n";
+            Swal.fire({
+              width: "85%",
+              confirmButtonText: "Vamos a Crearnos un Conjunto",
+              customClass: {
+                popup: "my-popup-height3",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirige a otra página
+                window.location.href = "/crear-conjunto";
+              }
+            });
           }
           if (winningStyles.includes("Casual")) {
-            message +=
-              "🟢 Estilo Casual: Cómodo, relajado y versátil para el día a día.\n\n";
+            Swal.fire({
+              width: "85%",
+              confirmButtonText: "Vamos a Crearnos un Conjunto",
+              customClass: {
+                popup: "my-popup-height2",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirige a otra página
+                window.location.href = "/crear-conjunto";
+              }
+            });
           }
           if (winningStyles.includes("Urbano")) {
-            message +=
-              "🟡 Estilo Urbano: Moderno y desenfadado, inspirado en la moda de la calle y la cultura pop.\n\n";
+            Swal.fire({
+              width: "85%",
+              confirmButtonText: "Vamos a Crearnos un Conjunto",
+              customClass: {
+                popup: "my-popup-height1",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirige a otra página
+                window.location.href = "/crear-conjunto";
+              }
+            });
           }
           if (winningStyles.includes("Bohemio")) {
-            message +=
-              "🟤 Estilo Bohemio: Creativo, artístico y relajado. Uso de estampados, colores tierra y texturas naturales.\n\n";
+            Swal.fire({
+              width: "85%",
+              confirmButtonText: "Vamos a Crearnos un Conjunto",
+              customClass: {
+                popup: "my-popup-height5",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirige a otra página
+                window.location.href = "/crear-conjunto";
+              }
+            });
           }
-          if (winningStyles.includes("Deportivo/Athleisure")) {
-            message +=
-              "🔴 Estilo Deportivo (Athleisure): Funcional y cómodo, ideal para una vida activa sin perder estilo.\n\n";
-          }
-
-          Swal.fire({
-            title: winningStyles.join(" + "),
-            text:
-              "🎯 Tu estilo ideal es:\n\n" +
-              winningStyles.join(" + ") +
-              "\n\n" +
-              message,
-
-            width: 1500,
-            background: "url(/static/img/guia/1.png)",
-            imageAlt: "Custom image",
-          });
         });
     </script>
   </body>
