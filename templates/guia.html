@@ -216,7 +216,7 @@
         font-weight: 700;
         background-color: white;
         border-radius: 12px;
-        width: 985px;
+        width: 885px;
         margin-left: 20px;
       }
       .contenedor-grand {
@@ -302,9 +302,26 @@
         margin-top: -10px;
       }
       /* -----------RESPONSIVE--------- */
-      @media (max-width: 792px) {
+      @media (max-width: 1530px) {
+        .main-container {
+          max-width: 1200px;
+          margin-top: 25px;
+        }
+        .titulo {
+          width: 84%;
+        }
+        .styleform-class {
+          width: 35%;
+        }
         .contenedor-grande {
+          width: 65%;
+          margin-right: -350px;
+        }
+        .color-image img {
           display: none;
+          width: 50%;
+          height: auto;
+          border-radius: 10px;
         }
       }
 
@@ -370,219 +387,288 @@
       .swal2-confirm:hover {
         background-color: #4a897f;
       }
+
+      .header {
+        background: #ffe5d4;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px 20px;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start; /* ← esta línea es la clave */
+        gap: 15px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #666;
+        z-index: 10;
+      }
+      .account-info {
+        display: flex;
+        flex: 1 1 auto; /* o 60%, si das 40% a .logo */
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .header button {
+        background: #ffe5d4;
+        border: 1px solid #60b1a7;
+        color: #666;
+        padding: 8px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        white-space: wrap;
+      }
+
+      .header button:hover {
+        background: #60b1a7;
+        color: white;
+      }
     </style>
   </head>
   <body>
+    <div class="header">
+      <div class="logo">
+        <img src="STYLO (1).png" alt="Logo" style="height: 80px" />
+      </div>
+
+      <div class="account-info">
+        <p id="user-info">Cargando información...</p>
+        <button
+          id="user-management-btn"
+          class="user-management-btn"
+          style="display: none"
+        >
+          ⚙️
+        </button>
+        <button id="login-btn" style="display: none">Iniciar sesión</button>
+      </div>
+    </div>
+
     <div class="main-container">
-      <form id="styleForm">
-        <h1 class="form-titulo">Descubre tu estilo de vestir</h1>
-        <fieldset>
-          <legend>
-            1. Cuando alguien te ve por primera vez, ¿qué quieres que sienta o
-            perciba de ti?
-          </legend>
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Confianza y respeto"
-              required
-            />
-            Confianza y respeto</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Buen rollo y cercanía"
-            />
-            Buen rollo y cercanía</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Creatividad y originalidad"
-            />
-            Creatividad y originalidad</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Profesionalismo y seriedad"
-            />
-            Profesionalismo y seriedad</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Elegancia y sofisticación"
-            />
-            Elegancia y sofisticación</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Tranquilidad y calma"
-            />
-            Tranquilidad y calma</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="firstImpression"
-              value="Energía y dinamismo"
-            />
-            Energía y dinamismo</label
-          >
-        </fieldset>
+      <div class="styleform-class">
+        <form id="styleForm">
+          <h1 class="form-titulo">Descubre tu estilo de vestir</h1>
+          <fieldset>
+            <legend>
+              1. Cuando alguien te ve por primera vez, ¿qué quieres que sienta o
+              perciba de ti?
+            </legend>
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Confianza y respeto"
+                required
+              />
+              Confianza y respeto</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Buen rollo y cercanía"
+              />
+              Buen rollo y cercanía</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Creatividad y originalidad"
+              />
+              Creatividad y originalidad</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Profesionalismo y seriedad"
+              />
+              Profesionalismo y seriedad</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Elegancia y sofisticación"
+              />
+              Elegancia y sofisticación</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Tranquilidad y calma"
+              />
+              Tranquilidad y calma</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="firstImpression"
+                value="Energía y dinamismo"
+              />
+              Energía y dinamismo</label
+            >
+          </fieldset>
 
-        <fieldset>
-          <legend>
-            2. ¿Cuáles son tus colores favoritos para vestir? (puedes
-            seleccionar más de uno)
-          </legend>
-          <label
-            ><input type="checkbox" name="favoriteColors" value="Neutros" />
-            Neutros (negro, gris, blanco, beige)</label
-          >
-          <label
-            ><input
-              type="checkbox"
-              name="favoriteColors"
-              value="Colores vivos"
-            />
-            Colores vivos (rojo, naranja, azul intenso)</label
-          >
-          <label
-            ><input type="checkbox" name="favoriteColors" value="Pasteles" />
-            Pasteles (rosa, celeste, lavanda)</label
-          >
-          <label
-            ><input type="checkbox" name="favoriteColors" value="Tierra" />
-            Tierra (marrones, verdes, ocres)</label
-          >
-        </fieldset>
+          <fieldset>
+            <legend>
+              2. ¿Cuáles son tus colores favoritos para vestir? (puedes
+              seleccionar más de uno)
+            </legend>
+            <label
+              ><input type="checkbox" name="favoriteColors" value="Neutros" />
+              Neutros (negro, gris, blanco, beige)</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="favoriteColors"
+                value="Colores vivos"
+              />
+              Colores vivos (rojo, naranja, azul intenso)</label
+            >
+            <label
+              ><input type="checkbox" name="favoriteColors" value="Pasteles" />
+              Pasteles (rosa, celeste, lavanda)</label
+            >
+            <label
+              ><input type="checkbox" name="favoriteColors" value="Tierra" />
+              Tierra (marrones, verdes, ocres)</label
+            >
+          </fieldset>
 
-        <fieldset>
-          <legend>3. ¿Cuál es tu prioridad al vestir?</legend>
-          <label
-            ><input type="radio" name="priority" value="Comodidad" required />
-            Comodidad</label
-          >
-          <label
-            ><input type="radio" name="priority" value="Elegancia" />
-            Elegancia</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="priority"
-              value="Originalidad / destacar"
-            />
-            Originalidad / destacar</label
-          >
-          <label
-            ><input type="radio" name="priority" value="Seguir tendencias" />
-            Seguir tendencias</label
-          >
-          <label
-            ><input type="radio" name="priority" value="Funcionalidad" />
-            Funcionalidad (trabajo, actividades)</label
-          >
-        </fieldset>
+          <fieldset>
+            <legend>3. ¿Cuál es tu prioridad al vestir?</legend>
+            <label
+              ><input type="radio" name="priority" value="Comodidad" required />
+              Comodidad</label
+            >
+            <label
+              ><input type="radio" name="priority" value="Elegancia" />
+              Elegancia</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="priority"
+                value="Originalidad / destacar"
+              />
+              Originalidad / destacar</label
+            >
+            <label
+              ><input type="radio" name="priority" value="Seguir tendencias" />
+              Seguir tendencias</label
+            >
+            <label
+              ><input type="radio" name="priority" value="Funcionalidad" />
+              Funcionalidad (trabajo, actividades)</label
+            >
+          </fieldset>
 
-        <fieldset>
-          <legend>4. ¿Qué tipo de accesorios usas más?</legend>
-          <label
-            ><input
-              type="radio"
-              name="accessories"
-              value="Joyería fina"
-              required
-            />
-            Joyería fina (collares, anillos)</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="accessories"
-              value="Accesorios llamativos"
-            />
-            Accesorios llamativos o grandes</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="accessories"
-              value="Gorras o sombreros"
-            />
-            Gorras o sombreros</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="accessories"
-              value="Bolsos o mochilas grandes"
-            />
-            Bolsos o mochilas grandes</label
-          >
-          <label
-            ><input type="radio" name="accessories" value="No uso accesorios" />
-            No uso accesorios</label
-          >
-        </fieldset>
+          <fieldset>
+            <legend>4. ¿Qué tipo de accesorios usas más?</legend>
+            <label
+              ><input
+                type="radio"
+                name="accessories"
+                value="Joyería fina"
+                required
+              />
+              Joyería fina (collares, anillos)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="accessories"
+                value="Accesorios llamativos"
+              />
+              Accesorios llamativos o grandes</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="accessories"
+                value="Gorras o sombreros"
+              />
+              Gorras o sombreros</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="accessories"
+                value="Bolsos o mochilas grandes"
+              />
+              Bolsos o mochilas grandes</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="accessories"
+                value="No uso accesorios"
+              />
+              No uso accesorios</label
+            >
+          </fieldset>
 
-        <fieldset>
-          <legend>
-            5. ¿Cómo describirías tu rutina diaria o estilo de vida?
-          </legend>
-          <label
-            ><input
-              type="radio"
-              name="lifestyle"
-              value="Activo/a y en movimiento"
-              required
-            />
-            Activo/a y en movimiento (deportes, socializar, trabajo
-            dinámico)</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="lifestyle"
-              value="Relajado/a y tranquilo/a"
-            />
-            Relajado/a y tranquilo/a (casa, lecturas, actividades
-            pausadas)</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="lifestyle"
-              value="Profesional y estructurado/a"
-            />
-            Profesional y estructurado/a (oficina, reuniones)</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="lifestyle"
-              value="Creativo/a y flexible"
-            />
-            Creativo/a y flexible (trabajo artístico o freelance)</label
-          >
-          <label
-            ><input type="radio" name="lifestyle" value="Social y fiestero/a" />
-            Social y fiestero/a (eventos, salir con amigos)</label
-          >
-        </fieldset>
+          <fieldset>
+            <legend>
+              5. ¿Cómo describirías tu rutina diaria o estilo de vida?
+            </legend>
+            <label
+              ><input
+                type="radio"
+                name="lifestyle"
+                value="Activo/a y en movimiento"
+                required
+              />
+              Activo/a y en movimiento (deportes, socializar, trabajo
+              dinámico)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="lifestyle"
+                value="Relajado/a y tranquilo/a"
+              />
+              Relajado/a y tranquilo/a (casa, lecturas, actividades
+              pausadas)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="lifestyle"
+                value="Profesional y estructurado/a"
+              />
+              Profesional y estructurado/a (oficina, reuniones)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="lifestyle"
+                value="Creativo/a y flexible"
+              />
+              Creativo/a y flexible (trabajo artístico o freelance)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="lifestyle"
+                value="Social y fiestero/a"
+              />
+              Social y fiestero/a (eventos, salir con amigos)</label
+            >
+          </fieldset>
 
-        <button type="submit">Descubrir mi estilo</button>
-      </form>
+          <button type="submit">Descubrir mi estilo</button>
+        </form>
+      </div>
 
       <!-- -------------GUIA--------------- -->
       <div class="contenedor-grande">
