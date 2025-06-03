@@ -1082,6 +1082,7 @@
         // Escuchar cambios en el filtro de género
         document.querySelectorAll('input[name="Genero"]').forEach((radio) => {
           radio.addEventListener("change", function () {
+            console.log("Cambio de género detectado:", this.value);
             if (currentCategory) {
               showOptions(currentCategory);
             }
