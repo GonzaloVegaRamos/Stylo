@@ -696,9 +696,9 @@
             item.classList.add("ropa-item");
 
             item.innerHTML = `
-                              <img src="${prenda.img}" alt="${prenda.nombre}" />
-                              <button class="remove-btn" onclick="eliminarPrenda('${categoria}', this)">×</button>
-                            `;
+                                    <img src="${prenda.img}" alt="${prenda.nombre}" />
+                                    <button class="remove-btn" onclick="eliminarPrenda('${categoria}', this)">×</button>
+                                  `;
             lista.appendChild(item);
           }
 
@@ -770,10 +770,10 @@
           item.classList.add("modal-item");
 
           item.innerHTML = `
-                        <img src="${prenda.img}" alt="${prenda.nombre}" />
-                        <p>${prenda.nombre}</p>
-                        <small>${prenda.estilo || "No definido"}</small>
-                    `;
+                              <img src="${prenda.img}" alt="${prenda.nombre}" />
+                              <p>${prenda.nombre}</p>
+                              <small>${prenda.estilo || "No definido"}</small>
+                          `;
           modalContainer.appendChild(item);
         });
 
@@ -872,6 +872,7 @@
           if (selectedBrand) {
             ropaList = ropaList.filter((item) => item.marca === selectedBrand);
           }
+
           if (searchTerm) {
             const term = searchTerm.toLowerCase();
             ropaList = ropaList.filter(
@@ -901,20 +902,20 @@
             const logoMarca = imagenesPorMarca[ropa.marca] || null;
 
             item.innerHTML = `
-              <div class="ropa-imagen-container" class="ropa-imagen-container">
-                <img src="${ropa.img}" alt="${ropa.nombre}" />
-                ${
-                  logoMarca
-                    ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
-                    : ""
-                }
-              </div>
-              <p>${ropa.nombre}</p>
-              <a href="${
-                ropa.url
-              }" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
-              <a class="btn-anadir" target="_blank">Añadir</a>
-            `;
+                    <div class="ropa-imagen-container" class="ropa-imagen-container">
+                      <img src="${ropa.img}" alt="${ropa.nombre}" />
+                      ${
+                        logoMarca
+                          ? `<img src="${logoMarca}" class="marca-logo" alt="${ropa.marca} logo" />`
+                          : ""
+                      }
+                    </div>
+                    <p>${ropa.nombre}</p>
+                    <a href="${
+                      ropa.url
+                    }" target="_blank" class="ver-prenda-btn">Ver en tienda</a>
+                    <a class="btn-anadir" target="_blank">Añadir</a>
+                  `;
             if (
               seleccion[currentCategory] &&
               seleccion[currentCategory].id === ropa.id
@@ -942,12 +943,6 @@
             "<p>Error al cargar las prendas</p>";
         }
       }
-
-      item.querySelector(".btn-anadir").addEventListener("click", (e) => {
-        e.preventDefault();
-        seleccionarPrenda(category, ropa);
-        showOptions(currentCategory); // recarga las prendas con el marcado actualizado
-      });
 
       // Función para guardar el conjunto
       function guardarConjunto() {
@@ -1110,6 +1105,9 @@
               showOptions(currentCategory);
             }
           });
+
+        // Llamada inicial directa
+        showOptions("Camiseta");
       });
 
       function toggleMenu() {
@@ -1133,20 +1131,6 @@
           menuToggleMenu.style.zIndex = "1001";
         }
       }
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const observer = new MutationObserver(() => {
-          const camisetasLi = document.querySelector(
-            "li[onclick=\"showOptions('Camiseta')\"]"
-          );
-          if (camisetasLi) {
-            camisetasLi.click();
-            observer.disconnect(); // Detiene el observer para evitar repeticiones
-          }
-        });
-
-        observer.observe(document.body, { childList: true, subtree: true });
-      });
     </script>
   </body>
 </html>
