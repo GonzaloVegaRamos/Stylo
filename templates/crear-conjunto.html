@@ -849,19 +849,19 @@
           .getElementById("search-bar")
           .value.toLowerCase();
         const selectedBrand = document.getElementById("brand-dropdown").value;
-        const selectedGender = document.querySelector(
+        const genderRadio = document.querySelector(
           'input[name="Genero"]:checked'
-        ).value;
+        );
+        const selectedGender = genderRadio ? genderRadio.value.trim() : null;
 
-        // Construir la URL con los parámetros
         let url = `https://stylo-4u8w.onrender.com/users/ropa?tipo=${encodeURIComponent(
           category.trim()
         )}`;
 
-        // Agregar filtro de género si está seleccionado
         if (selectedGender) {
           url += `&genero=${encodeURIComponent(selectedGender)}`;
         }
+
         //stylo-4u8w.onrender.com/users/ropa?tipo=Camiseta&genero=Hombre
         https: try {
           const response = await fetch(url);
