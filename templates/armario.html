@@ -210,7 +210,7 @@
       }
 
       #filter-search {
-        width: 40px;
+        width: 140px;
       }
     </style>
   </head>
@@ -227,8 +227,8 @@
     <div class="container">
       <div class="filters">
         <div class="filter-group">
-          <label for="filter-category">Filtrar por categoría</label>
-          <select id="filter-category">
+          <label for="filter-style">Filtrar por categoría</label>
+          <select id="filter-style">
             <option value="">Todos los conjuntos</option>
             <option value="casual">Casual</option>
             <option value="formal">Formal</option>
@@ -262,7 +262,7 @@
       let todosLosConjuntos = [];
 
       document
-        .getElementById("filter-category")
+        .getElementById("filter-style")
         .addEventListener("change", aplicarFiltros);
       document
         .getElementById("filter-date")
@@ -481,7 +481,7 @@
           });
       }
       function aplicarFiltros() {
-        const categoria = document.getElementById("filter-category").value;
+        const categoria = document.getElementById("filter-style").value;
         const orden = document.getElementById("filter-date").value;
         const textoBusqueda = document
           .getElementById("filter-search")
@@ -491,7 +491,7 @@
 
         // Filtrar por categoría
         if (categoria) {
-          filtrados = filtrados.filter((c) => c.categoria === categoria);
+          filtrados = filtrados.filter((c) => c.estilo === categoria);
         }
 
         // Filtrar por nombre
