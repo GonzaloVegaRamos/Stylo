@@ -5,23 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stylo - Mi Armario</title>
     <script src="/static/js/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+      .user-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .user-modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        width: 95%;
+        max-width: 400px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .user-modal h3 {
+        margin-bottom: 20px;
+        color: #2f3542;
+        text-align: center;
+        font-size: 1.3rem;
+      }
+
+      .user-option {
+        margin-bottom: 15px;
+      }
+
+      .user-option label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #555;
+        font-size: 0.9rem;
+      }
+
+      .user-option input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .user-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 10px;
+      }
+
+      .user-actions button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        flex: 1;
+      }
+
+      .update-btn {
+        background: #60b1a7;
+        color: white;
+      }
+
+      .update-btn:hover {
+        background: #4a8d84;
+      }
+
+      .delete-btn {
+        background: #ff6b6b;
+        color: white;
+      }
+
+      .delete-btn:hover {
+        background: #e05555;
+      }
+
+      .header {
+        background: #ffe5d4;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px 20px;
+        position: relative;
+        display: flex;
+        justify-content: space-between; /* ⬅️ esto separa logo y cuenta */
+        align-items: center; /* ⬅️ centra verticalmente */
+        font-weight: 600;
+        font-size: 1rem;
+        color: #666;
+        z-index: 10;
+      }
+
+      .account-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .header button {
+        background: #ffe5d4;
+        border: 1px solid #60b1a7;
+        color: #666;
+        padding: 8px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        white-space: wrap;
+      }
+
+      .header button:hover {
+        background: #60b1a7;
+        color: white;
+      }
+
       body {
         font-family: "Arial", sans-serif;
         margin: 0;
         padding: 0;
         background-color: #f5f5f5;
         color: #333;
-      }
-
-      .header {
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        text-align: center;
-        position: sticky;
-        top: 0;
-        z-index: 100;
       }
 
       .header h1 {
@@ -216,13 +338,51 @@
   </head>
   <body>
     <div class="header">
-      <div class="logo">
-        <a href="/">
+      <a href="/">
+        <div class="logo">
           <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
-        </a>
+        </div>
+      </a>
+
+      <div class="account-info">
+        <p id="user-info">Cargando información...</p>
+        <button
+          id="user-management-btn"
+          class="user-management-btn"
+          style="display: none"
+        >
+          ⚙️
+        </button>
+        <button id="login-btn" style="display: none">Iniciar sesión</button>
       </div>
-      <h1>Mi Armario</h1>
     </div>
+
+    <div id="user-modal" class="user-modal">
+      <div class="user-modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Gestión de cuenta</h3>
+
+        <div class="user-option">
+          <label for="new-username">Cambiar nombre de usuario</label>
+          <input
+            type="text"
+            id="new-username"
+            placeholder="Nuevo nombre de usuario"
+          />
+        </div>
+
+        <div class="user-actions">
+          <button class="update-btn" id="update-username-btn">
+            Actualizar
+          </button>
+          <button id="logout-btn" style="display: none">Cerrar sesión</button>
+          <button class="delete-btn" id="delete-account-btn">
+            Eliminar cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+    <h1>Mi Armario</h1>
 
     <div class="container">
       <div class="filters">
@@ -512,6 +672,252 @@
       }
 
       document.addEventListener("DOMContentLoaded", obtenerConjuntosUsuario);
+
+      const supabaseUrl = "https://fcuoobbozbpwobfzbfwb.supabase.co";
+      const supabaseAnonKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdW9vYmJvemJwd29iZnpiZndiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDk2OTUsImV4cCI6MjA1Njg4NTY5NX0.kBnE22zwoUuTU2LORXr5llC2XmkM92s1nPAIG4yisyQ";
+      const supabaseClient = supabase.createClient(
+        supabaseUrl,
+        supabaseAnonKey
+      );
+
+      const userInfoElement = document.getElementById("user-info");
+      const loginBtn = document.getElementById("login-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const userManagementBtn = document.getElementById("user-management-btn");
+      const userModal = document.getElementById("user-modal");
+      const closeModal = document.querySelector(".close-modal");
+      const updateUsernameBtn = document.getElementById("update-username-btn");
+      const deleteAccountBtn = document.getElementById("delete-account-btn");
+      const newUsernameInput = document.getElementById("new-username");
+
+      window.onload = async () => {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
+        if (session) {
+          console.log("Usuario logueado:", session.user);
+
+          // Guardar el token
+          localStorage.setItem("token", session.access_token);
+
+          // Mostrar bienvenida
+          const {
+            data: { user },
+          } = await supabaseClient.auth.getUser();
+
+          if (user) {
+            try {
+              const response = await fetch(
+                "https://stylo-4u8w.onrender.com/users/google-register",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id: user.id,
+                    email: user.email,
+                    full_name:
+                      user.user_metadata.full_name || user.email.split("@")[0],
+                  }),
+                }
+              );
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                console.error(
+                  "Error registrando usuario:",
+                  response.status,
+                  errorText
+                );
+              }
+            } catch (err) {
+              console.error("Error de red o fetch:", err);
+            }
+          }
+
+          await checkAuth();
+        } else {
+          console.log("No hay sesión activa");
+          userInfoElement.textContent = " ";
+          loginBtn.style.display = "inline-block";
+          logoutBtn.style.display = "none";
+          userManagementBtn.style.display = "none";
+        }
+      };
+
+      let currentUser = null;
+
+      // Función principal de autenticación
+      async function checkAuth() {
+        try {
+          const token = localStorage.getItem("token");
+          // Ocultar elementos por defecto
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "none";
+          userManagementBtn.style.display = "none";
+
+          if (!token) {
+            throw new Error("No hay token");
+          }
+          console.log("Token:", token);
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+
+          const data = await response.json();
+          console.log("Datos recibidos de /me:", data);
+          currentUser = data;
+          userInfoElement.textContent = data.username;
+          logoutBtn.style.display = "inline-block";
+          userManagementBtn.style.display = "inline-block";
+        } catch (error) {
+          console.error("Error de autenticación:", error);
+          localStorage.removeItem("token");
+          userInfoElement.textContent = "No has iniciado sesión";
+          loginBtn.style.display = "inline-block";
+        }
+      }
+      // Función para actualizar el nombre de usuario
+      async function updateUsername(newUsername) {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ username: newUsername }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Error en la respuesta del servidor");
+          }
+
+          const data = await response.json();
+          currentUser = data;
+          userInfoElement.textContent = data.username;
+
+          Swal.fire({
+            text: "Has cambiado el nombre!",
+            icon: "success",
+          });
+
+          userModal.style.display = "none";
+        } catch (error) {
+          alert("Hubo un error al actualizar el nombre de usuario");
+        }
+      }
+
+      // Función para eliminar la cuenta
+      async function deleteAccount() {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Error en la respuesta del servidor");
+          }
+
+          localStorage.removeItem("token");
+          Swal.fire({
+            text: "Tu cuenta ha sido eliminada",
+            icon: "success",
+          });
+          localStorage.removeItem("token");
+          location.reload();
+        } catch (error) {
+          console.error("Error al eliminar:", error);
+          alert("Hubo un error al eliminar tu cuenta");
+        }
+      }
+
+      // Event Listeners
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "/login";
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        location.reload();
+      });
+
+      userManagementBtn.addEventListener("click", () => {
+        userModal.style.display = "flex";
+        if (currentUser) {
+          newUsernameInput.value = currentUser.username;
+        }
+      });
+
+      closeModal.addEventListener("click", () => {
+        userModal.style.display = "none";
+      });
+
+      window.addEventListener("click", (event) => {
+        if (event.target === userModal) {
+          userModal.style.display = "none";
+        }
+      });
+
+      updateUsernameBtn.addEventListener("click", () => {
+        const newUsername = newUsernameInput.value.trim();
+        if (!newUsername) {
+          alert("Por favor ingresa un nombre de usuario válido");
+          return;
+        }
+        updateUsername(newUsername);
+      });
+
+      deleteAccountBtn.addEventListener("click", () => {
+        Swal.fire({
+          title: "¿Estás seguro de que quieres eliminar tu cuenta?",
+          text: " Esta acción no se puede deshacer.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Borrala",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            deleteAccount();
+          }
+        });
+      });
+
+      document
+        .getElementById("logout-btn")
+        .addEventListener("click", async () => {
+          const { error } = await supabaseClient.auth.signOut();
+          if (error) {
+            console.error("Error al cerrar sesión:", error.message);
+            alert("Error al cerrar sesión: " + error.message);
+          } else {
+            localStorage.removeItem("token"); // Limpia el token si lo usas
+            location.reload(); // Recarga para reiniciar el estado
+          }
+        });
     </script>
   </body>
 </html>
