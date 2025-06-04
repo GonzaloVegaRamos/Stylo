@@ -415,15 +415,37 @@
         }
       }
       .logo {
+        position: absolute; /* o fixed si quieres que siempre esté visible */
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background-color: transparent;
+      }
+      .logo-container {
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        background: transparent;
+        position: absolute; /* o fixed si quieres que siempre esté visible */
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+
+      .logo-container img {
+        height: 80px;
+        object-fit: contain;
       }
     </style>
   </head>
   <body>
-    <a href="/">
-      <div class="logo">
-        <img src="static/img/STYLO_Logo.png" alt="Logo" style="height: 80px" />
-      </div>
-    </a>
+    <div class="logo-container">
+      <a href="/">
+        <img src="static/img/STYLO_Logo.png" alt="Logo" />
+      </a>
+    </div>
+    <!-- Resto del contenido -->
+
     <section>
       <div class="container">
         <!-- Login -->
