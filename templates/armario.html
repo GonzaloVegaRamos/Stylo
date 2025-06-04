@@ -491,7 +491,9 @@
 
         // Filtrar por categoría
         if (categoria) {
-          filtrados = filtrados.filter((c) => c.estilo === categoria);
+          filtrados = filtrados.filter((c) =>
+            c.estilo?.toLowerCase().includes(categoria.toLowerCase())
+          );
         }
 
         // Filtrar por nombre
