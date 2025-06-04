@@ -101,6 +101,44 @@
       .delete-btn:hover {
         background: #e05555;
       }
+
+      .header {
+        background: #ffe5d4;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px 20px;
+        position: relative;
+        display: flex;
+        justify-content: space-between; /* ⬅️ esto separa logo y cuenta */
+        align-items: center; /* ⬅️ centra verticalmente */
+        font-weight: 600;
+        font-size: 1rem;
+        color: #666;
+        z-index: 10;
+      }
+
+      .account-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .header button {
+        background: #ffe5d4;
+        border: 1px solid #60b1a7;
+        color: #666;
+        padding: 8px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        white-space: wrap;
+      }
+
+      .header button:hover {
+        background: #60b1a7;
+        color: white;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -479,47 +517,6 @@
       }
       .swal2-confirm:hover {
         background-color: #4a897f;
-      }
-
-      .header {
-        background: #ffe5d4;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        padding: 15px 20px;
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: flex-start; /* ← esta línea es la clave */
-        gap: 15px;
-        font-weight: 600;
-        font-size: 1rem;
-        color: #666;
-        z-index: 10;
-      }
-      .account-info {
-        display: flex;
-        flex: 1 1 auto; /* o 60%, si das 40% a .logo */
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .header button {
-        background: #ffe5d4;
-        border: 1px solid #60b1a7;
-        color: #666;
-        padding: 8px 16px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        white-space: wrap;
-      }
-
-      .header button:hover {
-        background: #60b1a7;
-        color: white;
       }
     </style>
   </head>

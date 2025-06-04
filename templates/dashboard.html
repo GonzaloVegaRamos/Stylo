@@ -31,34 +31,23 @@
         padding: 15px 20px;
         position: relative;
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: flex-start; /* ← esta línea es la clave */
-        gap: 15px;
+        justify-content: space-between; /* ⬅️ esto separa logo y cuenta */
+        align-items: center; /* ⬅️ centra verticalmente */
         font-weight: 600;
         font-size: 1rem;
         color: #666;
         z-index: 10;
       }
 
-      .logo {
-        flex: 1 1 40%; /* o un valor como 40% si quieres limitar el tamaño */
+      .account-info {
         display: flex;
-        justify-content: center;
+        align-items: center;
+        gap: 10px;
       }
 
       .logo img {
         height: 70px;
         transition: height 0.3s ease;
-      }
-
-      .account-info {
-        display: flex;
-        flex: 1 1 auto; /* o 60%, si das 40% a .logo */
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
       }
 
       .header button {
