@@ -863,8 +863,10 @@
         }
 
         //stylo-4u8w.onrender.com/users/ropa?tipo=Camiseta&genero=Hombre
-        https: try {
+        try {
           const response = await fetch(url);
+          console.log("URL final:", url);
+
           if (!response.ok) throw new Error("Error al obtener las prendas");
           let ropaList = await response.json();
 

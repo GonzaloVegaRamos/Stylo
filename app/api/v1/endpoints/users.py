@@ -365,7 +365,6 @@ async def get_ropa(tipo: str = None, id: str = None, genero: str = None, marca: 
         query = supabase.table("ropa").select("*")
         
         if id:
-            # Manejar múltiples IDs separados por comas
             id_list = [i.strip() for i in id.split(',') if i.strip()]
             if len(id_list) == 1:
                 query = query.eq("id", id_list[0])
@@ -373,16 +372,22 @@ async def get_ropa(tipo: str = None, id: str = None, genero: str = None, marca: 
                 query = query.in_("id", id_list)
         elif tipo:
             query = query.eq("tipo", tipo)
-        
-        # Resto de tu lógica actual...
-        
+
+        if genero:
+            genero = genero.strip()  # ← importante para evitar errores por espacios
+            query = query.eq("Genero", genero)
+
+        # Aquí podrías seguir añadiendo otros filtros, como marca...
+
         response = query.execute()
         return response.data
+
     except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Error inesperado al obtener las prendas de ropa: {str(e)}"
         )
+
 
 
 from uuid import UUID
