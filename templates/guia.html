@@ -433,7 +433,7 @@
   <body>
     <div class="header">
       <div class="logo">
-        <img src="STYLO (1).png" alt="Logo" style="height: 80px" />
+        <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
       </div>
 
       <div class="account-info">
@@ -872,6 +872,108 @@
     </div>
 
     <script>
+      const userInfoElement = document.getElementById("user-info");
+      const loginBtn = document.getElementById("login-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      window.onload = async () => {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
+        if (session) {
+          console.log("Usuario logueado:", session.user);
+
+          // Guardar el token
+          localStorage.setItem("token", session.access_token);
+
+          // Mostrar bienvenida
+          const {
+            data: { user },
+          } = await supabaseClient.auth.getUser();
+
+          if (user) {
+            try {
+              const response = await fetch(
+                "https://stylo-4u8w.onrender.com/users/google-register",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id: user.id,
+                    email: user.email,
+                    full_name:
+                      user.user_metadata.full_name || user.email.split("@")[0],
+                  }),
+                }
+              );
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                console.error(
+                  "Error registrando usuario:",
+                  response.status,
+                  errorText
+                );
+              }
+            } catch (err) {
+              console.error("Error de red o fetch:", err);
+            }
+          }
+
+          await checkAuth();
+        } else {
+          console.log("No hay sesión activa");
+          userInfoElement.textContent = " ";
+          loginBtn.style.display = "inline-block";
+          logoutBtn.style.display = "none";
+          userManagementBtn.style.display = "none";
+        }
+      };
+
+      let currentUser = null;
+
+      // Función principal de autenticación
+      async function checkAuth() {
+        try {
+          const token = localStorage.getItem("token");
+          // Ocultar elementos por defecto
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "none";
+          userManagementBtn.style.display = "none";
+
+          if (!token) {
+            throw new Error("No hay token");
+          }
+          console.log("Token:", token);
+          const response = await fetch(
+            "https://stylo-4u8w.onrender.com/users/me",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+
+          const data = await response.json();
+          console.log("Datos recibidos de /me:", data);
+          currentUser = data;
+          userInfoElement.textContent = data.username;
+          logoutBtn.style.display = "inline-block";
+          userManagementBtn.style.display = "inline-block";
+        } catch (error) {
+          console.error("Error de autenticación:", error);
+          localStorage.removeItem("token");
+          userInfoElement.textContent = "No has iniciado sesión";
+          loginBtn.style.display = "inline-block";
+        }
+      }
+
       const styleMap = {
         // Pregunta 1
         "Confianza y respeto": ["Formal", "Preppy"],
