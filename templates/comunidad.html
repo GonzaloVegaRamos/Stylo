@@ -157,8 +157,17 @@
         height: 60px;
         vertical-align: middle;
       }
-
-      .header h1 {
+      .head {
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        background: transparent;
+        /* o fixed si quieres que siempre esté visible */
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      .head h1 {
         margin-top: 10px;
         font-size: 1.6rem;
         color: #444;
@@ -362,8 +371,8 @@
         </div>
       </div>
     </div>
+    <div class="head"><h1>Explora los conjuntos de la comunidad</h1></div>
 
-    <h1>Explora los conjuntos de la comunidad</h1>
     <div class="container">
       <div class="conjuntos-grid" id="feed-conjuntos">
         <!-- Aquí se cargarán los conjuntos de todos -->

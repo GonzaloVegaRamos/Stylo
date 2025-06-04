@@ -649,6 +649,66 @@
           animation-duration: 45s;
         }
       }
+
+      .promo-banner {
+        background-color: #fff0e6;
+        padding: 40px 20px;
+        border-top: 2px solid #ffc3a0;
+        display: flex;
+        justify-content: center;
+      }
+
+      .promo-content {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        background: #ffe5d4;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .promo-content img {
+        max-width: 300px;
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      .promo-text {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .promo-text h2 {
+        font-size: 1.8rem;
+        color: #2f3542;
+        margin-bottom: 10px;
+      }
+
+      .promo-text p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 15px;
+      }
+
+      .promo-text button {
+        background-color: #ff6b81;
+        color: #fff;
+        padding: 12px 25px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-weight: bold;
+      }
+
+      .promo-text button:hover {
+        background-color: #ff4757;
+      }
     </style>
   </head>
   <body>
@@ -733,17 +793,18 @@
     </div>
 
     <!-- Banner de Anuncio - MODIFICADO -->
-    <section class="ad-section">
-      <div class="ad-banner">
+    <!-- Banner Promocional -->
+    <section class="promo-banner">
+      <div class="promo-content">
         <img
-          src="static/img/Nueva coleccion verano 2025 (1).png"
-          alt="Anuncio especial"
+          src="static/img/promo-verano-2025.png"
+          alt="Promoción Verano 2025"
         />
-        <div class="ad-text">
-          <h2>🎉 ¡Gran promoción de temporada!</h2>
-          <p>Descubre descuentos exclusivos en nuevas colecciones.</p>
+        <div class="promo-text">
+          <h2>🌞 ¡Nueva Colección Verano 2025!</h2>
+          <p>Explora las últimas tendencias y consigue descuentos únicos.</p>
           <button onclick="window.location.href='promo.html'">
-            Ver Promoción
+            Descúbrela Ahora
           </button>
         </div>
       </div>
