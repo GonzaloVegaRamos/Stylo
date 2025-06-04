@@ -923,6 +923,7 @@
             text: "Tu cuenta ha sido eliminada",
             icon: "success",
           });
+          localStorage.removeItem("token");
           location.reload();
         } catch (error) {
           console.error("Error al eliminar:", error);
