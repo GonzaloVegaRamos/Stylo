@@ -217,7 +217,7 @@
           <img src="static/img/STYLO (1).png" alt="Logo" style="height: 80px" />
         </a>
       </div>
-      <h1>Mis Armario</h1>
+      <h1>Mi Armario</h1>
     </div>
 
     <div class="container">
@@ -384,6 +384,9 @@
         }" onclick="verConjunto('${conjunto.codigo}')">
           <div class="card-header">
             <h3>${conjunto.nombre}</h3>
+            <p style="margin: 5px 0; font-size: 0.9rem; color: #666;" ${
+              conjunto.estilo || "Sin estilo"
+            }</p>
           </div>
           <div class="card-body">
             <div class="prendas-container">

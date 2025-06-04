@@ -152,8 +152,14 @@
       <h1 id="nombre" class="conjunto-nombre">Conjunto de ropa</h1>
       <div id="creador" class="conjunto-creador"></div>
     </div>
+    <div
+      id="loading"
+      style="text-align: center; font-size: 1.2rem; margin: 20px"
+    >
+      Cargando conjunto...
+    </div>
 
-    <div id="conjunto-info">Cargando conjunto...</div>
+    <div id="conjunto-info" style="display: none"></div>
 
     <script>
       const params = new URLSearchParams(window.location.search);
@@ -169,11 +175,17 @@
             return response.json();
           })
           .then(async (conjunto) => {
-            // Establecer nombre del conjunto
             const nombreConjunto = conjunto.nombre || "Conjunto de ropa";
             document.getElementById("nombre").innerText = nombreConjunto;
 
-            // Si hay usuario, obtener nombre del usuario
+            const creadorEl = document.getElementById("creador");
+            const conjuntoInfoEl = document.getElementById("conjunto-info");
+            const loadingEl = document.getElementById("loading");
+
+            // Ocultamos conjunto-info mientras carga
+            conjuntoInfoEl.style.display = "none";
+
+            // Cargar nombre del usuario si existe
             if (conjunto.usuario) {
               try {
                 const userRes = await fetch(
@@ -181,21 +193,16 @@
                 );
                 if (!userRes.ok) throw new Error("Error al obtener el usuario");
                 const usuario = await userRes.json();
-
-                // Mostrar creador
-                document.getElementById("creador").innerText = `Creado por: ${
+                creadorEl.innerText = `Creado por: ${
                   usuario.username || "Usuario desconocido"
                 }`;
               } catch (error) {
                 console.error("Error al obtener el usuario:", error);
-                document.getElementById("creador").innerText =
-                  "Creador no disponible";
+                creadorEl.innerText = "Creador no disponible";
               }
             }
 
-            // Cargar prendas
-            const div = document.getElementById("conjunto-info");
-            div.innerHTML = "";
+            conjuntoInfoEl.innerHTML = "";
 
             const prendasKeys = [
               "camiseta",
@@ -205,7 +212,6 @@
               "pb",
               "accesorio",
             ];
-
             for (const key of prendasKeys) {
               const prendaId = conjunto[key];
               if (prendaId) {
@@ -220,27 +226,30 @@
 
                   const prendaDiv = document.createElement("div");
                   prendaDiv.className = "prenda";
-
                   prendaDiv.innerHTML = `
-                    <img src="${prenda.img}" alt="${prenda.marca}" />
-                    <div class="prenda-info">
-                      <h3>${prenda.nombre}</h3>
-                      <p><strong>Marca:</strong> ${prenda.marca}</p>
-                      <a href="${prenda.url}" target="_blank">Ver en tienda</a>
-                    </div>
-                  `;
-
-                  div.appendChild(prendaDiv);
+          <img src="${prenda.img}" alt="${prenda.marca}" />
+          <div class="prenda-info">
+            <h3>${prenda.nombre}</h3>
+            <p><strong>Marca:</strong> ${prenda.marca}</p>
+            <a href="${prenda.url}" target="_blank">Ver en tienda</a>
+          </div>
+        `;
+                  conjuntoInfoEl.appendChild(prendaDiv);
                 } catch (error) {
                   console.error(error);
                   const prendaDiv = document.createElement("div");
                   prendaDiv.className = "prenda";
                   prendaDiv.innerText = `${key}: No se pudo cargar la prenda.`;
-                  div.appendChild(prendaDiv);
+                  conjuntoInfoEl.appendChild(prendaDiv);
                 }
               }
             }
+
+            // Ocultamos el loading y mostramos el contenido
+            loadingEl.style.display = "none";
+            conjuntoInfoEl.style.display = "flex";
           })
+
           .catch((err) => {
             document.getElementById("conjunto-info").innerText =
               "Error al cargar el conjunto: " + err.message;

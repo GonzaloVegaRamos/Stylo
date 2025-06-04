@@ -818,7 +818,7 @@
           .writeText(texto)
           .then(() => {
             Swal.fire({
-              position: "top-end",
+              position: "top",
               icon: "success",
               title: "¡Enlace copiado al portapeles!\n" + texto,
               showConfirmButton: false,
@@ -1134,6 +1134,26 @@
           menuToggleMenu.style.zIndex = "1001";
         }
       }
+
+      document.addEventListener("click", function (event) {
+        const menu = document.querySelector(".menu");
+        const toggleButton = document.querySelector(".menu-toggle-menu");
+
+        // Si el menú no está abierto, no hacemos nada
+        if (!menu.classList.contains("open")) return;
+
+        // Si el clic fue dentro del menú o del botón, no cerramos
+        if (
+          menu.contains(event.target) ||
+          toggleButton.contains(event.target)
+        ) {
+          return;
+        }
+
+        // Si el clic fue fuera, cerramos el menú
+        menu.classList.remove("open");
+        toggleButton.style.display = "block";
+      });
     </script>
   </body>
 </html>
