@@ -176,6 +176,7 @@
             return response.json();
           })
           .then(async (conjunto) => {
+            estilo.innerText = `${conjunto.estilo}`;
             const nombreConjunto = conjunto.nombre || "Conjunto de ropa";
             document.getElementById("nombre").innerText = nombreConjunto;
 
@@ -204,7 +205,6 @@
               }
             }
 
-            estilo.innerText = `${conjunto.estilo}`;
             conjuntoInfoEl.innerHTML = "";
 
             const prendasKeys = [
