@@ -151,6 +151,7 @@
     <div class="conjunto-header">
       <h1 id="nombre" class="conjunto-nombre">Conjunto de ropa</h1>
       <div id="creador" class="conjunto-creador"></div>
+      <div id="estilo"></div>
     </div>
     <div
       id="loading"
@@ -181,6 +182,7 @@
             const creadorEl = document.getElementById("creador");
             const conjuntoInfoEl = document.getElementById("conjunto-info");
             const loadingEl = document.getElementById("loading");
+            const estilo = document.getElementById("estilo");
 
             // Ocultamos conjunto-info mientras carga
             conjuntoInfoEl.style.display = "none";
@@ -202,6 +204,7 @@
               }
             }
 
+            estilo.innerText = `${conjunto.estilo}`;
             conjuntoInfoEl.innerHTML = "";
 
             const prendasKeys = [
